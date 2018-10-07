@@ -9,6 +9,7 @@ package aswajaclothes;
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.master.EntriBarangFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
+import aswajaclothes.master.EntriSupplierFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
@@ -91,6 +92,11 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenu1.add(mnMasterBarang);
 
         mnMasterSupplier.setText("Master Entri Supplier");
+        mnMasterSupplier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnMasterSupplierActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnMasterSupplier);
 
         mnMasterEkspedisi.setText("Master Entri Ekspedisi");
@@ -174,6 +180,10 @@ public class AswajaClothes extends javax.swing.JFrame {
         dispose();
         System.exit(0);
     }//GEN-LAST:event_mnKeluarActionPerformed
+
+    private void mnMasterSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterSupplierActionPerformed
+        new EntriSupplierFrame().setVisible(true);
+    }//GEN-LAST:event_mnMasterSupplierActionPerformed
 
     /**
      * @param args the command line arguments

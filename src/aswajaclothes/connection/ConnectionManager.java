@@ -11,6 +11,7 @@ import aswajaclothes.common.model.KecamatanModel;
 import aswajaclothes.common.model.KelurahanModel;
 import aswajaclothes.common.model.ProvinsiModel;
 import aswajaclothes.master.model.BarangModel;
+import aswajaclothes.master.model.SupplierModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -41,6 +42,7 @@ public class ConnectionManager {
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Common">
     public ArrayList<ProvinsiModel> getProvinsi() {
         String query = "SELECT * FROM PROVINCES";
         ArrayList<ProvinsiModel> listProvinsi = new ArrayList<>();
@@ -118,8 +120,9 @@ public class ConnectionManager {
 
         return listKelurahan;
     }
-
-    // Master Customer
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Master Customer">
     public String getKodeCustomer() {
         String kode = "CS";
         String query = "SELECT COUNT(*) 'total' FROM CUSTOMER";
@@ -172,7 +175,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomersByNoTelepon(String noTelepon) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM CUSTOMER WHERE NO_TELEPON ='" + noTelepon + "'";
+        String query = "SELECT * FROM CUSTOMER WHERE NO_TELEPON LIKE '" + noTelepon + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -235,8 +238,9 @@ public class ConnectionManager {
         }
         return isResult;
     }
+    //</editor-fold>
     
-    // Master Barang
+    // <editor-fold defaultstate="collapsed" desc="Master Barang">
     public String getKodeBarang() {
         String kode = "BR";
         String query = "SELECT COUNT(*) 'total' FROM BARANG";
@@ -348,4 +352,131 @@ public class ConnectionManager {
 
         return listBarang;
     }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Master Customer">
+    public String getKodeSupplier() {
+        String kode = "SU";
+        String query = "SELECT COUNT(*) 'total' FROM SUPPLIER";
+        int totalSupplier = 0;
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                totalSupplier = result.getInt("total") + 1;
+            }
+            if (totalSupplier < 10) {
+                kode += "000" + totalSupplier;
+            } else if (totalSupplier < 100) {
+                kode += "00" + totalSupplier;
+            } else if (totalSupplier < 1000) {
+                kode += "0" + totalSupplier;
+            } else {
+                kode += "" + totalSupplier;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Ambil data supplier gagal");
+            return kode;
+        }
+        return kode;
+    }
+    
+    public ArrayList<SupplierModel> getSuppliers() {
+        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
+        String query = "SELECT * FROM SUPPLIER";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                SupplierModel supplier = new SupplierModel();
+                supplier.setKode(result.getString("kode_supplier"));
+                supplier.setName(result.getString("nama_supplier"));
+                supplier.setProvinsiId(result.getString("provinsi_id"));
+                supplier.setKabupatenId(result.getString("kabupaten_id"));
+                supplier.setKecamatanId(result.getString("kecamatan_id"));
+                supplier.setKelurahanId(result.getString("kelurahan_id"));
+                supplier.setAlamat(result.getString("alamat"));
+                supplier.setNoTelepon(result.getString("no_telepon"));
+                supplier.setNoFax(result.getString("no_fax"));
+                supplier.setEmail(result.getString("email"));
+                listSupplier.add(supplier);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listSupplier;
+        }
+
+        return listSupplier;
+    }
+    
+    public ArrayList<SupplierModel> getSupplierByNoTelepon(String noTelepon) {
+        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
+        String query = "SELECT * FROM SUPPLIER WHERE NO_TELEPON LIKE '" + noTelepon + "%'";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                SupplierModel supplier = new SupplierModel();
+                supplier.setKode(result.getString("kode_supplier"));
+                supplier.setName(result.getString("nama_supplier"));
+                supplier.setProvinsiId(result.getString("provinsi_id"));
+                supplier.setKabupatenId(result.getString("kabupaten_id"));
+                supplier.setKecamatanId(result.getString("kecamatan_id"));
+                supplier.setKelurahanId(result.getString("kelurahan_id"));
+                supplier.setAlamat(result.getString("alamat"));
+                supplier.setNoTelepon(result.getString("no_telepon"));
+                supplier.setNoFax(result.getString("no_fax"));
+                supplier.setEmail(result.getString("email"));
+                listSupplier.add(supplier);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listSupplier;
+        }
+
+        return listSupplier;
+    }
+    
+    public Boolean saveSupplier(Boolean isUpdate, SupplierModel model) {
+        Boolean isResult = false;
+        try {
+            String query = "";
+            if (isUpdate) {
+                query = "UPDATE SUPPLIER SET NAMA_SUPPLIER ='" + model.getName() + "',"
+                        + "PROVINSI_ID = '" + model.getProvinsiId() + "',"
+                        + "KABUPATEN_ID = '" + model.getKabupatenId() + "',"
+                        + "KECAMATAN_ID = '" + model.getKecamatanId() + "',"
+                        + "KELURAHAN_ID = '" + model.getKelurahanId() + "',"
+                        + "ALAMAT = '" + model.getAlamat() + "',"
+                        + "NO_TELEPON = '" + model.getNoTelepon() + "',"
+                        + "NO_FAX ='" + model.getNoFax() + "',"
+                        + "EMAIL = '" + model.getEmail() + "' "
+                        + "WHERE KODE_SUPPLIER ='" + model.getKode() + "'";
+                if (statement.executeUpdate(query) > 0) {
+                    isResult = true;
+                } else {
+                    isResult = false;
+                }
+            } else {
+                query = "INSERT INTO SUPPLIER VALUES ('" + model.getKode() + "', "
+                        + "'" + model.getName() + "',"
+                        + "'" + model.getProvinsiId() + "',"
+                        + "'" + model.getKabupatenId() + "',"
+                        + "'" + model.getKecamatanId() + "',"
+                        + "'" + model.getKelurahanId() + "',"
+                        + "'" + model.getAlamat() + "',"
+                        + "'" + model.getNoTelepon()+ "',"
+                        + "'" + model.getNoFax()+ "',"
+                        + "'" + model.getEmail() + "')";
+                if (statement.executeUpdate(query) > 0) {
+                    isResult = true;
+                } else {
+                    isResult = false;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getLocalizedMessage());
+            isResult = false;
+            return isResult;
+        }
+        return isResult;
+    }
+    // </editor-fold>
 }

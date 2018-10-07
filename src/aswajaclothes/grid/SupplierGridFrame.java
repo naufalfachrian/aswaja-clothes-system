@@ -6,14 +6,11 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.master.model.BarangModel;
 import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.util.CurrencyUtil;
+import aswajaclothes.master.model.SupplierModel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -21,14 +18,14 @@ import javax.swing.table.TableModel;
  *
  * @author Satrio
  */
-public class BarangGridFrame extends javax.swing.JFrame implements MouseListener {
+public class SupplierGridFrame extends javax.swing.JFrame implements MouseListener {
 
     /**
      * Creates new form CustomerGridFrame
      */
-    public BarangGridFrame(String filterByNama) {
+    public SupplierGridFrame(String filterByNoTelepon) {
         initComponents();
-        initBarangs(filterByNama);
+        initSuppliers(filterByNoTelepon);
         initTableListener();
     }
 
@@ -42,45 +39,38 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblBarang = new javax.swing.JTable();
+        tblCustomer = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Data Customer");
 
-        tblBarang.setModel(new javax.swing.table.DefaultTableModel(
+        tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Kode", "Nama", "Warna", "Area", "Ukuran", "Harga HPP", "Harga Jual Satuan"
+                "Kode", "Nama", "Alamat", "No Telepon"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
         });
-        tblBarang.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblBarang);
+        tblCustomer.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblCustomer);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,59 +83,51 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initBarangs(String byNama) {
-        String[] barangColumn = new String [] { "Kode", "Nama", "Warna", "Area",
-            "Ukuran", "Harga HPP", "Harga Jual Satuan"};
-        ArrayList<String[]> barangsRow = new ArrayList<>();
-        if (byNama.isEmpty()) {
-           listBarang = new ConnectionManager().getBarangs();
+    private void initSuppliers(String byNoTelepon) {
+        String[] supplierColumn = new String [] { "Kode", "Nama", "Alamat", "No Telepon"};
+        ArrayList<String[]> suppliersRow = new ArrayList<>();
+        if (byNoTelepon.isEmpty()) {
+           listSupplier = new ConnectionManager().getSuppliers();
         } else {
-            listBarang = new ConnectionManager().getBarangsByNama(byNama);
+            listSupplier = new ConnectionManager().getSupplierByNoTelepon(byNoTelepon);
         }
-        for (BarangModel barang : listBarang) {
+        for (SupplierModel supplier : listSupplier) {
             String[] rowData = new String[]{
-                barang.getKode(),
-                barang.getName(),
-                barang.getWarna(),
-                barang.getArea(),
-                barang.getUkuran(),
-                new CurrencyUtil().formatCurrency(barang.getHargaHPP()),
-                new CurrencyUtil().formatCurrency(barang.getHargaJualSatuan())
+                supplier.getKode(),
+                supplier.getName(),
+                supplier.getAlamat(),
+                supplier.getNoTelepon()
             };
-            barangsRow.add(rowData);
+            suppliersRow.add(rowData);
         }
-        TableModel tblModel = new DefaultTableModel(barangsRow.toArray(new String[][]{}), barangColumn){
+        TableModel tblModel = new DefaultTableModel(suppliersRow.toArray(new String[][]{}), supplierColumn){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        tblBarang.setModel(tblModel);
-        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
-        cellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-        tblBarang.getColumnModel().getColumn(5).setCellRenderer(cellRenderer);
-        tblBarang.getColumnModel().getColumn(6).setCellRenderer(cellRenderer);
+        tblCustomer.setModel(tblModel);
     }
     
     private void initTableListener(){
-        tblBarang.addMouseListener(this);
+        tblCustomer.addMouseListener(this);
     }
     
     // Variables declaration - able to modify
-    private ArrayList<BarangModel> listBarang;
+    private ArrayList<SupplierModel> listSupplier;
     private GridListener listener;
-    private String namaBarang;
+    private String noTelepon;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblBarang;
+    private javax.swing.JTable tblCustomer;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int rowSelected = tblBarang.getSelectedRow();
-        BarangModel barang = listBarang.get(rowSelected);
-        listener.onSelectedRow(barang);
+        int rowSelected = tblCustomer.getSelectedRow();
+        SupplierModel supplier = listSupplier.get(rowSelected);
+        listener.onSelectedRow(supplier);
         dispose();
     }
 
