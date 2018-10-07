@@ -10,6 +10,7 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.master.EntriKonsumenFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -21,6 +22,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     /** Creates new form MainFrame */
     public AswajaClothes() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /** This method is called from within the constructor to
@@ -32,13 +34,17 @@ public class AswajaClothes extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        logo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        mnMasterKonsumen = new javax.swing.JMenuItem();
+        mnMasterBarang = new javax.swing.JMenuItem();
+        mnMasterSupplier = new javax.swing.JMenuItem();
+        mnMasterEkspedisi = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        mnKeluar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -55,32 +61,48 @@ public class AswajaClothes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Utama");
-        setPreferredSize(getMaximumSize());
-        setResizable(false);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aswajaclothes/logo.jpg"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(130, 180, 132, 175);
+        getContentPane().add(logo, gridBagConstraints);
 
         jMenu1.setText("Master");
 
-        jMenuItem1.setText("Master Entri Konsumen");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnMasterKonsumen.setText("Master Entri Konsumen");
+        mnMasterKonsumen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnMasterKonsumenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(mnMasterKonsumen);
 
-        jMenuItem2.setText("Master Entri Barang");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mnMasterBarang.setText("Master Entri Barang");
+        mnMasterBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mnMasterBarangActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(mnMasterBarang);
 
-        jMenuItem3.setText("Master Entri Supplier");
-        jMenu1.add(jMenuItem3);
+        mnMasterSupplier.setText("Master Entri Supplier");
+        jMenu1.add(mnMasterSupplier);
 
-        jMenuItem4.setText("Master Entri Ekspedisi");
-        jMenu1.add(jMenuItem4);
+        mnMasterEkspedisi.setText("Master Entri Ekspedisi");
+        jMenu1.add(mnMasterEkspedisi);
+        jMenu1.add(jSeparator1);
+
+        mnKeluar.setText("Keluar");
+        mnKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnKeluarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnKeluar);
 
         jMenuBar1.add(jMenu1);
 
@@ -132,31 +154,25 @@ public class AswajaClothes extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnMasterKonsumenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterKonsumenActionPerformed
         new EntriKonsumenFrame().setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mnMasterKonsumenActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void mnMasterBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterBarangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mnMasterBarangActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void mnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnKeluarActionPerformed
+        dispose();
+        System.exit(0);
+    }//GEN-LAST:event_mnKeluarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,7 +208,7 @@ public class AswajaClothes extends javax.swing.JFrame {
             }
         });
     }
-    
+  
     //Variable declaration - able to modify
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -200,21 +216,24 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JLabel logo;
+    private javax.swing.JMenuItem mnKeluar;
+    private javax.swing.JMenuItem mnMasterBarang;
+    private javax.swing.JMenuItem mnMasterEkspedisi;
+    private javax.swing.JMenuItem mnMasterKonsumen;
+    private javax.swing.JMenuItem mnMasterSupplier;
     // End of variables declaration//GEN-END:variables
 
 }
