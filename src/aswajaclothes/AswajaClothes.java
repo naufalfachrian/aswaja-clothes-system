@@ -7,6 +7,7 @@
 package aswajaclothes;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.master.EntriBarangFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -162,7 +163,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     }//GEN-LAST:event_mnMasterKonsumenActionPerformed
 
     private void mnMasterBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterBarangActionPerformed
-        // TODO add your handling code here:
+        new EntriBarangFrame().setVisible(true);
     }//GEN-LAST:event_mnMasterBarangActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed

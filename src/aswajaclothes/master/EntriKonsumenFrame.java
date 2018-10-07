@@ -374,7 +374,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tombol"));
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
