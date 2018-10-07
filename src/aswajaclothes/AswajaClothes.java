@@ -8,6 +8,7 @@ package aswajaclothes;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.master.EntriBarangFrame;
+import aswajaclothes.master.EntriEkspedisiFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
 import aswajaclothes.master.EntriSupplierFrame;
 import java.awt.Dimension;
@@ -100,6 +101,11 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenu1.add(mnMasterSupplier);
 
         mnMasterEkspedisi.setText("Master Entri Ekspedisi");
+        mnMasterEkspedisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnMasterEkspedisiActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnMasterEkspedisi);
         jMenu1.add(jSeparator1);
 
@@ -184,6 +190,10 @@ public class AswajaClothes extends javax.swing.JFrame {
     private void mnMasterSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterSupplierActionPerformed
         new EntriSupplierFrame().setVisible(true);
     }//GEN-LAST:event_mnMasterSupplierActionPerformed
+
+    private void mnMasterEkspedisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterEkspedisiActionPerformed
+        new EntriEkspedisiFrame().setVisible(true);
+    }//GEN-LAST:event_mnMasterEkspedisiActionPerformed
 
     /**
      * @param args the command line arguments

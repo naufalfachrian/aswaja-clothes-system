@@ -348,7 +348,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tombol"));
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnSimpanBarang.setText("Simpan");
         btnSimpanBarang.addActionListener(new java.awt.event.ActionListener() {
@@ -387,12 +387,13 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -474,7 +475,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private javax.swing.JButton btnCariBarang;
     private javax.swing.JButton btnCariNamaBarang;
     private javax.swing.JButton btnKeluar;
-    private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnSimpanBarang;
     private javax.swing.JButton btnUbahBarang;
     private javax.swing.JComboBox<String> cbArea;
@@ -488,7 +488,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField tfHargaHpp;
     private javax.swing.JTextField tfHargaJualSatuan;

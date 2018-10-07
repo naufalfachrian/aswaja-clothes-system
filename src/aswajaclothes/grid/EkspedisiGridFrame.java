@@ -7,7 +7,7 @@ package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.master.model.SupplierModel;
+import aswajaclothes.master.model.EkspedisiModel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -18,14 +18,14 @@ import javax.swing.table.TableModel;
  *
  * @author Satrio
  */
-public class SupplierGridFrame extends javax.swing.JFrame implements MouseListener {
+public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListener {
 
     /**
      * Creates new form CustomerGridFrame
      */
-    public SupplierGridFrame(String filterByNoTelepon) {
+    public EkspedisiGridFrame() {
         initComponents();
-        initSuppliers(filterByNoTelepon);
+        initEkspedisi();
         initTableListener();
     }
 
@@ -39,12 +39,12 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCustomer = new javax.swing.JTable();
+        tblEkspedisi = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Data Supplier");
+        setTitle("Data Ekspedisi");
 
-        tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
+        tblEkspedisi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -63,8 +63,8 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
                 return types [columnIndex];
             }
         });
-        tblCustomer.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblCustomer);
+        tblEkspedisi.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblEkspedisi);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,51 +83,44 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initSuppliers(String byNoTelepon) {
-        String[] supplierColumn = new String [] { "Kode", "Nama", "Alamat", "No Telepon"};
-        ArrayList<String[]> suppliersRow = new ArrayList<>();
-        if (byNoTelepon.isEmpty()) {
-           listSupplier = new ConnectionManager().getSuppliers();
-        } else {
-            listSupplier = new ConnectionManager().getSupplierByNoTelepon(byNoTelepon);
-        }
-        for (SupplierModel supplier : listSupplier) {
+    private void initEkspedisi() {
+        String[] ekspedisiColumn = new String [] { "Kode", "Nama"};
+        ArrayList<String[]> ekspedisisRow = new ArrayList<>();
+        listEkspedisi = new ConnectionManager().getEkspedisis();
+        for (EkspedisiModel ekspedisi : listEkspedisi) {
             String[] rowData = new String[]{
-                supplier.getKode(),
-                supplier.getName(),
-                supplier.getAlamat(),
-                supplier.getNoTelepon()
+                ekspedisi.getKode(),
+                ekspedisi.getName(),
             };
-            suppliersRow.add(rowData);
+            ekspedisisRow.add(rowData);
         }
-        TableModel tblModel = new DefaultTableModel(suppliersRow.toArray(new String[][]{}), supplierColumn){
+        TableModel tblModel = new DefaultTableModel(ekspedisisRow.toArray(new String[][]{}), ekspedisiColumn){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        tblCustomer.setModel(tblModel);
+        tblEkspedisi.setModel(tblModel);
     }
     
     private void initTableListener(){
-        tblCustomer.addMouseListener(this);
+        tblEkspedisi.addMouseListener(this);
     }
     
     // Variables declaration - able to modify
-    private ArrayList<SupplierModel> listSupplier;
+    private ArrayList<EkspedisiModel> listEkspedisi;
     private GridListener listener;
-    private String noTelepon;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblCustomer;
+    private javax.swing.JTable tblEkspedisi;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int rowSelected = tblCustomer.getSelectedRow();
-        SupplierModel supplier = listSupplier.get(rowSelected);
-        listener.onSelectedRow(supplier);
+        int rowSelected = tblEkspedisi.getSelectedRow();
+        EkspedisiModel ekspedisi = listEkspedisi.get(rowSelected);
+        listener.onSelectedRow(ekspedisi);
         dispose();
     }
 

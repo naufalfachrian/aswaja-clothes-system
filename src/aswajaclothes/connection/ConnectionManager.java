@@ -11,6 +11,7 @@ import aswajaclothes.common.model.KecamatanModel;
 import aswajaclothes.common.model.KelurahanModel;
 import aswajaclothes.common.model.ProvinsiModel;
 import aswajaclothes.master.model.BarangModel;
+import aswajaclothes.master.model.EkspedisiModel;
 import aswajaclothes.master.model.SupplierModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
@@ -354,7 +355,7 @@ public class ConnectionManager {
     }
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Master Customer">
+    // <editor-fold defaultstate="collapsed" desc="Master Supplier">
     public String getKodeSupplier() {
         String kode = "SU";
         String query = "SELECT COUNT(*) 'total' FROM SUPPLIER";
@@ -465,6 +466,81 @@ public class ConnectionManager {
                         + "'" + model.getNoTelepon()+ "',"
                         + "'" + model.getNoFax()+ "',"
                         + "'" + model.getEmail() + "')";
+                if (statement.executeUpdate(query) > 0) {
+                    isResult = true;
+                } else {
+                    isResult = false;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getLocalizedMessage());
+            isResult = false;
+            return isResult;
+        }
+        return isResult;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Master Ekspedisi">
+    public String getKodeEkspedisi() {
+        String kode = "EX";
+        String query = "SELECT COUNT(*) 'total' FROM EKSPEDISI";
+        int totalEkspedisi = 0;
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                totalEkspedisi = result.getInt("total") + 1;
+            }
+            if (totalEkspedisi < 10) {
+                kode += "000" + totalEkspedisi;
+            } else if (totalEkspedisi < 100) {
+                kode += "00" + totalEkspedisi;
+            } else if (totalEkspedisi < 1000) {
+                kode += "0" + totalEkspedisi;
+            } else {
+                kode += "" + totalEkspedisi;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Ambil data ekspedisi gagal");
+            return kode;
+        }
+        return kode;
+    }
+    
+    public ArrayList<EkspedisiModel> getEkspedisis() {
+        ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
+        String query = "SELECT * FROM EKSPEDISI";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                EkspedisiModel ekspedisi = new EkspedisiModel();
+                ekspedisi.setKode(result.getString("kode_ekspedisi"));
+                ekspedisi.setName(result.getString("nama_ekspedisi"));
+                listEkspedisi.add(ekspedisi);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listEkspedisi;
+        }
+
+        return listEkspedisi;
+    }
+
+    public Boolean saveEkspedisi(Boolean isUpdate, EkspedisiModel model) {
+        Boolean isResult = false;
+        try {
+            String query = "";
+            if (isUpdate) {
+                query = "UPDATE EKSPEDISI SET NAMA_EKSPEDISI ='" + model.getName() + "' "
+                        + "WHERE KODE_EKSPEDISI ='" + model.getKode() + "'";
+                if (statement.executeUpdate(query) > 0) {
+                    isResult = true;
+                } else {
+                    isResult = false;
+                }
+            } else {
+                query = "INSERT INTO EKSPEDISI VALUES ('" + model.getKode() + "', "
+                        + "'" + model.getName() + "')";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {

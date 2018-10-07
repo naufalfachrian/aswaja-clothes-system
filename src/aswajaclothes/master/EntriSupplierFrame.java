@@ -224,7 +224,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
         btnKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Master Customer");
+        setTitle("Master Supplier");
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Supplier"));
