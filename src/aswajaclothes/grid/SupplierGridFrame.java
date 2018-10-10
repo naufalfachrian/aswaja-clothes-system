@@ -6,8 +6,8 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.master.model.SupplierModel;
+import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.model.master.SupplierModel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -127,7 +127,7 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblCustomer.getSelectedRow();
         SupplierModel supplier = listSupplier.get(rowSelected);
-        listener.onSelectedRow(supplier);
+        listener.onSelectedRow(supplier, SupplierGridFrame.class.getSimpleName());
         dispose();
     }
 

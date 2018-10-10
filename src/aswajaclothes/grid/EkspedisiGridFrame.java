@@ -6,8 +6,8 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.master.model.EkspedisiModel;
+import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.model.master.EkspedisiModel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblEkspedisi.getSelectedRow();
         EkspedisiModel ekspedisi = listEkspedisi.get(rowSelected);
-        listener.onSelectedRow(ekspedisi);
+        listener.onSelectedRow(ekspedisi, EkspedisiGridFrame.class.getSimpleName());
         dispose();
     }
 

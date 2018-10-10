@@ -10,5 +10,5 @@ package aswajaclothes.grid;
  * @author Satrio
  */
 public interface GridListener {
-    public void onSelectedRow(Object model);
+    public void onSelectedRow(Object model, String fromGrid);
 }

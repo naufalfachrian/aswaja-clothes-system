@@ -6,7 +6,7 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.master.model.CustomerModel;
+import aswajaclothes.model.master.CustomerModel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class CustomerGridFrame extends javax.swing.JFrame implements MouseListen
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblCustomer.getSelectedRow();
         CustomerModel customer = listCustomer.get(rowSelected);
-        listener.onSelectedRow(customer);
+        listener.onSelectedRow(customer, CustomerGridFrame.class.getSimpleName());
         dispose();
     }
 

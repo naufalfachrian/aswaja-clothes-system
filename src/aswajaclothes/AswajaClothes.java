@@ -11,6 +11,7 @@ import aswajaclothes.master.EntriBarangFrame;
 import aswajaclothes.master.EntriEkspedisiFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
 import aswajaclothes.master.EntriSupplierFrame;
+import aswajaclothes.transaction.InputOrderPenjualanFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
@@ -49,7 +50,7 @@ public class AswajaClothes extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnKeluar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        mnInputOrderPenjualan = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -121,8 +122,13 @@ public class AswajaClothes extends javax.swing.JFrame {
 
         jMenu2.setText("Transaksi");
 
-        jMenuItem5.setText("Input Order Penjualan");
-        jMenu2.add(jMenuItem5);
+        mnInputOrderPenjualan.setText("Input Order Penjualan");
+        mnInputOrderPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnInputOrderPenjualanActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnInputOrderPenjualan);
 
         jMenuItem6.setText("Input Order Pembelian");
         jMenu2.add(jMenuItem6);
@@ -195,6 +201,10 @@ public class AswajaClothes extends javax.swing.JFrame {
         new EntriEkspedisiFrame().setVisible(true);
     }//GEN-LAST:event_mnMasterEkspedisiActionPerformed
 
+    private void mnInputOrderPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnInputOrderPenjualanActionPerformed
+        new InputOrderPenjualanFrame().setVisible(true);
+    }//GEN-LAST:event_mnInputOrderPenjualanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -243,13 +253,13 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel logo;
+    private javax.swing.JMenuItem mnInputOrderPenjualan;
     private javax.swing.JMenuItem mnKeluar;
     private javax.swing.JMenuItem mnMasterBarang;
     private javax.swing.JMenuItem mnMasterEkspedisi;

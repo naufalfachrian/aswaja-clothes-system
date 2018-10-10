@@ -5,14 +5,14 @@
  */
 package aswajaclothes.connection;
 
-import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.common.model.KabupatenModel;
-import aswajaclothes.common.model.KecamatanModel;
-import aswajaclothes.common.model.KelurahanModel;
-import aswajaclothes.common.model.ProvinsiModel;
-import aswajaclothes.master.model.BarangModel;
-import aswajaclothes.master.model.EkspedisiModel;
-import aswajaclothes.master.model.SupplierModel;
+import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.model.common.KabupatenModel;
+import aswajaclothes.model.common.KecamatanModel;
+import aswajaclothes.model.common.KelurahanModel;
+import aswajaclothes.model.common.ProvinsiModel;
+import aswajaclothes.model.master.BarangModel;
+import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.SupplierModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -553,6 +553,33 @@ public class ConnectionManager {
             return isResult;
         }
         return isResult;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Input Order Penjualan">
+    public String getKodePesanan() {
+        String kode = "PS";
+        String query = "SELECT COUNT(*) 'total' FROM INPUT_ORDER_PENJUALAN";
+        int totalPesanan = 0;
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                totalPesanan = result.getInt("total") + 1;
+            }
+            if (totalPesanan < 10) {
+                kode += "000" + totalPesanan;
+            } else if (totalPesanan < 100) {
+                kode += "00" + totalPesanan;
+            } else if (totalPesanan < 1000) {
+                kode += "0" + totalPesanan;
+            } else {
+                kode += "" + totalPesanan;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Ambil data order pesanan gagal");
+            return kode;
+        }
+        return kode;
     }
     // </editor-fold>
 }

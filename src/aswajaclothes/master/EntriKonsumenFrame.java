@@ -7,11 +7,11 @@ package aswajaclothes.master;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.master.model.CustomerModel;
-import aswajaclothes.common.model.KabupatenModel;
-import aswajaclothes.common.model.KecamatanModel;
-import aswajaclothes.common.model.KelurahanModel;
-import aswajaclothes.common.model.ProvinsiModel;
+import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.model.common.KabupatenModel;
+import aswajaclothes.model.common.KecamatanModel;
+import aswajaclothes.model.common.KelurahanModel;
+import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.util.ValidatorUtil;
 import java.util.ArrayList;
@@ -539,7 +539,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void onSelectedRow(Object model) {
+    public void onSelectedRow(Object model, String fromGrid) {
         CustomerModel customer = (CustomerModel) model;
         setCustomer(customer);
     }

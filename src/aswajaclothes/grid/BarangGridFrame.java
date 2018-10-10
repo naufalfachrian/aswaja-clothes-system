@@ -6,8 +6,8 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.master.model.BarangModel;
-import aswajaclothes.master.model.CustomerModel;
+import aswajaclothes.model.master.BarangModel;
+import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.util.CurrencyUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -145,7 +145,7 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblBarang.getSelectedRow();
         BarangModel barang = listBarang.get(rowSelected);
-        listener.onSelectedRow(barang);
+        listener.onSelectedRow(barang, BarangGridFrame.class.getSimpleName());
         dispose();
     }
 
