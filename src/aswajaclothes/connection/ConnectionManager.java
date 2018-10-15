@@ -198,6 +198,31 @@ public class ConnectionManager {
 
         return listCustomer;
     }
+    
+    public ArrayList<CustomerModel> getCustomersByNama(String nama) {
+        ArrayList<CustomerModel> listCustomer = new ArrayList<>();
+        String query = "SELECT * FROM CUSTOMER WHERE NAMA_KUSTOMER LIKE '%" + nama + "%'";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                CustomerModel customer = new CustomerModel();
+                customer.setKode(result.getString("kode_kustomer"));
+                customer.setName(result.getString("nama_kustomer"));
+                customer.setProvinsiId(result.getString("provinsi_id"));
+                customer.setKabupatenId(result.getString("kabupaten_id"));
+                customer.setKecamatanId(result.getString("kecamatan_id"));
+                customer.setKelurahanId(result.getString("kelurahan_id"));
+                customer.setAlamat(result.getString("alamat"));
+                customer.setNoTelepon(result.getString("no_telepon"));
+                listCustomer.add(customer);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listCustomer;
+        }
+
+        return listCustomer;
+    }
 
     public Boolean saveCustomer(Boolean isUpdate, CustomerModel model) {
         Boolean isResult = false;
@@ -435,6 +460,33 @@ public class ConnectionManager {
         return listSupplier;
     }
     
+    public ArrayList<SupplierModel> getSupplierByNama(String nama) {
+        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
+        String query = "SELECT * FROM SUPPLIER WHERE NAMA_SUPPLIER LIKE '" + nama + "%'";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                SupplierModel supplier = new SupplierModel();
+                supplier.setKode(result.getString("kode_supplier"));
+                supplier.setName(result.getString("nama_supplier"));
+                supplier.setProvinsiId(result.getString("provinsi_id"));
+                supplier.setKabupatenId(result.getString("kabupaten_id"));
+                supplier.setKecamatanId(result.getString("kecamatan_id"));
+                supplier.setKelurahanId(result.getString("kelurahan_id"));
+                supplier.setAlamat(result.getString("alamat"));
+                supplier.setNoTelepon(result.getString("no_telepon"));
+                supplier.setNoFax(result.getString("no_fax"));
+                supplier.setEmail(result.getString("email"));
+                listSupplier.add(supplier);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listSupplier;
+        }
+
+        return listSupplier;
+    }
+    
     public Boolean saveSupplier(Boolean isUpdate, SupplierModel model) {
         Boolean isResult = false;
         try {
@@ -510,6 +562,25 @@ public class ConnectionManager {
     public ArrayList<EkspedisiModel> getEkspedisis() {
         ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
         String query = "SELECT * FROM EKSPEDISI";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                EkspedisiModel ekspedisi = new EkspedisiModel();
+                ekspedisi.setKode(result.getString("kode_ekspedisi"));
+                ekspedisi.setName(result.getString("nama_ekspedisi"));
+                listEkspedisi.add(ekspedisi);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return listEkspedisi;
+        }
+
+        return listEkspedisi;
+    }
+    
+    public ArrayList<EkspedisiModel> getEkspedisiByNama(String nama) {
+        ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
+        String query = "SELECT * FROM EKSPEDISI WHERE NAMA_EKSPEDISI LIKE '%" + nama + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {

@@ -15,6 +15,7 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -231,7 +232,7 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
     }//GEN-LAST:event_tfNamaActionPerformed
 
     private void btnCariEkspedisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariEkspedisiActionPerformed
-        EkspedisiGridFrame ekspedisiGrid = new EkspedisiGridFrame();
+        EkspedisiGridFrame ekspedisiGrid = new EkspedisiGridFrame(FilterUtil.FilterType.NONE, "");
         ekspedisiGrid.setGridListener(this);
         ekspedisiGrid.setVisible(true);
     }//GEN-LAST:event_btnCariEkspedisiActionPerformed

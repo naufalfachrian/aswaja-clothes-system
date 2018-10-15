@@ -15,6 +15,7 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.SupplierGridFrame;
 import aswajaclothes.model.master.SupplierModel;
+import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -96,8 +97,8 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
             String kelurahanId = listKelurahan.get(cbKelurahan.getSelectedIndex()).getId();
             String alamat = new ValidatorUtil().isEmpty(taAlamat.getText(), "Alamat");
             String noTelepon = new ValidatorUtil().isNumber(tfNoTelepon.getText(), "No Telepon");
-            String noFax = new ValidatorUtil().isNumber(tfNoFax.getText(), "No Fax");
-            String email = new ValidatorUtil().isEmpty(tfEmail.getText(), "Email");
+            String noFax = tfNoFax.getText();
+            String email = tfEmail.getText();
             SupplierModel supplier = new SupplierModel();
             supplier.setKode(kode);
             supplier.setName(nama);
@@ -526,7 +527,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     }//GEN-LAST:event_tfNoTeleponActionPerformed
 
     private void btnCariCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariCustomerActionPerformed
-        SupplierGridFrame supplierGrid = new SupplierGridFrame("");
+        SupplierGridFrame supplierGrid = new SupplierGridFrame(FilterUtil.FilterType.NONE, "");
         supplierGrid.setGridListener(this);
         supplierGrid.setVisible(true);
     }//GEN-LAST:event_btnCariCustomerActionPerformed
@@ -548,7 +549,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnCariNoTeleponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariNoTeleponActionPerformed
-        SupplierGridFrame supplierGrid = new SupplierGridFrame(tfNoTelepon.getText());
+        SupplierGridFrame supplierGrid = new SupplierGridFrame(FilterUtil.FilterType.NO_TELEPON, tfNoTelepon.getText());
         supplierGrid.setGridListener(this);
         supplierGrid.setVisible(true);
     }//GEN-LAST:event_btnCariNoTeleponActionPerformed

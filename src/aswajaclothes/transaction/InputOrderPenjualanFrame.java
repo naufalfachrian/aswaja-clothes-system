@@ -13,7 +13,9 @@ import aswajaclothes.grid.GridListener;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.util.FilterUtil;
 import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.event.ItemEvent;
 import java.util.Date;
 
 /**
@@ -41,6 +43,39 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private void initKodePesanan(){
         String kode = new ConnectionManager().getKodePesanan();
         tfKodePesanan.setText(kode);
+    }
+    
+    private void initTable(){
+        
+    }
+    
+    private void clearBarang(){
+        tfKodeBarang.setText("");
+        tfNamaBarang.setText("");
+        tfHargaBarang.setText("");
+        tfQty.setText("");
+        cbLenganPanjang.setSelected(false);
+    }
+    
+    private void clearPesanan(){
+        initKodePesanan();
+        tfKodeCustomer.setText("");
+        tfNamaCustomer.setText("");
+        initDateFormat();
+        tblPesananDetail.removeAll();
+    }
+    
+    private void clearEkspedisi(){
+        tfKodeEkspedisi.setText("");
+        tfNamaEkspedisi.setText("");
+        tfOngkir.setText("");
+        tfTotal.setText("");
+    }
+    
+    private void clearAll(){
+        clearPesanan();
+        clearBarang();
+        clearEkspedisi();
     }
 
     /**
@@ -236,6 +271,16 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         jLabel8.setText("Qty");
 
         cbLenganPanjang.setText("Lengan Panjang (Optional)");
+        cbLenganPanjang.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbLenganPanjangItemStateChanged(evt);
+            }
+        });
+        cbLenganPanjang.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cbLenganPanjangStateChanged(evt);
+            }
+        });
 
         btnTambah.setText("Tambah");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
@@ -276,9 +321,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbLenganPanjang, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbLenganPanjang, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(btnTambah)
@@ -299,12 +344,12 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                     .addComponent(jLabel6)
                     .addComponent(tfNamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbLenganPanjang))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(tfHargaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbLenganPanjang))
+                    .addComponent(tfHargaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
@@ -314,15 +359,30 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
 
         tblPesananDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Edit", "Hapus"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblPesananDetail);
 
         jLabel9.setText("Kode Ekspedisi");
@@ -351,6 +411,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
 
         jLabel12.setText("Total");
 
+        tfTotal.setEditable(false);
         tfTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfTotalActionPerformed(evt);
@@ -439,11 +500,11 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(tfKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -479,10 +540,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_tfKodeCustomerActionPerformed
 
     private void btnCariCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariCustomerActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame("");
+        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NONE, "");
         customerGrid.setGridListener(this);
         customerGrid.setVisible(true);
-        
     }//GEN-LAST:event_btnCariCustomerActionPerformed
 
     private void tfNamaCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaCustomerActionPerformed
@@ -508,11 +568,11 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_tfHargaBarangActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
-        // TODO add your handling code here:
+        clearBarang();
     }//GEN-LAST:event_btnBersihActionPerformed
 
     private void tfKodeEkspedisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeEkspedisiActionPerformed
@@ -532,7 +592,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_tfTotalActionPerformed
 
     private void btnCariEkspedisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariEkspedisiActionPerformed
-        EkspedisiGridFrame ekspedisiGrid = new EkspedisiGridFrame();
+        EkspedisiGridFrame ekspedisiGrid = new EkspedisiGridFrame(FilterUtil.FilterType.NONE, "");
         ekspedisiGrid.setGridListener(this);
         ekspedisiGrid.setVisible(true);
     }//GEN-LAST:event_btnCariEkspedisiActionPerformed
@@ -542,16 +602,30 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
-        // TODO add your handling code here:
+        clearAll();
     }//GEN-LAST:event_btnBatalActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void chooserTanggalPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chooserTanggalPropertyChange
 
     }//GEN-LAST:event_chooserTanggalPropertyChange
+
+    private void cbLenganPanjangStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cbLenganPanjangStateChanged
+        
+    }//GEN-LAST:event_cbLenganPanjangStateChanged
+
+    private void cbLenganPanjangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbLenganPanjangItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED){
+            cbLenganPanjang.setSelected(true);
+            System.out.println("Lengan Panjang");
+        } else {
+            cbLenganPanjang.setSelected(false);
+            System.out.println("Lengan Pendek");
+        }
+    }//GEN-LAST:event_cbLenganPanjangItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -601,10 +675,17 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(CustomerGridFrame.class.getSimpleName())){
             CustomerModel customer = (CustomerModel) model;
+            tfKodeCustomer.setText(customer.getKode());
+            tfNamaCustomer.setText(customer.getName());
         } else if (fromGrid.equals(BarangGridFrame.class.getSimpleName())){
             BarangModel barang = (BarangModel) model;
+            tfKodeBarang.setText(barang.getKode());
+            tfNamaBarang.setText(barang.getName());
+            tfHargaBarang.setText(String.valueOf(barang.getHargaHPP()));
         } else if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())){
             EkspedisiModel ekspedisi = (EkspedisiModel) model;
+            tfKodeEkspedisi.setText(ekspedisi.getKode());
+            tfNamaEkspedisi.setText(ekspedisi.getName());
         } else {
             // Do Nothing
         }

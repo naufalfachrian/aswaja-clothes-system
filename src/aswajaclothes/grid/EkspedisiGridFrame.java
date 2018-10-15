@@ -8,6 +8,7 @@ package aswajaclothes.grid;
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
     /**
      * Creates new form CustomerGridFrame
      */
-    public EkspedisiGridFrame() {
+    public EkspedisiGridFrame(FilterUtil.FilterType filter, String valueFilter) {
         initComponents();
-        initEkspedisi();
+        initEkspedisi(filter, valueFilter);
         initTableListener();
     }
 
@@ -40,6 +41,9 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEkspedisi = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        tfNama = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Data Ekspedisi");
@@ -66,27 +70,62 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
         tblEkspedisi.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblEkspedisi);
 
+        jLabel1.setText("Nama");
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCari)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCari))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void initEkspedisi() {
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        if (tfNama.getText().isEmpty()){
+            initEkspedisi(FilterUtil.FilterType.NONE, "");
+        } else {
+            initEkspedisi(FilterUtil.FilterType.NAMA, tfNama.getText());
+        }
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void initEkspedisi(FilterUtil.FilterType filter, String valueFilter) {
         String[] ekspedisiColumn = new String [] { "Kode", "Nama"};
         ArrayList<String[]> ekspedisisRow = new ArrayList<>();
-        listEkspedisi = new ConnectionManager().getEkspedisis();
+        if (filter.equals(FilterUtil.FilterType.NAMA)){
+            listEkspedisi = new ConnectionManager().getEkspedisiByNama(valueFilter);
+        } else {
+            listEkspedisi = new ConnectionManager().getEkspedisis();
+        }
+        
         for (EkspedisiModel ekspedisi : listEkspedisi) {
             String[] rowData = new String[]{
                 ekspedisi.getKode(),
@@ -112,8 +151,11 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
     private GridListener listener;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblEkspedisi;
+    private javax.swing.JTextField tfNama;
     // End of variables declaration//GEN-END:variables
 
     @Override

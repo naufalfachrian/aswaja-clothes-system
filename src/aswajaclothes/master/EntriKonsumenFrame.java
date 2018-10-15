@@ -13,6 +13,7 @@ import aswajaclothes.model.common.KecamatanModel;
 import aswajaclothes.model.common.KelurahanModel;
 import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.grid.GridListener;
+import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -477,7 +478,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     }//GEN-LAST:event_tfNoTeleponActionPerformed
 
     private void btnCariCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariCustomerActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame("");
+        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NONE, "");
         customerGrid.setGridListener(this);
         customerGrid.setVisible(true);
     }//GEN-LAST:event_btnCariCustomerActionPerformed
@@ -499,7 +500,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnCariNoTeleponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariNoTeleponActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame(tfNoTelepon.getText());
+        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NO_TELEPON, tfNoTelepon.getText());
         customerGrid.setGridListener(this);
         customerGrid.setVisible(true);
     }//GEN-LAST:event_btnCariNoTeleponActionPerformed

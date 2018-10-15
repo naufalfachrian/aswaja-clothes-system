@@ -186,7 +186,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         tfHargaJualSatuan = new javax.swing.JTextField();
-        btnCariNamaBarang = new javax.swing.JButton();
         tfHargaHpp = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         btnSimpanBarang = new javax.swing.JButton();
@@ -263,13 +262,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
             }
         });
 
-        btnCariNamaBarang.setText("Cari");
-        btnCariNamaBarang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariNamaBarangActionPerformed(evt);
-            }
-        });
-
         tfHargaHpp.setSize(new java.awt.Dimension(100, 26));
         tfHargaHpp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,9 +293,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
                             .addComponent(cbWarna, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(tfKodeBarang))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCariBarang)
-                            .addComponent(btnCariNamaBarang))
+                        .addComponent(btnCariBarang)
                         .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -322,8 +312,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCariNamaBarang))
+                    .addComponent(tfNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -439,12 +428,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         barangGrid.setVisible(true);
     }//GEN-LAST:event_btnCariBarangActionPerformed
 
-    private void btnCariNamaBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariNamaBarangActionPerformed
-        BarangGridFrame barangGrid = new BarangGridFrame(tfNama.getText());
-        barangGrid.setGridListener(this);
-        barangGrid.setVisible(true);
-    }//GEN-LAST:event_btnCariNamaBarangActionPerformed
-
     private void tfHargaHppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfHargaHppActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfHargaHppActionPerformed
@@ -473,7 +456,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnCariBarang;
-    private javax.swing.JButton btnCariNamaBarang;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpanBarang;
     private javax.swing.JButton btnUbahBarang;

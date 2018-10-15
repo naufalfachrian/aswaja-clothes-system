@@ -74,11 +74,11 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="147" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tfKodeEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -287,10 +287,9 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="tfQty" min="-2" pref="92" max="-2" attributes="0"/>
-                      <Component id="cbLenganPanjang" min="-2" pref="196" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="tfQty" min="-2" pref="92" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbLenganPanjang" min="-2" pref="196" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
@@ -316,12 +315,12 @@
                       <Component id="tfNamaBarang" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tfQty" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbLenganPanjang" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tfHargaBarang" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbLenganPanjang" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -383,6 +382,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Lengan Panjang (Optional)"/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbLenganPanjangItemStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cbLenganPanjangStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnTambah">
           <Properties>
@@ -412,11 +415,14 @@
         <Component class="javax.swing.JTable" name="tblPesananDetail">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
-                <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                <Column editable="true" title="Title 4" type="java.lang.Object"/>
+              <Table columnCount="7" rowCount="4">
+                <Column editable="false" title="No" type="java.lang.String"/>
+                <Column editable="false" title="Kode Barang" type="java.lang.String"/>
+                <Column editable="false" title="Nama Barang" type="java.lang.Object"/>
+                <Column editable="false" title="Qty" type="java.lang.Object"/>
+                <Column editable="false" title="Harga Barang" type="java.lang.String"/>
+                <Column editable="false" title="Edit" type="java.lang.Object"/>
+                <Column editable="false" title="Hapus" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>
@@ -459,6 +465,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfTotal">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfTotalActionPerformed"/>
       </Events>
