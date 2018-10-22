@@ -15,13 +15,20 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.grid.BarangGridFrame;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.model.master.BarangModel;
+import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.ValidatorUtil;
+import com.sun.glass.events.KeyEvent;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -38,7 +45,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         initWarna();
         initArea();
         initUkuran();
-
+        initFormatFieldNumber();
     }
 
     /**
@@ -81,6 +88,11 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         String kode = new ConnectionManager().getKodeBarang();
         tfKodeBarang.setText(kode);
     }
+    
+    private void initFormatFieldNumber(){
+        tfHargaHpp.setValue(0);
+        tfHargaJualSatuan.setValue(0);
+    }
 
     private void simpanBarang(Boolean isUpdate) {
         try {
@@ -89,8 +101,8 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
             String warna = listWarna.get(cbWarna.getSelectedIndex());
             String area = listArea.get(cbArea.getSelectedIndex());
             String ukuran = listUkuran.get(cbUkuran.getSelectedIndex());
-            String hargaHPP = new ValidatorUtil().isNumber(tfHargaHpp.getText(), "Harga HPP");
-            String hargaJualSatuan = new ValidatorUtil().isNumber(tfHargaJualSatuan.getText(), "Harga Jual Satuan");
+            String hargaHPP = new CurrencyUtil().clearFormat(tfHargaHpp.getText());
+            String hargaJualSatuan = new CurrencyUtil().clearFormat(tfHargaJualSatuan.getText());;
             BarangModel barang = new BarangModel();
             barang.setKode(kode);
             barang.setName(nama);
@@ -108,7 +120,11 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
                 JOptionPane.showMessageDialog(this, "Simpan barang gagal", "Pesan", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            if (ex instanceof ParseException){
+                System.out.println("Parsing number failed");
+            } else {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
     }
@@ -119,8 +135,8 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         cbWarna.setSelectedIndex(0);
         cbArea.setSelectedIndex(0);
         cbUkuran.setSelectedIndex(0);
-        tfHargaJualSatuan.setText("");
-        tfHargaHpp.setText("");
+        tfHargaJualSatuan.setValue(0);
+        tfHargaHpp.setValue(0);
 
     }
 
@@ -185,8 +201,8 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         cbUkuran = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        tfHargaJualSatuan = new javax.swing.JTextField();
-        tfHargaHpp = new javax.swing.JTextField();
+        tfHargaHpp = new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber());
+        tfHargaJualSatuan = new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber());
         jPanel4 = new javax.swing.JPanel();
         btnSimpanBarang = new javax.swing.JButton();
         btnUbahBarang = new javax.swing.JButton();
@@ -255,17 +271,15 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
 
         jLabel8.setText("Harga Jual Satuan");
 
-        tfHargaJualSatuan.setSize(new java.awt.Dimension(100, 26));
-        tfHargaJualSatuan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfHargaJualSatuanActionPerformed(evt);
+        tfHargaHpp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfHargaHppKeyPressed(evt);
             }
         });
 
-        tfHargaHpp.setSize(new java.awt.Dimension(100, 26));
-        tfHargaHpp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfHargaHppActionPerformed(evt);
+        tfHargaJualSatuan.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfHargaJualSatuanKeyPressed(evt);
             }
         });
 
@@ -285,21 +299,16 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbArea, 0, 270, Short.MAX_VALUE)
-                            .addComponent(cbUkuran, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfNama)
-                            .addComponent(cbWarna, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfKodeBarang))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCariBarang)
-                        .addGap(34, 34, 34))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfHargaHpp, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfHargaJualSatuan))
-                        .addGap(115, 115, 115))))
+                    .addComponent(cbArea, 0, 270, Short.MAX_VALUE)
+                    .addComponent(cbUkuran, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfNama)
+                    .addComponent(cbWarna, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfKodeBarang)
+                    .addComponent(tfHargaHpp)
+                    .addComponent(tfHargaJualSatuan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCariBarang)
+                .addGap(34, 34, 34))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,7 +342,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(tfHargaJualSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tombol"));
@@ -418,19 +427,11 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         JComboBox cb = (JComboBox) evt.getSource();
     }//GEN-LAST:event_cbUkuranActionPerformed
 
-    private void tfHargaJualSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfHargaJualSatuanActionPerformed
-
-    }//GEN-LAST:event_tfHargaJualSatuanActionPerformed
-
     private void btnCariBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariBarangActionPerformed
         BarangGridFrame barangGrid = new BarangGridFrame("");
         barangGrid.setGridListener(this);
         barangGrid.setVisible(true);
     }//GEN-LAST:event_btnCariBarangActionPerformed
-
-    private void tfHargaHppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfHargaHppActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfHargaHppActionPerformed
 
     private void btnUbahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahBarangActionPerformed
         simpanBarang(true);
@@ -447,6 +448,22 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private void btnSimpanBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanBarangActionPerformed
         simpanBarang(false);
     }//GEN-LAST:event_btnSimpanBarangActionPerformed
+
+    private void tfHargaHppKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHargaHppKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_BACKSPACE){
+            if (tfHargaHpp.getText().length() == 1){
+                tfHargaHpp.setValue(0);
+            }
+        }
+    }//GEN-LAST:event_tfHargaHppKeyPressed
+
+    private void tfHargaJualSatuanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHargaJualSatuanKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_BACKSPACE){
+            if (tfHargaJualSatuan.getText().length() == 1){
+                tfHargaJualSatuan.setValue(0);
+            }
+        }
+    }//GEN-LAST:event_tfHargaJualSatuanKeyPressed
 
     // Variable declaration - able to modify
     private ArrayList<String> listWarna;
@@ -471,8 +488,8 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField tfHargaHpp;
-    private javax.swing.JTextField tfHargaJualSatuan;
+    private javax.swing.JFormattedTextField tfHargaHpp;
+    private javax.swing.JFormattedTextField tfHargaJualSatuan;
     private javax.swing.JTextField tfKodeBarang;
     private javax.swing.JTextField tfNama;
     // End of variables declaration//GEN-END:variables

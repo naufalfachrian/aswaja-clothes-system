@@ -8,7 +8,9 @@ package aswajaclothes.util;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -30,16 +32,26 @@ public class CurrencyUtil {
     }
     
     public String formatCurrency(int amount){
-        
-        DecimalFormat formatter = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-        DecimalFormatSymbols formatterSymbol = new DecimalFormatSymbols();
-
-        formatterSymbol.setCurrencySymbol("");
-        formatterSymbol.setMonetaryDecimalSeparator(',');
-        formatterSymbol.setGroupingSeparator('.');
-
-        formatter.setDecimalFormatSymbols(formatterSymbol);
-        return formatter.format(amount);
+        NumberFormatter numberFormatter = formatNumber();
+        return numberFormatter.getFormat().format(amount);
     }
     
+    public String clearFormat(String amount) throws ParseException{
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        return format.parse(amount).toString();
+    }
+    
+    public int clearFormatToInt(String amount) throws ParseException{
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        return format.parse(amount).intValue();
+    }
+    
+    public NumberFormatter formatNumber(){
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(0);
+        
+        NumberFormatter  numberFormatter = new NumberFormatter(numberFormat);
+        numberFormatter.setAllowsInvalid(false);
+        return numberFormatter;
+    }
 }

@@ -14,6 +14,8 @@ public class InputOrderPenjualanDetailModel {
     private String kodeBarang;
     private int qty;
     private String tipeLengan;
+    private String namaBarang;
+    private int hargaBarang;
 
     public InputOrderPenjualanDetailModel() {
     }
@@ -49,6 +51,21 @@ public class InputOrderPenjualanDetailModel {
     public void setTipeLengan(String tipeLengan) {
         this.tipeLengan = tipeLengan;
     }
-    
+
+    public String getNamaBarang() {
+        return namaBarang;
+    }
+
+    public void setNamaBarang(String namaBarang) {
+        this.namaBarang = namaBarang;
+    }
+
+    public int getHargaBarang() {
+        return hargaBarang;
+    }
+
+    public void setHargaBarang(int hargaBarang) {
+        this.hargaBarang = hargaBarang;
+    }
     
 }
