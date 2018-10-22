@@ -82,8 +82,8 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     
     private void initCellRenderAction(){
         TableColumnModel columnModel = tblPesananDetail.getColumnModel();
-        columnModel.getColumn(5).setCellRenderer(new ButtonCell());
         columnModel.getColumn(6).setCellRenderer(new ButtonCell());
+        columnModel.getColumn(7).setCellRenderer(new ButtonCell());
     }
     
     private void initListOrderPenjualan(){
@@ -96,6 +96,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         tfHargaBarang.setValue(0);
         tfQty.setText("");
         cbLenganPanjang.setSelected(false);
+        btnTambah.setText("Tambah");
     }
     
     private void clearPesanan(){
@@ -128,12 +129,16 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         } else if (tfKodeBarang.getText().isEmpty()){
             throw new Exception("Kode barang harus diisi");
         }
+        boolean isUpdate = (btnTambah.getText().equals("Ubah"))? true : false;
         String kodeBarang = tfKodeBarang.getText();
         String namaBarang = tfNamaBarang.getText();
         String tipeLengan = (cbLenganPanjang.isSelected())? "Panjang" : "Pendek";
         int harga = new CurrencyUtil().clearFormatToInt(tfHargaBarang.getText());
         String sQty = new ValidatorUtil().isNumber(tfQty.getText(), "Kuantitas");
         int qty = Integer.parseInt(sQty);
+        if (tipeLengan.equals("Panjang")){
+            harga += 10000;
+        }
         
         InputOrderPenjualanDetailModel model = new InputOrderPenjualanDetailModel();
         model.setKodeBarang(kodeBarang);
@@ -141,7 +146,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         model.setQty(qty);
         model.setTipeLengan(tipeLengan);
         model.setHargaBarang(harga);
-        if (!isDuplikasiBarang(model)){
+        if (!isDuplikasiBarang(model, isUpdate)){
            listOrderPenjualanDetail.add(model);
         }
         tblModel.setRowCount(0);
@@ -154,6 +159,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                 modelDetail.getNamaBarang(),
                 modelDetail.getQty(),
                 hargaBarang,
+                modelDetail.getTipeLengan(),
                 "Edit",
                 "Hapus"
             });
@@ -164,13 +170,17 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         calculateTotal();
     }
 
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model){
+    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
         boolean isDuplikasi = false;
         for(InputOrderPenjualanDetailModel obj : listOrderPenjualanDetail){
             if (obj.getKodeBarang().equals(model.getKodeBarang())){
-                int currQty = obj.getQty();
-                int accumulateQty = currQty + model.getQty();
-                obj.setQty(accumulateQty);
+                if (isUpdate == false){
+                   int currQty = obj.getQty();
+                   int accumulateQty = currQty + model.getQty();
+                   obj.setQty(accumulateQty);
+                } else {
+                    obj.setQty(model.getQty());
+                }
                 isDuplikasi = true;
                 break;
             }
@@ -468,14 +478,14 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
 
             },
             new String [] {
-                "No", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Edit", "Hapus"
+                "No", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Tipe Lengan", "Edit", "Hapus"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -807,7 +817,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblPesananDetail.getSelectedRow();
         int columnSelected = tblPesananDetail.getSelectedColumn();
-        if (columnSelected == 6) {
+        if (columnSelected == 7) {
             int dialogResult = JOptionPane.showConfirmDialog (null, "Yakin ingin hapus? ","Warning", JOptionPane.YES_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION){
                 listOrderPenjualanDetail.remove(rowSelected);
@@ -818,12 +828,18 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                     Logger.getLogger(InputOrderPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } else if (columnSelected == 5){
+        } else if (columnSelected == 6){
             InputOrderPenjualanDetailModel model = listOrderPenjualanDetail.get(rowSelected);
+            int hargaBarang = model.getHargaBarang();
+            if (model.getTipeLengan().equals("Panjang")){
+                hargaBarang -= 10000;
+            }
             tfKodeBarang.setText(model.getKodeBarang());
             tfNamaBarang.setText(model.getNamaBarang());
             tfQty.setText(String.valueOf(model.getQty()));
-            tfHargaBarang.setText(String.valueOf(model.getHargaBarang()));
+            tfHargaBarang.setText(String.valueOf(hargaBarang));
+            cbLenganPanjang.setSelected(model.getTipeLengan().equals("Panjang"));
+            btnTambah.setText("Ubah");
         }
     }
 
