@@ -35,7 +35,10 @@ public class ConnectionManager {
 
     public ConnectionManager() {
         try {
-            connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/aswaja_clothes?useSSL=false", "root", "");
+            connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/" + 
+                    ConnectionSecret.databaseName + "?useSSL=false", 
+                    ConnectionSecret.databaseUsername, 
+                    ConnectionSecret.databasePassword);
             statement = connection.createStatement();
         } catch (SQLException ex) {
             System.out.print("Connection to database is failed");
