@@ -433,7 +433,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSuppliers() {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier";
+        String query = "SELECT * FROM supplier WHERE deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -555,6 +555,16 @@ public class ConnectionManager {
             return isResult;
         }
         return isResult;
+    }
+    
+    public boolean deleteSupplier(String supplierId) {
+        String query = "UPDATE supplier SET deleted = true WHERE kode_supplier = '" + supplierId + "'";
+        try {
+            return statement.executeUpdate(query) > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     // </editor-fold>
     
