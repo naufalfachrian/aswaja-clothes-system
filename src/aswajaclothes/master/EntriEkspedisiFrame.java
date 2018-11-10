@@ -94,6 +94,7 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
 
@@ -106,7 +107,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         jLabel1.setText("Kode Ekspedisi");
 
         tfKodeEkspedisi.setEnabled(false);
-        tfKodeEkspedisi.setSize(new java.awt.Dimension(100, 26));
         tfKodeEkspedisi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfKodeEkspedisiActionPerformed(evt);
@@ -122,7 +122,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
 
         jLabel2.setText("Nama Ekspedisi");
 
-        tfNama.setSize(new java.awt.Dimension(100, 26));
         tfNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNamaActionPerformed(evt);
@@ -179,6 +178,14 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
             }
         });
         jPanel2.add(btnUbah);
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnHapus);
 
         btnBatal.setText("Batal");
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
@@ -253,11 +260,16 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         simpanEkspedisi(false);
     }//GEN-LAST:event_btnSimpanActionPerformed
 
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        konfirmasiHapusEkspedisi();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
     // Variable declaration - able to modify
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnCariEkspedisi;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnUbah;
@@ -273,5 +285,22 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
     public void onSelectedRow(Object model, String fromGrid) {
         EkspedisiModel ekspedisi = (EkspedisiModel) model;
         setEkspedisi(ekspedisi);
+    }
+
+    private void konfirmasiHapusEkspedisi() {
+        int option = JOptionPane.showConfirmDialog(this, "Apakah anda yakin hendak menghapus ekspedisi " + tfNama.getText() + "?", "Hapus Ekspedisi", JOptionPane.OK_CANCEL_OPTION);
+        // OK = 0
+        if (option == 0) {
+            hapusEkspedisi();
+        }
+    }
+
+    private void hapusEkspedisi() {
+        if (new ConnectionManager().deleteEkspedisi(tfKodeEkspedisi.getText())) {
+            JOptionPane.showMessageDialog(this, "Ekspedisi terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            clear();
+        } else {
+            JOptionPane.showMessageDialog(this, "Ekspedisi gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

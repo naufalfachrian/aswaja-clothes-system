@@ -586,7 +586,7 @@ public class ConnectionManager {
     
     public ArrayList<EkspedisiModel> getEkspedisis() {
         ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM ekspedisi";
+        String query = "SELECT * FROM ekspedisi WHERE deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -649,6 +649,16 @@ public class ConnectionManager {
             return isResult;
         }
         return isResult;
+    }
+    
+    public boolean deleteEkspedisi(String ekspedisiId) {
+        String query = "UPDATE ekspedisi SET deleted = true WHERE kode_ekspedisi = '" + ekspedisiId + "'";
+        try {
+            return statement.executeUpdate(query) > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     // </editor-fold>
     
