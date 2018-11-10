@@ -48,7 +48,7 @@ public class ConnectionManager {
 
     // <editor-fold defaultstate="collapsed" desc="Common">
     public ArrayList<ProvinsiModel> getProvinsi() {
-        String query = "SELECT * FROM PROVINCES";
+        String query = "SELECT * FROM provinces";
         ArrayList<ProvinsiModel> listProvinsi = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery(query);
@@ -66,7 +66,7 @@ public class ConnectionManager {
     }
 
     public ArrayList<KabupatenModel> getKabupten(String provinsiId) {
-        String query = "SELECT * FROM REGENCIES WHERE PROVINCE_ID = " + provinsiId;
+        String query = "SELECT * FROM regencies WHERE province_id = " + provinsiId;
         ArrayList<KabupatenModel> listKabupaten = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery(query);
@@ -86,7 +86,7 @@ public class ConnectionManager {
     }
 
     public ArrayList<KecamatanModel> getKecamatan(String kabupatenId) {
-        String query = "SELECT * FROM DISTRICTS WHERE REGENCY_ID = " + kabupatenId;
+        String query = "SELECT * FROM districts WHERE regency_id = " + kabupatenId;
         ArrayList<KecamatanModel> listKecamatan = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery(query);
@@ -106,7 +106,7 @@ public class ConnectionManager {
     }
 
     public ArrayList<KelurahanModel> getKelurahan(String kecamatanId) {
-        String query = "SELECT * FROM VILLAGES WHERE DISTRICT_ID = " + kecamatanId;
+        String query = "SELECT * FROM villages WHERE district_id = " + kecamatanId;
         ArrayList<KelurahanModel> listKelurahan = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery(query);
@@ -129,7 +129,7 @@ public class ConnectionManager {
     // <editor-fold defaultstate="collapsed" desc="Master Customer">
     public String getKodeCustomer() {
         String kode = "CS";
-        String query = "SELECT COUNT(*) 'total' FROM CUSTOMER";
+        String query = "SELECT COUNT(*) 'total' FROM customer";
         int totalCustomer = 0;
         try {
             ResultSet result = statement.executeQuery(query);
@@ -154,7 +154,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomers() {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM CUSTOMER";
+        String query = "SELECT * FROM customer";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -179,7 +179,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomersByNoTelepon(String noTelepon) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM CUSTOMER WHERE NO_TELEPON LIKE '" + noTelepon + "%'";
+        String query = "SELECT * FROM customer WHERE no_telepon LIKE '" + noTelepon + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -204,7 +204,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomersByNama(String nama) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM CUSTOMER WHERE NAMA_KUSTOMER LIKE '%" + nama + "%'";
+        String query = "SELECT * FROM customer WHERE nama_kustomer LIKE '%" + nama + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -232,21 +232,21 @@ public class ConnectionManager {
         try {
             String query = "";
             if (isUpdate) {
-                query = "UPDATE CUSTOMER SET NAMA_KUSTOMER ='" + model.getName() + "',"
-                        + "PROVINSI_ID = '" + model.getProvinsiId() + "',"
-                        + "KABUPATEN_ID = '" + model.getKabupatenId() + "',"
-                        + "KECAMATAN_ID = '" + model.getKecamatanId() + "',"
-                        + "KELURAHAN_ID = '" + model.getKelurahanId() + "',"
-                        + "ALAMAT = '" + model.getAlamat() + "',"
-                        + "NO_TELEPON = '" + model.getNoTelepon() + "' "
-                        + "WHERE KODE_KUSTOMER ='" + model.getKode() + "'";
+                query = "UPDATE customer SET nama_kustomer ='" + model.getName() + "',"
+                        + "provinsi_id = '" + model.getProvinsiId() + "',"
+                        + "kabupaten_id = '" + model.getKabupatenId() + "',"
+                        + "kecamatan_id = '" + model.getKecamatanId() + "',"
+                        + "kelurahan_id = '" + model.getKelurahanId() + "',"
+                        + "alamat = '" + model.getAlamat() + "',"
+                        + "no_telepon = '" + model.getNoTelepon() + "' "
+                        + "WHERE kode_kustomer ='" + model.getKode() + "'";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {
                     isResult = false;
                 }
             } else {
-                query = "INSERT INTO CUSTOMER VALUES ('" + model.getKode() + "', "
+                query = "INSERT INTO customer VALUES ('" + model.getKode() + "', "
                         + "'" + model.getName() + "',"
                         + "'" + model.getProvinsiId() + "',"
                         + "'" + model.getKabupatenId() + "',"
@@ -272,7 +272,7 @@ public class ConnectionManager {
     // <editor-fold defaultstate="collapsed" desc="Master Barang">
     public String getKodeBarang() {
         String kode = "BR";
-        String query = "SELECT COUNT(*) 'total' FROM BARANG";
+        String query = "SELECT COUNT(*) 'total' FROM barang";
         int totalBarang = 0;
         try {
             ResultSet result = statement.executeQuery(query);
@@ -300,20 +300,20 @@ public class ConnectionManager {
         try {
             String query = "";
             if (isUpdate) {
-                query = "UPDATE BARANG SET NAMA_BARANG ='" + model.getName()+ "',"
-                        + "WARNA = '" + model.getWarna() + "',"
-                        + "AREA = '" + model.getArea() + "',"
-                        + "UKURAN = '" + model.getUkuran() + "',"
-                        + "HARGA_HPP = '" + model.getHargaHPP()+ "',"
-                        + "HARGA_JUAL_SATUAN = '" + model.getHargaJualSatuan() + "' "
-                        + "WHERE KODE_BARANG ='" + model.getKode() + "'";
+                query = "UPDATE barang SET nama_barang ='" + model.getName()+ "',"
+                        + "warna = '" + model.getWarna() + "',"
+                        + "area = '" + model.getArea() + "',"
+                        + "ukuran = '" + model.getUkuran() + "',"
+                        + "harga_hpp = '" + model.getHargaHPP()+ "',"
+                        + "harga_jual_satuan = '" + model.getHargaJualSatuan() + "' "
+                        + "WHERE kode_barang ='" + model.getKode() + "'";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {
                     isResult = false;
                 }
             } else {
-                query = "INSERT INTO BARANG VALUES ('" + model.getKode() + "', "
+                query = "INSERT INTO barang VALUES ('" + model.getKode() + "', "
                         + "'" + model.getName() + "',"
                         + "'" + model.getWarna()+ "',"
                         + "'" + model.getArea() + "',"
@@ -336,7 +336,7 @@ public class ConnectionManager {
     
     public ArrayList<BarangModel> getBarangs() {
         ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM BARANG";
+        String query = "SELECT * FROM barang";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -360,7 +360,7 @@ public class ConnectionManager {
     
     public ArrayList<BarangModel> getBarangsByNama(String nama) {
         ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM BARANG WHERE NAMA_BARANG LIKE '%"+ nama +"%'";
+        String query = "SELECT * FROM barang WHERE nama_barang LIKE '%"+ nama +"%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -386,7 +386,7 @@ public class ConnectionManager {
     // <editor-fold defaultstate="collapsed" desc="Master Supplier">
     public String getKodeSupplier() {
         String kode = "SU";
-        String query = "SELECT COUNT(*) 'total' FROM SUPPLIER";
+        String query = "SELECT COUNT(*) 'total' FROM supplier";
         int totalSupplier = 0;
         try {
             ResultSet result = statement.executeQuery(query);
@@ -411,7 +411,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSuppliers() {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM SUPPLIER";
+        String query = "SELECT * FROM supplier";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -438,7 +438,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSupplierByNoTelepon(String noTelepon) {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM SUPPLIER WHERE NO_TELEPON LIKE '" + noTelepon + "%'";
+        String query = "SELECT * FROM supplier WHERE no_telepon LIKE '" + noTelepon + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -465,7 +465,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSupplierByNama(String nama) {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM SUPPLIER WHERE NAMA_SUPPLIER LIKE '" + nama + "%'";
+        String query = "SELECT * FROM supplier WHERE nama_supplier LIKE '" + nama + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -495,23 +495,23 @@ public class ConnectionManager {
         try {
             String query = "";
             if (isUpdate) {
-                query = "UPDATE SUPPLIER SET NAMA_SUPPLIER ='" + model.getName() + "',"
-                        + "PROVINSI_ID = '" + model.getProvinsiId() + "',"
-                        + "KABUPATEN_ID = '" + model.getKabupatenId() + "',"
-                        + "KECAMATAN_ID = '" + model.getKecamatanId() + "',"
-                        + "KELURAHAN_ID = '" + model.getKelurahanId() + "',"
-                        + "ALAMAT = '" + model.getAlamat() + "',"
-                        + "NO_TELEPON = '" + model.getNoTelepon() + "',"
-                        + "NO_FAX ='" + model.getNoFax() + "',"
-                        + "EMAIL = '" + model.getEmail() + "' "
-                        + "WHERE KODE_SUPPLIER ='" + model.getKode() + "'";
+                query = "UPDATE supplier SET nama_supplier ='" + model.getName() + "',"
+                        + "provinsi_id = '" + model.getProvinsiId() + "',"
+                        + "kabupaten_id = '" + model.getKabupatenId() + "',"
+                        + "kecamatan_id = '" + model.getKecamatanId() + "',"
+                        + "kelurahan_id = '" + model.getKelurahanId() + "',"
+                        + "alamat = '" + model.getAlamat() + "',"
+                        + "no_telepon = '" + model.getNoTelepon() + "',"
+                        + "no_fax ='" + model.getNoFax() + "',"
+                        + "email = '" + model.getEmail() + "' "
+                        + "WHERE kode_supplier ='" + model.getKode() + "'";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {
                     isResult = false;
                 }
             } else {
-                query = "INSERT INTO SUPPLIER VALUES ('" + model.getKode() + "', "
+                query = "INSERT INTO supplier VALUES ('" + model.getKode() + "', "
                         + "'" + model.getName() + "',"
                         + "'" + model.getProvinsiId() + "',"
                         + "'" + model.getKabupatenId() + "',"
@@ -539,7 +539,7 @@ public class ConnectionManager {
     // <editor-fold defaultstate="collapsed" desc="Master Ekspedisi">
     public String getKodeEkspedisi() {
         String kode = "EX";
-        String query = "SELECT COUNT(*) 'total' FROM EKSPEDISI";
+        String query = "SELECT COUNT(*) 'total' FROM ekspedisi";
         int totalEkspedisi = 0;
         try {
             ResultSet result = statement.executeQuery(query);
@@ -564,7 +564,7 @@ public class ConnectionManager {
     
     public ArrayList<EkspedisiModel> getEkspedisis() {
         ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM EKSPEDISI";
+        String query = "SELECT * FROM ekspedisi";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -583,7 +583,7 @@ public class ConnectionManager {
     
     public ArrayList<EkspedisiModel> getEkspedisiByNama(String nama) {
         ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM EKSPEDISI WHERE NAMA_EKSPEDISI LIKE '%" + nama + "%'";
+        String query = "SELECT * FROM ekspedisi WHERE nama_ekspedisi LIKE '%" + nama + "%'";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -605,15 +605,15 @@ public class ConnectionManager {
         try {
             String query = "";
             if (isUpdate) {
-                query = "UPDATE EKSPEDISI SET NAMA_EKSPEDISI ='" + model.getName() + "' "
-                        + "WHERE KODE_EKSPEDISI ='" + model.getKode() + "'";
+                query = "UPDATE ekspedisi SET nama_ekspedisi ='" + model.getName() + "' "
+                        + "WHERE kode_ekspedisi ='" + model.getKode() + "'";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {
                     isResult = false;
                 }
             } else {
-                query = "INSERT INTO EKSPEDISI VALUES ('" + model.getKode() + "', "
+                query = "INSERT INTO ekspedisi VALUES ('" + model.getKode() + "', "
                         + "'" + model.getName() + "')";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
@@ -633,7 +633,7 @@ public class ConnectionManager {
     // <editor-fold defaultstate="collapsed" desc="Input Order Penjualan">
     public String getKodePesanan() {
         String kode = "PS";
-        String query = "SELECT COUNT(*) 'total' FROM INPUT_ORDER_PENJUALAN";
+        String query = "SELECT COUNT(*) 'total' FROM input_order_penjualan";
         int totalPesanan = 0;
         try {
             ResultSet result = statement.executeQuery(query);
