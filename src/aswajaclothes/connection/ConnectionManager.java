@@ -181,7 +181,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomersByNoTelepon(String noTelepon) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM customer WHERE no_telepon LIKE '" + noTelepon + "%'";
+        String query = "SELECT * FROM customer WHERE no_telepon LIKE '" + noTelepon + "%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -206,7 +206,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomersByNama(String nama) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM customer WHERE nama_kustomer LIKE '%" + nama + "%'";
+        String query = "SELECT * FROM customer WHERE nama_kustomer LIKE '%" + nama + "%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -372,7 +372,7 @@ public class ConnectionManager {
     
     public ArrayList<BarangModel> getBarangsByNama(String nama) {
         ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM barang WHERE nama_barang LIKE '%"+ nama +"%'";
+        String query = "SELECT * FROM barang WHERE nama_barang LIKE '%"+ nama +"%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -460,7 +460,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSupplierByNoTelepon(String noTelepon) {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier WHERE no_telepon LIKE '" + noTelepon + "%'";
+        String query = "SELECT * FROM supplier WHERE no_telepon LIKE '" + noTelepon + "%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -487,7 +487,7 @@ public class ConnectionManager {
     
     public ArrayList<SupplierModel> getSupplierByNama(String nama) {
         ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier WHERE nama_supplier LIKE '" + nama + "%'";
+        String query = "SELECT * FROM supplier WHERE nama_supplier LIKE '" + nama + "%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -615,7 +615,7 @@ public class ConnectionManager {
     
     public ArrayList<EkspedisiModel> getEkspedisiByNama(String nama) {
         ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM ekspedisi WHERE nama_ekspedisi LIKE '%" + nama + "%'";
+        String query = "SELECT * FROM ekspedisi WHERE nama_ekspedisi LIKE '%" + nama + "%' AND deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
