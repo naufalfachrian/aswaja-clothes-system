@@ -19,6 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConnectionManager {
 
@@ -154,7 +156,7 @@ public class ConnectionManager {
     
     public ArrayList<CustomerModel> getCustomers() {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM customer";
+        String query = "SELECT * FROM customer WHERE deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -266,6 +268,16 @@ public class ConnectionManager {
             return isResult;
         }
         return isResult;
+    }
+    
+    public Boolean deleteCustomer(String customerId) {
+        try {
+            String query = "UPDATE customer SET deleted = true WHERE kode_kustomer = '" + customerId + "'";
+            return statement.executeUpdate(query) > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     //</editor-fold>
     

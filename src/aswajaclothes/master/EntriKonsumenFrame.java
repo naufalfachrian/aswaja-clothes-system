@@ -207,6 +207,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
 
@@ -220,7 +221,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         jLabel1.setText("Kode Customer");
 
         tfKodeCustomer.setEnabled(false);
-        tfKodeCustomer.setSize(new java.awt.Dimension(100, 26));
         tfKodeCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfKodeCustomerActionPerformed(evt);
@@ -236,7 +236,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
 
         jLabel2.setText("Nama Customer");
 
-        tfNama.setSize(new java.awt.Dimension(100, 26));
         tfNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNamaActionPerformed(evt);
@@ -280,12 +279,10 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
 
         taAlamat.setColumns(20);
         taAlamat.setRows(5);
-        taAlamat.setBounds(new java.awt.Rectangle(0, 0, 243, 80));
         jScrollPane1.setViewportView(taAlamat);
 
         jLabel8.setText("No Telepon");
 
-        tfNoTelepon.setSize(new java.awt.Dimension(100, 26));
         tfNoTelepon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNoTeleponActionPerformed(evt);
@@ -392,6 +389,14 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
             }
         });
         jPanel2.add(btnUbah);
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnHapus);
 
         btnBatal.setText("Batal");
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
@@ -505,6 +510,10 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         customerGrid.setVisible(true);
     }//GEN-LAST:event_btnCariNoTeleponActionPerformed
 
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        konfirmasiHapusCustomer();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
     // Variable declaration - able to modify
     private ArrayList<ProvinsiModel> listProvinsi;
     private ArrayList<KabupatenModel> listKabupaten;
@@ -515,6 +524,7 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnCariCustomer;
     private javax.swing.JButton btnCariNoTelepon;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnUbah;
@@ -543,5 +553,22 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     public void onSelectedRow(Object model, String fromGrid) {
         CustomerModel customer = (CustomerModel) model;
         setCustomer(customer);
+    }
+
+    private void konfirmasiHapusCustomer() {
+        int option = JOptionPane.showConfirmDialog(this, "Apakah anda yakin hendak menghapus konsumen " + tfNama.getText() + "?", "Hapus Konsumen", JOptionPane.OK_CANCEL_OPTION);
+        // OK = 0
+        if (option == 0) {
+            hapusCustomer();
+        }
+    }
+
+    private void hapusCustomer() {
+        if (new ConnectionManager().deleteCustomer(tfKodeCustomer.getText())) {
+            JOptionPane.showMessageDialog(this, "Konsumen terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            clear();
+        } else {
+            JOptionPane.showMessageDialog(this, "Konsumen gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
