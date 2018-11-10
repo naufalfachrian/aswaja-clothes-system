@@ -51,11 +51,13 @@ public class AswajaClothes extends javax.swing.JFrame {
         mnKeluar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnInputOrderPenjualan = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
@@ -120,7 +122,7 @@ public class AswajaClothes extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Transaksi");
+        jMenu2.setText("Transaksi Penjualan");
 
         mnInputOrderPenjualan.setText("Input Order Penjualan");
         mnInputOrderPenjualan.addActionListener(new java.awt.event.ActionListener() {
@@ -130,30 +132,32 @@ public class AswajaClothes extends javax.swing.JFrame {
         });
         jMenu2.add(mnInputOrderPenjualan);
 
-        jMenuItem6.setText("Input Order Pembelian");
-        jMenu2.add(jMenuItem6);
-
-        jMenuItem7.setText("Input Penjualan");
+        jMenuItem7.setText("Input Bukti Penjualan");
         jMenu2.add(jMenuItem7);
 
         jMenuItem8.setText("Cetak Invoice Penjualan");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
-            }
-        });
         jMenu2.add(jMenuItem8);
 
-        jMenuItem9.setText("Cetak Order Pembelian");
-        jMenu2.add(jMenuItem9);
+        jMenuItem1.setText("Cetak Surat Jalan");
+        jMenu2.add(jMenuItem1);
 
         jMenuItem10.setText("Retur Penjualan");
         jMenu2.add(jMenuItem10);
 
-        jMenuItem11.setText("Retur Pembelian");
-        jMenu2.add(jMenuItem11);
-
         jMenuBar1.add(jMenu2);
+
+        jMenu4.setText("Transaksi Pembelian");
+
+        jMenuItem6.setText("Input Order Pembelian");
+        jMenu4.add(jMenuItem6);
+
+        jMenuItem9.setText("Cetak Order Pembelian");
+        jMenu4.add(jMenuItem9);
+
+        jMenuItem11.setText("Retur Pembelian");
+        jMenu4.add(jMenuItem11);
+
+        jMenuBar1.add(jMenu4);
 
         jMenu3.setText("Report");
 
@@ -183,10 +187,6 @@ public class AswajaClothes extends javax.swing.JFrame {
     private void mnMasterBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMasterBarangActionPerformed
         new EntriBarangFrame().setVisible(true);
     }//GEN-LAST:event_mnMasterBarangActionPerformed
-
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void mnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnKeluarActionPerformed
         dispose();
@@ -246,7 +246,9 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
