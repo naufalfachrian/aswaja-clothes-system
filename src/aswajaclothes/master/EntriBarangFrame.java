@@ -206,6 +206,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         jPanel4 = new javax.swing.JPanel();
         btnSimpanBarang = new javax.swing.JButton();
         btnUbahBarang = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
 
@@ -219,7 +220,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         jLabel1.setText("Kode Barang");
 
         tfKodeBarang.setEnabled(false);
-        tfKodeBarang.setSize(new java.awt.Dimension(100, 26));
         tfKodeBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfKodeBarangActionPerformed(evt);
@@ -235,7 +235,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
 
         jLabel2.setText("Nama Barang");
 
-        tfNama.setSize(new java.awt.Dimension(100, 26));
         tfNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNamaActionPerformed(evt);
@@ -364,6 +363,14 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         });
         jPanel4.add(btnUbahBarang);
 
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnHapus);
+
         btnBatal.setText("Batal");
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -465,6 +472,10 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         }
     }//GEN-LAST:event_tfHargaJualSatuanKeyPressed
 
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        konfirmasiHapusBarang();
+    }//GEN-LAST:event_btnHapusActionPerformed
+
     // Variable declaration - able to modify
     private ArrayList<String> listWarna;
     private ArrayList<String> listArea;
@@ -473,6 +484,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnCariBarang;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpanBarang;
     private javax.swing.JButton btnUbahBarang;
@@ -498,5 +510,22 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     public void onSelectedRow(Object model, String fromGrid) {
         BarangModel barang = (BarangModel) model;
         setBarang(barang);
+    }
+
+    private void konfirmasiHapusBarang() {
+        int option = JOptionPane.showConfirmDialog(this, "Apakah anda yakin hendak menghapus barang " + tfNama.getText() + "?", "Hapus Barang", JOptionPane.OK_CANCEL_OPTION);
+        // OK = 0
+        if (option == 0) {
+            hapusBarang();
+        }
+    }
+
+    private void hapusBarang() {
+        if (new ConnectionManager().deleteBarang(tfKodeBarang.getText())) {
+            JOptionPane.showMessageDialog(this, "Barang terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            clear();
+        } else {
+            JOptionPane.showMessageDialog(this, "Barang gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

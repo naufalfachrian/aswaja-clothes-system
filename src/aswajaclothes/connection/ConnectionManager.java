@@ -348,7 +348,7 @@ public class ConnectionManager {
     
     public ArrayList<BarangModel> getBarangs() {
         ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM barang";
+        String query = "SELECT * FROM barang WHERE deleted = false";
         try {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -392,6 +392,16 @@ public class ConnectionManager {
         }
 
         return listBarang;
+    }
+    
+    public boolean deleteBarang(String barangId) {
+        String query = "UPDATE barang SET deleted = true WHERE kode_barang = '"  + barangId + "'";
+        try {
+            return statement.executeUpdate(query) > 0 ;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     // </editor-fold>
     
