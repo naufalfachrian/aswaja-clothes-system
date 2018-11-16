@@ -13,6 +13,8 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.model.master.SupplierModel;
+import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.model.transaction.InputOrderPenjualanModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -696,6 +698,27 @@ public class ConnectionManager {
             return kode;
         }
         return kode;
+    }
+    
+    public int simpanInputOrderPenjualan(InputOrderPenjualanModel item) throws SQLException {
+        String tableName = "input_order_penjualan";
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d, %d, '%s')",
+                tableName, item.getKodePesanan(), item.getKodeKustomer(),
+                item.getKodeEkspedisi(), item.getOngkir(), item.getTotal(), item.getTanggal());
+        int inserted = statement.executeUpdate(query);
+        if (inserted > 0) {
+            for (InputOrderPenjualanDetailModel itemDetail : item.getOrders()) {
+                itemDetail.setKodePesanan(item.getKodePesanan());
+                simpanInputOrderPenjualanDetail(itemDetail);
+            }
+        }
+        return inserted;
+    }
+    
+    public int simpanInputOrderPenjualanDetail(InputOrderPenjualanDetailModel item) throws SQLException {
+        String tableName = "input_order_penjualan_detail";
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', %d, '%s')", tableName, item.getKodePesanan(), item.getKodeBarang(), item.getQty(), item.getTipeLengan());
+        return statement.executeUpdate(query);
     }
     // </editor-fold>
 }

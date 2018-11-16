@@ -5,6 +5,8 @@
  */
 package aswajaclothes.model.transaction;
 
+import java.util.List;
+
 /**
  *
  * @author Satrio
@@ -16,6 +18,15 @@ public class InputOrderPenjualanModel {
     private int ongkir;
     private int total;
     private String tanggal;
+    private List<InputOrderPenjualanDetailModel> orders;
+
+    public List<InputOrderPenjualanDetailModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<InputOrderPenjualanDetailModel> orders) {
+        this.orders = orders;
+    }
 
     public InputOrderPenjualanModel() {
     }

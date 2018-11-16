@@ -14,6 +14,8 @@ import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.model.transaction.InputOrderPenjualanModel;
+import aswajaclothes.util.Config;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
@@ -26,6 +28,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -707,7 +710,24 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_btnCariEkspedisiActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        
+        try {
+            InputOrderPenjualanModel penjualan = new InputOrderPenjualanModel();
+            penjualan.setKodePesanan(tfKodePesanan.getText());
+            penjualan.setKodeKustomer(tfKodeCustomer.getText());
+            penjualan.setKodeEkspedisi(tfKodeEkspedisi.getText());
+            penjualan.setOngkir(new CurrencyUtil().clearFormatToInt(tfOngkir.getText()));
+            penjualan.setTotal(new CurrencyUtil().clearFormatToInt(tfTotal.getText()));
+            penjualan.setTanggal(new SimpleDateFormat(Config.DATE_FORMAT).format(chooserTanggal.getDate()));
+            penjualan.setOrders(listOrderPenjualanDetail);
+            ConnectionManager connectionManager = new ConnectionManager();
+            if (connectionManager.simpanInputOrderPenjualan(penjualan) > 0) {
+                JOptionPane.showMessageDialog(this, "Order penjualan berhasil disimpan", "Tersimpan", JOptionPane.INFORMATION_MESSAGE);
+                clearAll();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(InputOrderPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
