@@ -12,7 +12,7 @@ import aswajaclothes.master.EntriEkspedisiFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
 import aswajaclothes.master.EntriSupplierFrame;
 import aswajaclothes.transaction.CetakInvoicePenjualanFrame;
-import aswajaclothes.transaction.InputBuktiPembayaran;
+import aswajaclothes.transaction.InputBuktiPembayaranFrame;
 import aswajaclothes.transaction.InputOrderPembelianFrame;
 import aswajaclothes.transaction.InputOrderPenjualanFrame;
 import java.awt.Dimension;
@@ -228,7 +228,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     }//GEN-LAST:event_mnCetakInvoicePenjualanActionPerformed
 
     private void mnInputBuktiPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnInputBuktiPembayaranActionPerformed
-        new InputBuktiPembayaran().setVisible(true);
+        new InputBuktiPembayaranFrame().setVisible(true);
     }//GEN-LAST:event_mnInputBuktiPembayaranActionPerformed
 
     private void mnInputOrderPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnInputOrderPembelianActionPerformed

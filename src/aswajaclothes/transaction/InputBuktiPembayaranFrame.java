@@ -45,12 +45,12 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Satrio
  */
-public class InputBuktiPembayaran extends javax.swing.JFrame implements GridListener, MouseListener {
+public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements GridListener, MouseListener {
 
     /**
      * Creates new form InputOrderPenjualanFrame
      */
-    public InputBuktiPembayaran() {
+    public InputBuktiPembayaranFrame() {
         initComponents();
         initDateFormat();
         initKodePesanan();
