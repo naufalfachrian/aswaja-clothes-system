@@ -71,10 +71,13 @@
                 <Property name="text" type="java.lang.String" value="Input Bukti Penjualan"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
+            <MenuItem class="javax.swing.JMenuItem" name="mnCetakInvoicePenjualan">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cetak Invoice Penjualan"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnCetakInvoicePenjualanActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
