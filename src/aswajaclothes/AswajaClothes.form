@@ -87,10 +87,13 @@
                 <Property name="text" type="java.lang.String" value="Cetak Surat Jalan"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
+            <MenuItem class="javax.swing.JMenuItem" name="mnReturPenjualan">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Retur Penjualan"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnReturPenjualanActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
