@@ -13,6 +13,7 @@ import aswajaclothes.master.EntriKonsumenFrame;
 import aswajaclothes.master.EntriSupplierFrame;
 import aswajaclothes.transaction.CetakInvoicePenjualanFrame;
 import aswajaclothes.transaction.InputBuktiPembayaran;
+import aswajaclothes.transaction.InputOrderPembelianFrame;
 import aswajaclothes.transaction.InputOrderPenjualanFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -58,7 +59,7 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mnInputOrderPembelian = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -160,8 +161,13 @@ public class AswajaClothes extends javax.swing.JFrame {
 
         jMenu4.setText("Transaksi Pembelian");
 
-        jMenuItem6.setText("Input Order Pembelian");
-        jMenu4.add(jMenuItem6);
+        mnInputOrderPembelian.setText("Input Order Pembelian");
+        mnInputOrderPembelian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnInputOrderPembelianActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mnInputOrderPembelian);
 
         jMenuItem9.setText("Cetak Order Pembelian");
         jMenu4.add(jMenuItem9);
@@ -225,6 +231,10 @@ public class AswajaClothes extends javax.swing.JFrame {
         new InputBuktiPembayaran().setVisible(true);
     }//GEN-LAST:event_mnInputBuktiPembayaranActionPerformed
 
+    private void mnInputOrderPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnInputOrderPembelianActionPerformed
+        new InputOrderPembelianFrame().setVisible(true);
+    }//GEN-LAST:event_mnInputOrderPembelianActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -275,12 +285,12 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel logo;
     private javax.swing.JMenuItem mnCetakInvoicePenjualan;
     private javax.swing.JMenuItem mnInputBuktiPembayaran;
+    private javax.swing.JMenuItem mnInputOrderPembelian;
     private javax.swing.JMenuItem mnInputOrderPenjualan;
     private javax.swing.JMenuItem mnKeluar;
     private javax.swing.JMenuItem mnMasterBarang;
