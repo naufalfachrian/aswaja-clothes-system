@@ -10,6 +10,7 @@ import aswajaclothes.grid.BarangGridFrame;
 import aswajaclothes.grid.CustomerGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
+import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
@@ -53,7 +54,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     public CetakInvoicePenjualanFrame() {
         initComponents();
         initDateFormat();
-        initKodePesanan();
+        initKodeInvoice();
         initFormatFieldNumber();
         initTable();
         initListOrderPenjualan();
@@ -66,8 +67,8 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         editor.setEditable(false);
     }
     
-    private void initKodePesanan(){
-        String kode = new ConnectionManager().getKodePesanan();
+    private void initKodeInvoice(){
+        String kode = new ConnectionManager().getKodeInvoice();
         tfNoInvoice.setText(kode);
     }
     
@@ -164,7 +165,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Invoice"));
 
-        jLabel1.setText("No.. Invoice");
+        jLabel1.setText("No. Invoice");
 
         tfNoInvoice.setEnabled(false);
         tfNoInvoice.addActionListener(new java.awt.event.ActionListener() {
@@ -446,8 +447,6 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                 .addContainerGap())
         );
 
-        jPanel1.getAccessibleContext().setAccessibleName("Data Invoice");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -464,9 +463,8 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     }//GEN-LAST:event_tfNoPesananActionPerformed
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NONE, "");
-        customerGrid.setGridListener(this);
-        customerGrid.setVisible(true);
+        PesananGridFrame pesananGridFrame = new PesananGridFrame("");
+        pesananGridFrame.setVisible(true);
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
     private void tfKodeCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeCustomerActionPerformed
@@ -549,21 +547,21 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     @Override
     public void mousePressed(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        // Todo
     }
 }
