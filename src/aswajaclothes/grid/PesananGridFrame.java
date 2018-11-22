@@ -9,6 +9,7 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.PesananModel;
+import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -48,7 +49,7 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
         btnCari = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Data Customer");
+        setTitle("Data Pesanan");
 
         tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -129,8 +130,8 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
                 item.getKodePesanan(),
                 item.getNamaKustomer(),
                 item.getNamaEkspedisi(),
-                item.getOngkir().toString(),
-                item.getTotal().toString()
+                new CurrencyUtil().formatCurrency(item.getOngkir()),
+                new CurrencyUtil().formatCurrency(item.getTotal()),
             };
             rows.add(rowData);
         }
@@ -163,8 +164,8 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblCustomer.getSelectedRow();
-//        CustomerModel customer = listCustomer.get(rowSelected);
-//        listener.onSelectedRow(customer, PesananGridFrame.class.getSimpleName());
+        PesananModel pesanan  = items.get(rowSelected);
+        listener.onSelectedRow(pesanan, PesananGridFrame.class.getSimpleName());
         dispose();
     }
 

@@ -14,6 +14,8 @@ import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.ItemPesananModel;
+import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanModel;
 import aswajaclothes.util.Config;
@@ -41,6 +43,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -141,8 +144,8 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         jLabel8 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         tfNamaCustomer = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        tfNamaEkspedisi = new javax.swing.JTextField();
+        ppnCheckBox = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesananDetail = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
@@ -221,12 +224,12 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
         tfNamaCustomer.setEnabled(false);
 
-        jTextField2.setEnabled(false);
+        tfNamaEkspedisi.setEnabled(false);
 
-        jCheckBox1.setText("PPn");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        ppnCheckBox.setText("PPn");
+        ppnCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                ppnCheckBoxActionPerformed(evt);
             }
         });
 
@@ -257,7 +260,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                                     .addComponent(jLabel15))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
+                                    .addComponent(tfNamaEkspedisi)
                                     .addComponent(tfNamaCustomer))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -269,7 +272,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jCheckBox1))))
+                            .addComponent(ppnCheckBox))))
                 .addContainerGap(90, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -298,9 +301,9 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
-                    .addComponent(jCheckBox1))
+                    .addComponent(ppnCheckBox))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -357,6 +360,9 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
         jLabel14.setText("Rp");
 
+        tfSubTotal.setEditable(false);
+        tfSubTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfSubTotal.setEnabled(false);
         tfSubTotal.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 tfSubTotalCaretUpdate(evt);
@@ -364,14 +370,24 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         });
 
         tfOngkir.setEditable(false);
+        tfOngkir.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfOngkir.setEnabled(false);
 
         jLabel5.setText("PPn");
 
         jLabel6.setText("Rp");
 
+        tfPPn.setEditable(false);
+        tfPPn.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfPPn.setEnabled(false);
+
         jLabel7.setText("Total Bayar");
 
         jLabel9.setText("Rp");
+
+        tfTotalBayar.setEditable(false);
+        tfTotalBayar.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfTotalBayar.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -464,6 +480,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
         PesananGridFrame pesananGridFrame = new PesananGridFrame("");
+        pesananGridFrame.setGridListener(this);
         pesananGridFrame.setVisible(true);
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
@@ -491,13 +508,19 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         }
     }//GEN-LAST:event_tfSubTotalCaretUpdate
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    private void ppnCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppnCheckBoxActionPerformed
+        withPpn = ppnCheckBox.isSelected();
+        applyPpn();
+    }//GEN-LAST:event_ppnCheckBoxActionPerformed
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    boolean withPpn = false;
+    Integer subTotal = 0;
+    Integer ongkir = 0;
+    Integer ppn = 0;
+    Integer total = 0;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -505,7 +528,6 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     private javax.swing.JButton btnCetak;
     private javax.swing.JButton btnKeluar;
     private com.toedter.calendar.JDateChooser chooserTanggal;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -523,10 +545,11 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JCheckBox ppnCheckBox;
     private javax.swing.JTable tblPesananDetail;
     private javax.swing.JTextField tfKodeCustomer;
     private javax.swing.JTextField tfNamaCustomer;
+    private javax.swing.JTextField tfNamaEkspedisi;
     private javax.swing.JTextField tfNoInvoice;
     private javax.swing.JTextField tfNoPesanan;
     private javax.swing.JFormattedTextField tfOngkir;
@@ -537,7 +560,19 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        // Todo
+        if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
+            PesananModel pesanan = (PesananModel) model;
+            tfNoPesanan.setText(pesanan.getKodePesanan());
+            tfKodeCustomer.setText(pesanan.getKodeKustomer());
+            tfNamaCustomer.setText(pesanan.getNamaKustomer());
+            tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
+            tfSubTotal.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
+            tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
+            subTotal = pesanan.getTotal();
+            ongkir = pesanan.getOngkir();
+            applyPpn();
+            applyPesananDetail(pesanan);
+        }
     }
 
     @Override
@@ -563,5 +598,42 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     @Override
     public void mouseExited(MouseEvent e) {
         // Todo
+    }
+
+    private void applyPpn() {
+        Integer prePpn = subTotal + ongkir;
+        if (withPpn) {
+            ppn = prePpn * 1 / 10; // PPn 10%
+        } else {
+            ppn = 0;
+        }
+        total = subTotal + ongkir + ppn;
+        tfPPn.setText(new CurrencyUtil().formatCurrency(ppn));
+        tfTotalBayar.setText(new CurrencyUtil().formatCurrency(total));
+    }
+
+    private void applyPesananDetail(PesananModel pesanan) {
+        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+            ArrayList<String[]> rows = new ArrayList<>();
+            int count = 1;
+            for (ItemPesananModel item : items) {
+                String[] rowData = new String[]{
+                    String.valueOf(count),
+                    item.getBarang().getKode(),
+                    item.getBarang().getName(),
+                    item.getQuantity().toString(),
+                    new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
+                    new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
+                };
+                rows.add(rowData);
+                count++;
+            }
+            TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            tblPesananDetail.setModel(tblModel);
     }
 }

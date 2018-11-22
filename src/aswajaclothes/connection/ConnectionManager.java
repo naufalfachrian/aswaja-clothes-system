@@ -13,6 +13,7 @@ import aswajaclothes.model.common.KelurahanModel;
 import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
@@ -747,6 +748,36 @@ public class ConnectionManager {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return items;
+        }
+        return items;
+    }
+    
+    public List<ItemPesananModel> getDaftarPesananItem(String kodePesanan) {
+        ArrayList<ItemPesananModel> items = new ArrayList<>();
+        String query = String.format("SELECT * FROM input_order_penjualan_detail iopd "
+                + "LEFT JOIN barang b ON iopd.kode_barang = b.kode_barang "
+                + "WHERE iopd.kode_pesanan = '%s'", kodePesanan);
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                ItemPesananModel item = new ItemPesananModel();
+                item.setKodePesanan(kodePesanan);
+                
+                BarangModel barang = new BarangModel();
+                barang.setKode(result.getString("kode_barang"));
+                barang.setName(result.getString("nama_barang"));
+                barang.setWarna(result.getString("warna"));
+                barang.setArea(result.getString("area"));
+                barang.setUkuran(result.getString("ukuran"));
+                barang.setHargaHPP(result.getInt("harga_hpp"));
+                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
+                item.setBarang(barang);
+                
+                item.setQuantity(result.getInt("qty"));
+                items.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return items;
     }
