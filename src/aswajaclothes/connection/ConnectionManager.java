@@ -801,6 +801,12 @@ public class ConnectionManager {
     
     //<editor-fold defaultstate="collapsed" desc="get kode">
     
+    
+    public String getKodePembelian() {
+        return getKode("PM", "input_order_pembelian");
+    }
+    
+    
     public String getKode(String prefix, String namaTable) {
         String query = String.format("SELECT COUNT(*) 'total' FROM %s", namaTable);
         String kode = prefix;
