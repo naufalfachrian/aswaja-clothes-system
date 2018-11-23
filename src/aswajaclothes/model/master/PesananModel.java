@@ -5,6 +5,12 @@
  */
 package aswajaclothes.model.master;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author littleflower
@@ -86,7 +92,13 @@ public class PesananModel {
     }
 
     public String getTanggalPemesanan() {
-        return tanggalPemesanan;
+        try {
+            Date _tanggalPesanan = new SimpleDateFormat("ddMMyyyy").parse(tanggalPemesanan);
+            return new SimpleDateFormat("dd-MM-yyyy").format(_tanggalPesanan);
+        } catch (ParseException ex) {
+            Logger.getLogger(PesananModel.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
     }
 
     public void setTanggalPemesanan(String tanggalPemesanan) {
