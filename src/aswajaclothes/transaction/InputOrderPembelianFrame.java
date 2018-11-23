@@ -464,6 +464,11 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         tfTanggalPesanan.setEnabled(false);
 
         btnBersihPemesanan.setText("Bersih");
+        btnBersihPemesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBersihPemesananActionPerformed(evt);
+            }
+        });
 
         btnTambahPemesanan.setText("Tambah");
         btnTambahPemesanan.addActionListener(new java.awt.event.ActionListener() {
@@ -635,6 +640,13 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnTambahPemesananActionPerformed
+
+    private void btnBersihPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihPemesananActionPerformed
+        selectedKodePesanan.clear();
+        for(int i = 0; i <= tblModel.getRowCount(); i++) {
+            tblModel.removeRow(0);
+        }
+    }//GEN-LAST:event_btnBersihPemesananActionPerformed
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
