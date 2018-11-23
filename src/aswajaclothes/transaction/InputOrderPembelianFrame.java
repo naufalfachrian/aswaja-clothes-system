@@ -15,6 +15,7 @@ import aswajaclothes.grid.SupplierGridFrame;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
@@ -82,11 +83,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void initTable(){
         tblModel = (DefaultTableModel)tblPesananDetail.getModel();
         tblPesananDetail.addMouseListener(this);
+        tblPesananDetail.setModel(tblModel);
         initCellRenderAction();
     }
     
     private void initCellRenderAction(){
-        // Todo
+        tblPesananDetail.getColumnModel().getColumn(5).setCellRenderer(new ButtonCell());
     }
     
     private void initListOrderPenjualan(){
@@ -184,8 +186,8 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         btnCariPemesanan = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         tfTanggalPesanan = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnBersihPemesanan = new javax.swing.JButton();
+        btnTambahPemesanan = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -390,7 +392,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -461,9 +463,14 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         tfTanggalPesanan.setEditable(false);
         tfTanggalPesanan.setEnabled(false);
 
-        jButton3.setText("Bersih");
+        btnBersihPemesanan.setText("Bersih");
 
-        jButton4.setText("Tambah");
+        btnTambahPemesanan.setText("Tambah");
+        btnTambahPemesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahPemesananActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -496,9 +503,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(btnTambahPemesanan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3))
+                .addComponent(btnBersihPemesanan))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -519,8 +526,8 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)))
+                    .addComponent(btnBersihPemesanan)
+                    .addComponent(btnTambahPemesanan)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -611,24 +618,43 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         frame.setVisible(true);
     }//GEN-LAST:event_btnCariPemesananActionPerformed
 
+    private void btnTambahPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPemesananActionPerformed
+        PesananModel pesanan = new ConnectionManager().getDaftarPesananById(kodePesanan);
+        if (!kodePesananHasBeenSelected()) {
+            List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+            tblModel.addRow(new String[] {
+                String.valueOf((tblModel.getRowCount() + 1)),
+                pesanan.getKodePesanan(),
+                pesanan.getNamaKustomer(),
+                String.valueOf(items.size()),
+                new CurrencyUtil().formatCurrency(pesanan.getTotal()),
+                "Hapus"
+            });
+            selectedKodePesanan.add(kodePesanan);
+        } else {
+            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTambahPemesananActionPerformed
+
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     private String kodeSupplier = null;
     private String kodeEkspedisi = null;
     private String kodePesanan = null;
+    private ArrayList<String> selectedKodePesanan = new ArrayList<>();
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnBersihPemesanan;
     private javax.swing.JButton btnCariEkspedisi;
     private javax.swing.JButton btnCariPemesanan;
     private javax.swing.JButton btnCariPesanan;
     private javax.swing.JButton btnCariSupplier;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnTambahPemesanan;
     private com.toedter.calendar.JDateChooser chooserTanggal;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -719,5 +745,14 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         tfKodeCustomer.setText(pesanan.getKodeKustomer());
         tfTanggalPesanan.setText(pesanan.getTanggalPemesanan());
         kodePesanan = pesanan.getKodePesanan();
+    }
+
+    private boolean kodePesananHasBeenSelected() {
+        for (String check: selectedKodePesanan) {
+            if (check.equals(kodePesanan)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
