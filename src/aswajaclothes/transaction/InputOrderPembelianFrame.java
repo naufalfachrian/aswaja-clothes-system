@@ -714,7 +714,15 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Todo
+        if (tblPesananDetail.getSelectedColumn() == 5) {
+            int position = tblPesananDetail.getSelectedRow();
+            String kodePesanan = (String) tblPesananDetail.getValueAt(position, 1);
+            String namaKustomer = (String) tblPesananDetail.getValueAt(position, 2);
+            int result = JOptionPane.showConfirmDialog(this, String.format("Apakaha Anda yakin hendak menghapus pesanan %s atas nama %s dari daftar pembelian ini?", kodePesanan, namaKustomer), "Pertanyaan", JOptionPane.YES_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                hapusPesananDariPembelian(position);
+            }
+        }
     }
 
     @Override
@@ -766,5 +774,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             }
         }
         return false;
+    }
+
+    private void hapusPesananDariPembelian(int position) {
+        selectedKodePesanan.remove(position);
+        tblModel.removeRow(position);
     }
 }
