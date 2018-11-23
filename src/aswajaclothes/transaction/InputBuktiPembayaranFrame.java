@@ -13,6 +13,7 @@ import aswajaclothes.grid.GridListener;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanModel;
 import aswajaclothes.util.Config;
@@ -40,6 +41,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -75,6 +77,7 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
         tblModel = (DefaultTableModel)tblPesananDetail.getModel();
         tblPesananDetail.addMouseListener(this);
         initCellRenderAction();
+        populateTable();
     }
     
     private void initCellRenderAction(){
@@ -214,7 +217,11 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
-    List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    List<PesananModel> daftarPesanan;
+    
+    private static final String VerificationText = "Verifikasi";
+    
+    private static final String SudahLunasText = "Sudah Lunas";
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCari;
@@ -232,26 +239,79 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Todo
+        int rowSelected = tblPesananDetail.getSelectedRow();
+        int columnSelected = tblPesananDetail.getSelectedColumn();
+        String columnText = tblPesananDetail.getModel().getValueAt(rowSelected, columnSelected).toString();
+        if (columnSelected == 5 && columnText.equals(VerificationText)) {
+            askToConfirmBuktiPembayaran(rowSelected);
+        }
+        if (columnSelected == 5 & columnText.equals(SudahLunasText)) {
+            pesananSudahLunas(rowSelected);
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+        // Todo
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        // Todo
     }
+
+    private void askToConfirmBuktiPembayaran(int rowSelected) {
+        PesananModel pesanan = daftarPesanan.get(rowSelected);
+        int dialogResult = JOptionPane.showConfirmDialog (null, String.format("Konfirmasi pembayaran pesanan %s atas nama %s?", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Warning", JOptionPane.YES_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION){
+            confirmBuktiPembayaran(pesanan);
+        }
+    }
+
+    private void confirmBuktiPembayaran(PesananModel pesanan) {
+        new ConnectionManager().setStatusBayarOrderPenjualan(pesanan, true);
+        populateTable();
+    }
+
+    private void populateTable() {
+        daftarPesanan = new ConnectionManager().getDaftarPesanan();
+        ArrayList<String[]> rows = new ArrayList<>();
+        int count = 1;
+        for (PesananModel item : daftarPesanan) {
+            String[] rowData = new String[]{
+                String.format("%d", count),
+                item.getKodePesanan(),
+                item.getNamaKustomer(),
+                "0",
+                new CurrencyUtil().formatCurrency(item.getTotal()),
+                item.isLunas() ? SudahLunasText : VerificationText
+            };
+            rows.add(rowData);
+            count++;
+        }
+        TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[]{ "No.", "Kode Pesanan", "Nama Kustomer", "Qty", "Total Harga", "Aksi" }){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPesananDetail.setModel(tblModel);
+        tblPesananDetail.getColumnModel().getColumn(5).setCellRenderer(new ButtonCell());
+    }
+
+    private void pesananSudahLunas(int rowSelected) {
+        PesananModel pesanan = daftarPesanan.get(rowSelected);
+        JOptionPane.showMessageDialog(null, String.format("Pembayaran pesanan %s atas nama %s sudah lunas.", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Warning", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
 }

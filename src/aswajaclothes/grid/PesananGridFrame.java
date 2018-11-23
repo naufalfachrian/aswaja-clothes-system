@@ -43,7 +43,7 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCustomer = new javax.swing.JTable();
+        tblPesanan = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         tfNama = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
@@ -51,7 +51,7 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Data Pesanan");
 
-        tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
+        tblPesanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -70,8 +70,8 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
                 return types [columnIndex];
             }
         });
-        tblCustomer.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblCustomer);
+        tblPesanan.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblPesanan);
 
         jLabel1.setText("Nama");
 
@@ -141,11 +141,11 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
                 return false;
             }
         };
-        tblCustomer.setModel(tblModel);
+        tblPesanan.setModel(tblModel);
     }
     
     private void initTableListener(){
-        tblCustomer.addMouseListener(this);
+        tblPesanan.addMouseListener(this);
     }
     
     // Variables declaration - able to modify
@@ -157,13 +157,13 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     private javax.swing.JButton btnCari;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblCustomer;
+    private javax.swing.JTable tblPesanan;
     private javax.swing.JTextField tfNama;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int rowSelected = tblCustomer.getSelectedRow();
+        int rowSelected = tblPesanan.getSelectedRow();
         PesananModel pesanan  = items.get(rowSelected);
         listener.onSelectedRow(pesanan, PesananGridFrame.class.getSimpleName());
         dispose();

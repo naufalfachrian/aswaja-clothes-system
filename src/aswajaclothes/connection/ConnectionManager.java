@@ -725,9 +725,19 @@ public class ConnectionManager {
         return statement.executeUpdate(query);
     }
     
+    public int setStatusBayarOrderPenjualan(PesananModel pesananModel, boolean statusBayar) {
+        try {
+            String query = String.format("UPDATE input_order_penjualan SET is_lunas = %b WHERE kode_pesanan = '%s'", statusBayar, pesananModel.getKodePesanan());
+            return statement.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+    
     public List<PesananModel> getDaftarPesanan() {
         ArrayList<PesananModel> items = new ArrayList<>();
-        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +
+        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
                 "FROM input_order_penjualan iop " +
                 "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
                 "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi;";
@@ -743,6 +753,7 @@ public class ConnectionManager {
                 item.setOngkir(result.getInt("ongkir"));
                 item.setTotal(result.getInt("total"));
                 item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
+                item.setLunas(result.getBoolean("is_lunas"));
                 items.add(item);
             }
         } catch (SQLException ex) {
