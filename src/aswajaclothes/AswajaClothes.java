@@ -138,7 +138,7 @@ public class AswajaClothes extends javax.swing.JFrame {
         });
         jMenu2.add(mnInputOrderPenjualan);
 
-        mnInputBuktiPembayaran.setText("Input Bukti Penjualan");
+        mnInputBuktiPembayaran.setText("Input Bukti Pembayaran");
         mnInputBuktiPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnInputBuktiPembayaranActionPerformed(evt);
