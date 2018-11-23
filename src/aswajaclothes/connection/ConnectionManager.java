@@ -763,6 +763,33 @@ public class ConnectionManager {
         return items;
     }
     
+    public PesananModel getDaftarPesananById(String inputOrderPenjualanId) {
+        try {
+            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
+                    "FROM input_order_penjualan iop " +
+                    "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
+                    "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi " +
+                    "WHERE iop.kode_pesanan = '%s';", inputOrderPenjualanId);
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                PesananModel item = new PesananModel();
+                item.setKodePesanan(result.getString("kode_pesanan"));
+                item.setKodeKustomer(result.getString("kode_kustomer"));
+                item.setNamaKustomer(result.getString("nama_kustomer"));
+                item.setKodeEkspedisi(result.getString("kode_ekspedisi"));
+                item.setNamaEkspedisi(result.getString("nama_ekspedisi"));
+                item.setOngkir(result.getInt("ongkir"));
+                item.setTotal(result.getInt("total"));
+                item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
+                item.setLunas(result.getBoolean("is_lunas"));
+                return item;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public List<ItemPesananModel> getDaftarPesananItem(String kodePesanan) {
         ArrayList<ItemPesananModel> items = new ArrayList<>();
         String query = String.format("SELECT * FROM input_order_penjualan_detail iopd "
