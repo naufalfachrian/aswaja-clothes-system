@@ -26,6 +26,7 @@ import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import aswajaclothes.widget.ButtonCell;
 import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
@@ -43,6 +44,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -58,7 +60,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     public InputOrderPembelianFrame() {
         initComponents();
         initDateFormat();
-        initKodePesanan();
+        initKodePembelian();
         initFormatFieldNumber();
         initTable();
         initListOrderPenjualan();
@@ -71,7 +73,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         editor.setEditable(false);
     }
     
-    private void initKodePesanan(){
+    private void initKodePembelian(){
         String kode = new ConnectionManager().getKodePembelian();
         tfKodePembelian.setText(kode);
     }
@@ -95,22 +97,34 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         listOrderPenjualanDetail = new ArrayList<>();
     }
     
-    private void clearBarang(){
-        // Todo
+    private void clearSupplier(){
+        kodeSupplier = null;
+        kodeEkspedisi = null;
+        clear(new JTextField[] {
+            tfSupplierKodeEkspedisi,
+            tfSupplierKodeSupplier,
+            tfSupplierNamaEkspedisi,
+            tfSupplierNamaSupplier,
+            tfSupplierNomorTelepon,
+        });
+        tfSupplierAlamat.setText("");
     }
     
     private void clearPesanan(){
-        // Todo
-    }
-    
-    private void clearEkspedisi(){
-        // Todo
+        kodePesanan = null;
+        clear(new JTextField[] {
+            tfPesananKodeKustomer,
+            tfPesananKodePesanan,
+            tfPesananNamaKustomer,
+            tfPesananTanggalPesanan
+        });
     }
     
     private void clearAll(){
         clearPesanan();
-        clearBarang();
-        clearEkspedisi();
+        clearSupplier();
+        initKodePembelian();
+        bersihPemesananTable();
     }
     
     private void tambah() throws ParseException, Exception{
@@ -156,20 +170,20 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         chooserTanggal = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        tfKodeSupplier = new javax.swing.JTextField();
+        tfSupplierKodeSupplier = new javax.swing.JTextField();
         btnCariSupplier = new javax.swing.JButton();
-        tfNamaSupplier = new javax.swing.JTextField();
+        tfSupplierNamaSupplier = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        tfKodeEkspedisi = new javax.swing.JTextField();
+        tfSupplierKodeEkspedisi = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        tfNamaEkspedisi = new javax.swing.JTextField();
+        tfSupplierNamaEkspedisi = new javax.swing.JTextField();
         btnCariEkspedisi = new javax.swing.JButton();
-        tfNomorTelepon = new javax.swing.JTextField();
+        tfSupplierNomorTelepon = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tfAlamat = new javax.swing.JTextArea();
+        tfSupplierAlamat = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesananDetail = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -180,12 +194,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        tfKodePesanan = new javax.swing.JTextField();
-        tfKodeCustomer = new javax.swing.JTextField();
-        tfNamaCustomer = new javax.swing.JTextField();
+        tfPesananKodePesanan = new javax.swing.JTextField();
+        tfPesananKodeKustomer = new javax.swing.JTextField();
+        tfPesananNamaKustomer = new javax.swing.JTextField();
         btnCariPemesanan = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        tfTanggalPesanan = new javax.swing.JTextField();
+        tfPesananTanggalPesanan = new javax.swing.JTextField();
         btnBersihPemesanan = new javax.swing.JButton();
         btnTambahPemesanan = new javax.swing.JButton();
 
@@ -256,10 +270,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jLabel5.setText("Kode Supplier");
 
-        tfKodeSupplier.setEnabled(false);
-        tfKodeSupplier.addActionListener(new java.awt.event.ActionListener() {
+        tfSupplierKodeSupplier.setEnabled(false);
+        tfSupplierKodeSupplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfKodeSupplierActionPerformed(evt);
+                tfSupplierKodeSupplierActionPerformed(evt);
             }
         });
 
@@ -270,10 +284,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             }
         });
 
-        tfNamaSupplier.setEnabled(false);
-        tfNamaSupplier.addActionListener(new java.awt.event.ActionListener() {
+        tfSupplierNamaSupplier.setEnabled(false);
+        tfSupplierNamaSupplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNamaSupplierActionPerformed(evt);
+                tfSupplierNamaSupplierActionPerformed(evt);
             }
         });
 
@@ -285,13 +299,13 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jLabel4.setText("Kode Ekspedisi");
 
-        tfKodeEkspedisi.setEditable(false);
-        tfKodeEkspedisi.setEnabled(false);
+        tfSupplierKodeEkspedisi.setEditable(false);
+        tfSupplierKodeEkspedisi.setEnabled(false);
 
         jLabel8.setText("Nama Ekspedisi");
 
-        tfNamaEkspedisi.setEditable(false);
-        tfNamaEkspedisi.setEnabled(false);
+        tfSupplierNamaEkspedisi.setEditable(false);
+        tfSupplierNamaEkspedisi.setEnabled(false);
 
         btnCariEkspedisi.setText("Cari");
         btnCariEkspedisi.addActionListener(new java.awt.event.ActionListener() {
@@ -300,14 +314,14 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             }
         });
 
-        tfNomorTelepon.setEditable(false);
-        tfNomorTelepon.setEnabled(false);
+        tfSupplierNomorTelepon.setEditable(false);
+        tfSupplierNomorTelepon.setEnabled(false);
 
-        tfAlamat.setEditable(false);
-        tfAlamat.setColumns(20);
-        tfAlamat.setRows(5);
-        tfAlamat.setEnabled(false);
-        jScrollPane2.setViewportView(tfAlamat);
+        tfSupplierAlamat.setEditable(false);
+        tfSupplierAlamat.setColumns(20);
+        tfSupplierAlamat.setRows(5);
+        tfSupplierAlamat.setEnabled(false);
+        jScrollPane2.setViewportView(tfSupplierAlamat);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -326,25 +340,25 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfKodeSupplier)
+                                    .addComponent(tfSupplierKodeSupplier)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tfSupplierNamaEkspedisi, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(tfKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(tfSupplierKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(btnCariEkspedisi)))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCariSupplier))
-                            .addComponent(tfNamaSupplier)))
+                            .addComponent(tfSupplierNamaSupplier)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNomorTelepon)
+                            .addComponent(tfSupplierNomorTelepon)
                             .addComponent(jScrollPane2))))
                 .addContainerGap())
         );
@@ -354,28 +368,28 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(tfKodeSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfSupplierKodeSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCariSupplier))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(tfNamaSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSupplierNamaSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(tfNomorTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSupplierNomorTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfSupplierKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(btnCariEkspedisi))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfSupplierNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -441,14 +455,14 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jLabel11.setText("Nama Customer");
 
-        tfKodePesanan.setEditable(false);
-        tfKodePesanan.setEnabled(false);
+        tfPesananKodePesanan.setEditable(false);
+        tfPesananKodePesanan.setEnabled(false);
 
-        tfKodeCustomer.setEditable(false);
-        tfKodeCustomer.setEnabled(false);
+        tfPesananKodeKustomer.setEditable(false);
+        tfPesananKodeKustomer.setEnabled(false);
 
-        tfNamaCustomer.setEditable(false);
-        tfNamaCustomer.setEnabled(false);
+        tfPesananNamaKustomer.setEditable(false);
+        tfPesananNamaKustomer.setEnabled(false);
 
         btnCariPemesanan.setText("Cari");
         btnCariPemesanan.setToolTipText("");
@@ -460,8 +474,8 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jLabel12.setText("Tanggal");
 
-        tfTanggalPesanan.setEditable(false);
-        tfTanggalPesanan.setEnabled(false);
+        tfPesananTanggalPesanan.setEditable(false);
+        tfPesananTanggalPesanan.setEnabled(false);
 
         btnBersihPemesanan.setText("Bersih");
         btnBersihPemesanan.addActionListener(new java.awt.event.ActionListener() {
@@ -487,7 +501,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfNamaCustomer))
+                        .addComponent(tfPesananNamaKustomer))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -495,16 +509,16 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(11, 11, 11)
-                                .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tfPesananKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCariPemesanan))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tfKodeCustomer)))))
+                                .addComponent(tfPesananKodeKustomer)))))
                 .addGap(73, 73, 73)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfTanggalPesanan)
+                .addComponent(tfPesananTanggalPesanan)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -516,18 +530,18 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfPesananKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCariPemesanan)
                     .addComponent(jLabel9)
                     .addComponent(jLabel12)
-                    .addComponent(tfTanggalPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfPesananTanggalPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfPesananKodeKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNamaCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfPesananNamaKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -581,9 +595,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
-    private void tfKodeSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeSupplierActionPerformed
+    private void tfSupplierKodeSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSupplierKodeSupplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfKodeSupplierActionPerformed
+    }//GEN-LAST:event_tfSupplierKodeSupplierActionPerformed
 
     private void btnCariSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariSupplierActionPerformed
         SupplierGridFrame frame = new SupplierGridFrame(FilterUtil.FilterType.NONE, "");
@@ -591,9 +605,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         frame.setVisible(true);
     }//GEN-LAST:event_btnCariSupplierActionPerformed
 
-    private void tfNamaSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaSupplierActionPerformed
+    private void tfSupplierNamaSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSupplierNamaSupplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNamaSupplierActionPerformed
+    }//GEN-LAST:event_tfSupplierNamaSupplierActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // Todo
@@ -642,10 +656,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_btnTambahPemesananActionPerformed
 
     private void btnBersihPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihPemesananActionPerformed
-        selectedKodePesanan.clear();
-        for(int i = 0; i <= tblModel.getRowCount(); i++) {
-            tblModel.removeRow(0);
-        }
+        bersihPemesananTable();
     }//GEN-LAST:event_btnBersihPemesananActionPerformed
 
     // Variable declarations - able to modify
@@ -686,17 +697,17 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblPesananDetail;
-    private javax.swing.JTextArea tfAlamat;
-    private javax.swing.JTextField tfKodeCustomer;
-    private javax.swing.JTextField tfKodeEkspedisi;
     private javax.swing.JTextField tfKodePembelian;
-    private javax.swing.JTextField tfKodePesanan;
-    private javax.swing.JTextField tfKodeSupplier;
-    private javax.swing.JTextField tfNamaCustomer;
-    private javax.swing.JTextField tfNamaEkspedisi;
-    private javax.swing.JTextField tfNamaSupplier;
-    private javax.swing.JTextField tfNomorTelepon;
-    private javax.swing.JTextField tfTanggalPesanan;
+    private javax.swing.JTextField tfPesananKodeKustomer;
+    private javax.swing.JTextField tfPesananKodePesanan;
+    private javax.swing.JTextField tfPesananNamaKustomer;
+    private javax.swing.JTextField tfPesananTanggalPesanan;
+    private javax.swing.JTextArea tfSupplierAlamat;
+    private javax.swing.JTextField tfSupplierKodeEkspedisi;
+    private javax.swing.JTextField tfSupplierKodeSupplier;
+    private javax.swing.JTextField tfSupplierNamaEkspedisi;
+    private javax.swing.JTextField tfSupplierNamaSupplier;
+    private javax.swing.JTextField tfSupplierNomorTelepon;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -746,24 +757,24 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void setSupplier(SupplierModel supplier) {
-        tfKodeSupplier.setText(supplier.getKode());
-        tfNamaSupplier.setText(supplier.getName());
-        tfAlamat.setText(supplier.getAlamat());
-        tfNomorTelepon.setText(supplier.getNoTelepon());
+        tfSupplierKodeSupplier.setText(supplier.getKode());
+        tfSupplierNamaSupplier.setText(supplier.getName());
+        tfSupplierAlamat.setText(supplier.getAlamat());
+        tfSupplierNomorTelepon.setText(supplier.getNoTelepon());
         kodeSupplier = supplier.getKode();
     }
 
     private void setEkspedisi(EkspedisiModel ekspedisi) {
-        tfKodeEkspedisi.setText(ekspedisi.getKode());
-        tfNamaEkspedisi.setText(ekspedisi.getName());
+        tfSupplierKodeEkspedisi.setText(ekspedisi.getKode());
+        tfSupplierNamaEkspedisi.setText(ekspedisi.getName());
         kodeEkspedisi = ekspedisi.getKode();
     }
 
     private void setPesanan(PesananModel pesanan) {
-        tfKodePesanan.setText(pesanan.getKodePesanan());
-        tfNamaCustomer.setText(pesanan.getNamaKustomer());
-        tfKodeCustomer.setText(pesanan.getKodeKustomer());
-        tfTanggalPesanan.setText(pesanan.getTanggalPemesanan());
+        tfPesananKodePesanan.setText(pesanan.getKodePesanan());
+        tfPesananNamaKustomer.setText(pesanan.getNamaKustomer());
+        tfPesananKodeKustomer.setText(pesanan.getKodeKustomer());
+        tfPesananTanggalPesanan.setText(pesanan.getTanggalPemesanan());
         kodePesanan = pesanan.getKodePesanan();
     }
 
@@ -779,5 +790,23 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void hapusPesananDariPembelian(int position) {
         selectedKodePesanan.remove(position);
         tblModel.removeRow(position);
+    }
+
+    private void clear(JTextField[] fields) {
+        for (JTextField field : fields) {
+            field.setText("");
+        }
+    }
+
+    private void bersihPemesananTable() {
+        selectedKodePesanan.clear();
+        clearTable();
+    }
+
+    private void clearTable() {
+        if (tblModel.getRowCount() == 0) return;
+        for(int i = 0; i <= tblModel.getRowCount(); i++) {
+            tblModel.removeRow(0);
+        }
     }
 }

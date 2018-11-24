@@ -178,12 +178,12 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="tfKodeSupplier" max="32767" attributes="0"/>
+                                      <Component id="tfSupplierKodeSupplier" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="tfNamaEkspedisi" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="tfSupplierNamaEkspedisi" alignment="0" max="32767" attributes="0"/>
                                               <Group type="102" attributes="0">
-                                                  <Component id="tfKodeEkspedisi" min="-2" pref="154" max="-2" attributes="0"/>
+                                                  <Component id="tfSupplierKodeEkspedisi" min="-2" pref="154" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="btnCariEkspedisi" min="-2" max="-2" attributes="0"/>
                                               </Group>
@@ -194,7 +194,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnCariSupplier" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="tfNamaSupplier" max="32767" attributes="0"/>
+                              <Component id="tfSupplierNamaSupplier" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -204,7 +204,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="tfNomorTelepon" max="32767" attributes="0"/>
+                              <Component id="tfSupplierNomorTelepon" max="32767" attributes="0"/>
                               <Component id="jScrollPane2" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -219,18 +219,18 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfKodeSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfSupplierKodeSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCariSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfNamaSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfSupplierNamaSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfNomorTelepon" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfSupplierNomorTelepon" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -239,13 +239,13 @@
                   </Group>
                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfKodeEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfSupplierKodeEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCariEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfNamaEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfSupplierNamaEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -259,12 +259,12 @@
             <Property name="text" type="java.lang.String" value="Kode Supplier"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodeSupplier">
+        <Component class="javax.swing.JTextField" name="tfSupplierKodeSupplier">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeSupplierActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfSupplierKodeSupplierActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCariSupplier">
@@ -275,12 +275,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCariSupplierActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNamaSupplier">
+        <Component class="javax.swing.JTextField" name="tfSupplierNamaSupplier">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNamaSupplierActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfSupplierNamaSupplierActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
@@ -303,7 +303,7 @@
             <Property name="text" type="java.lang.String" value="Kode Ekspedisi"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodeEkspedisi">
+        <Component class="javax.swing.JTextField" name="tfSupplierKodeEkspedisi">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -314,7 +314,7 @@
             <Property name="text" type="java.lang.String" value="Nama Ekspedisi"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNamaEkspedisi">
+        <Component class="javax.swing.JTextField" name="tfSupplierNamaEkspedisi">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -328,7 +328,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCariEkspedisiActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNomorTelepon">
+        <Component class="javax.swing.JTextField" name="tfSupplierNomorTelepon">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -341,7 +341,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTextArea" name="tfAlamat">
+            <Component class="javax.swing.JTextArea" name="tfSupplierAlamat">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="columns" type="int" value="20"/>
@@ -472,7 +472,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tfNamaCustomer" max="32767" attributes="0"/>
+                          <Component id="tfPesananNamaKustomer" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -482,13 +482,13 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                  <Component id="tfKodePesanan" min="-2" pref="174" max="-2" attributes="0"/>
+                                  <Component id="tfPesananKodePesanan" min="-2" pref="174" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnCariPemesanan" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="tfKodeCustomer" max="32767" attributes="0"/>
+                                  <Component id="tfPesananKodeKustomer" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -496,7 +496,7 @@
                   <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tfTanggalPesanan" max="32767" attributes="0"/>
+                  <Component id="tfPesananTanggalPesanan" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
@@ -511,20 +511,20 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfKodePesanan" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfPesananKodePesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCariPemesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfTanggalPesanan" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfPesananTanggalPesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfKodeCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfPesananKodeKustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfNamaCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfPesananNamaKustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="7" max="32767" attributes="0"/>
@@ -552,19 +552,19 @@
             <Property name="text" type="java.lang.String" value="Nama Customer"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodePesanan">
+        <Component class="javax.swing.JTextField" name="tfPesananKodePesanan">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodeCustomer">
+        <Component class="javax.swing.JTextField" name="tfPesananKodeKustomer">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNamaCustomer">
+        <Component class="javax.swing.JTextField" name="tfPesananNamaKustomer">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -584,7 +584,7 @@
             <Property name="text" type="java.lang.String" value="Tanggal"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfTanggalPesanan">
+        <Component class="javax.swing.JTextField" name="tfPesananTanggalPesanan">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="enabled" type="boolean" value="false"/>
