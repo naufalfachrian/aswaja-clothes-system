@@ -71,7 +71,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     }
     
     private void initKodeInvoice(){
-        String kode = new ConnectionManager().getKodeInvoice();
+        String kode = new ConnectionManager().getKodeInvoicePenjualan();
         tfNoInvoice.setText(kode);
     }
     

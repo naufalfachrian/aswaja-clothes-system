@@ -827,7 +827,7 @@ public class ConnectionManager {
     
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
-    public String getKodeInvoice() {
+    public String getKodeInvoicePenjualan() {
         return getKode("INV-", "cetak_invoice_penjualan");
     }
 
