@@ -23,8 +23,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -822,9 +825,13 @@ public class ConnectionManager {
     
     // </editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
+    
     public String getKodeInvoice() {
         return getKode("INV-", "cetak_invoice_penjualan");
     }
+
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="get kode">
     
@@ -859,6 +866,71 @@ public class ConnectionManager {
         return kode;
     }
     
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Input Order Pembelian">
+    
+    public boolean simpanInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, Date tanggal, ArrayList<String> selectedKodePesanan, boolean isUpdate) {
+        String dateString = new SimpleDateFormat("ddMMyyyy").format(tanggal);
+        if (isUpdate) {
+            return updateInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, dateString, selectedKodePesanan);
+        } else {
+            return insertInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, dateString, selectedKodePesanan);
+        }
+    }
+    
+    private boolean updateInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, String dateString, ArrayList<String> selectedKodePesanan) {
+        String query = String.format("UPDATE input_order_pembelian SET "
+                + "kode_supplier = '%s', "
+                + "kode_ekspedisi = '%s', "
+                + "tanggal = '%s' "
+                + "WHERE kode_pembelian = '%s'", kodeSupplier, kodeEkspedisi, dateString, kodePembelian);
+        try {
+            boolean result = statement.executeUpdate(query) > 0;
+            boolean applyDetail = applyInputOrderPembelianDetail(kodePembelian, selectedKodePesanan);
+            return result && applyDetail;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private boolean insertInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, String dateString, ArrayList<String> selectedKodePesanan) {
+        try {
+            String query = String.format("INSERT INTO input_order_pembelian VALUES ( '%s', '%s', '%s', '%s' )", kodePembelian, kodeSupplier, kodeEkspedisi, dateString);
+            boolean result = statement.executeUpdate(query) > 0;
+            boolean applyDetail = applyInputOrderPembelianDetail(kodePembelian, selectedKodePesanan);
+            return result && applyDetail;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    private boolean applyInputOrderPembelianDetail(String kodePembelian, ArrayList<String> selectedKodePesanan) {
+        boolean terhapus = hapusSemuaInputOrderPembelianDetail(kodePembelian);
+        int inserted = 0;
+        for (String kodePesanan : selectedKodePesanan) {
+            try {
+                String query = String.format("INSERT INTO input_order_pembelian_detail VALUES ('%s', '%s')", kodePembelian, kodePesanan);
+                inserted += statement.executeUpdate(query);
+            } catch (SQLException ex) {
+                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return inserted == selectedKodePesanan.size();
+    }
+    
+    private boolean hapusSemuaInputOrderPembelianDetail(String kodePembelian) {
+        try {
+            String query = String.format("DELETE FROM input_order_pembelian_detail WHERE kode_pembelian = '%s'", kodePembelian);
+            return statement.execute(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     //</editor-fold>
     
 }

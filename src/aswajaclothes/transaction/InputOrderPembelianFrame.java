@@ -74,8 +74,8 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void initKodePembelian(){
-        String kode = new ConnectionManager().getKodePembelian();
-        tfKodePembelian.setText(kode);
+        kodePembelian = new ConnectionManager().getKodePembelian();
+        tfKodePembelian.setText(kodePembelian);
     }
     
     private void initFormatFieldNumber(){
@@ -610,7 +610,11 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_tfSupplierNamaSupplierActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        // Todo
+        if (simpanInputOrderPembelian()) {
+            inputOrderPembelianTersimpan();
+        } else {
+            inputOrderPembelianGagalTersimpan();
+        }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
@@ -662,10 +666,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    private String kodePembelian = null;
     private String kodeSupplier = null;
     private String kodeEkspedisi = null;
     private String kodePesanan = null;
     private ArrayList<String> selectedKodePesanan = new ArrayList<>();
+    private boolean isUpdate = false;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -808,5 +814,39 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         for(int i = 0; i <= tblModel.getRowCount(); i++) {
             tblModel.removeRow(0);
         }
+    }
+
+    private boolean simpanInputOrderPembelian() {
+        if (kodePembelian == null) {
+            throw new UnsupportedOperationException("kodePembelian should not be null");
+        }
+        if (kodeSupplier == null) {
+            peringatanHarusDiisi("Supplier");
+            return false;
+        }
+        if (kodeEkspedisi == null) {
+            peringatanHarusDiisi("Ekspedisi");
+            return false;
+        }
+        if (selectedKodePesanan.isEmpty()) {
+            peringatanHarusDiisi("Pesanann");
+            return false;
+        }
+        Date tanggal = chooserTanggal.getDate();
+        return new ConnectionManager().simpanInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, tanggal, selectedKodePesanan, isUpdate);
+    }
+
+    private void peringatanHarusDiisi(String fieldName) {
+        JOptionPane.showMessageDialog(this, String.format("%s harus diisi.", fieldName), "Perhatian", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void inputOrderPembelianTersimpan() {
+        JOptionPane.showMessageDialog(this, "Input Order Pembelian Tersimpan.", "Tersimpan", JOptionPane.INFORMATION_MESSAGE);
+        clearAll();
+    }
+
+    private void inputOrderPembelianGagalTersimpan() {
+        JOptionPane.showMessageDialog(this, "Input Order Pemeblan Gagal Tersimpan", "Gagal Tersimpan", JOptionPane.ERROR_MESSAGE);
+        clearAll();
     }
 }
