@@ -170,6 +170,11 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
         });
 
         btnKeluar.setText("Keluar");
+        btnKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKeluarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,6 +219,10 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnKeluarActionPerformed
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
