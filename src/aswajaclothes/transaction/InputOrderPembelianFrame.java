@@ -810,9 +810,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void clearTable() {
-        if (tblModel.getRowCount() == 0) return;
-        for(int i = 0; i <= tblModel.getRowCount(); i++) {
-            tblModel.removeRow(0);
+        if (tblModel.getRowCount() > 0) {
+            for (int i = tblModel.getRowCount() - 1; i > -1; i--) {
+                tblModel.removeRow(i);
+            }
         }
     }
 
