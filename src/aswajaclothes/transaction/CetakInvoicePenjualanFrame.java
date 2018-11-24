@@ -610,7 +610,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                 rows.add(rowData);
                 count++;
             }
-            TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
+            tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
