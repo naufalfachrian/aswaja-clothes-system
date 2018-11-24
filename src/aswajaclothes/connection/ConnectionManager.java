@@ -961,5 +961,13 @@ public class ConnectionManager {
     }
 
     //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Surat Jalan">
+    
+    public String getKodeSuratJalan() {
+        return getKode("SJ", "cetak_surat_jalan");
+    }
+    
+    //</editor-fold>
     
 }

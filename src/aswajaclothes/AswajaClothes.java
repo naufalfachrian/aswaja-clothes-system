@@ -13,6 +13,7 @@ import aswajaclothes.master.EntriKonsumenFrame;
 import aswajaclothes.master.EntriSupplierFrame;
 import aswajaclothes.transaction.CetakInvoicePenjualanFrame;
 import aswajaclothes.transaction.CetakOrderPembelianFrame;
+import aswajaclothes.transaction.CetakSuratJalanFrame;
 import aswajaclothes.transaction.InputBuktiPembayaranFrame;
 import aswajaclothes.transaction.InputOrderPembelianFrame;
 import aswajaclothes.transaction.InputOrderPenjualanFrame;
@@ -59,7 +60,7 @@ public class AswajaClothes extends javax.swing.JFrame {
         mnInputOrderPenjualan = new javax.swing.JMenuItem();
         mnInputBuktiPembayaran = new javax.swing.JMenuItem();
         mnCetakInvoicePenjualan = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnCetakSuratJalan = new javax.swing.JMenuItem();
         mnReturPenjualan = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         mnInputOrderPembelian = new javax.swing.JMenuItem();
@@ -154,8 +155,13 @@ public class AswajaClothes extends javax.swing.JFrame {
         });
         jMenu2.add(mnCetakInvoicePenjualan);
 
-        jMenuItem1.setText("Cetak Surat Jalan");
-        jMenu2.add(jMenuItem1);
+        mnCetakSuratJalan.setText("Cetak Surat Jalan");
+        mnCetakSuratJalan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnCetakSuratJalanActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnCetakSuratJalan);
 
         mnReturPenjualan.setText("Retur Penjualan");
         mnReturPenjualan.addActionListener(new java.awt.event.ActionListener() {
@@ -265,6 +271,10 @@ public class AswajaClothes extends javax.swing.JFrame {
         new ReturPembelianFrame().setVisible(true);
     }//GEN-LAST:event_mnReturPembelianActionPerformed
 
+    private void mnCetakSuratJalanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCetakSuratJalanActionPerformed
+        new CetakSuratJalanFrame().setVisible(true);
+    }//GEN-LAST:event_mnCetakSuratJalanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -308,7 +318,6 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
@@ -317,6 +326,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JLabel logo;
     private javax.swing.JMenuItem mnCetakInvoicePenjualan;
     private javax.swing.JMenuItem mnCetakOrderPembelian;
+    private javax.swing.JMenuItem mnCetakSuratJalan;
     private javax.swing.JMenuItem mnInputBuktiPembayaran;
     private javax.swing.JMenuItem mnInputOrderPembelian;
     private javax.swing.JMenuItem mnInputOrderPenjualan;
