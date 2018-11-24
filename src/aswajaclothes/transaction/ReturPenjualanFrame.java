@@ -6,40 +6,18 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.grid.BarangGridFrame;
-import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.master.BarangModel;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.grid.PesananGridFrame;
+import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanModel;
-import aswajaclothes.util.Config;
 import aswajaclothes.util.CurrencyUtil;
-import aswajaclothes.util.FilterUtil;
-import aswajaclothes.util.ValidatorUtil;
-import aswajaclothes.widget.ButtonCell;
 import com.toedter.calendar.JTextFieldDateEditor;
-import java.awt.Toolkit;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -89,34 +67,6 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         // Todo
     }
     
-    private void clearBarang(){
-        // Todo
-    }
-    
-    private void clearPesanan(){
-        // Todo
-    }
-    
-    private void clearEkspedisi(){
-        // Todo
-    }
-    
-    private void clearAll(){
-        // Todo
-    }
-    
-    private void tambah() throws ParseException, Exception{
-        // Todo
-    }
-
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
-        return false;
-    }
-     
-    private void calculateTotal() throws ParseException{
-        // Todo
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -132,15 +82,15 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         btnCariInvoice = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tfNoPesanan = new javax.swing.JTextField();
+        tfKodePesanan = new javax.swing.JTextField();
         btnCariPesanan = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        tfKodeCustomer = new javax.swing.JTextField();
+        tfKodeKustomer = new javax.swing.JTextField();
         chooserTanggal = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        tfNamaCustomer = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        tfNamaKustomer = new javax.swing.JTextField();
+        tfNamaEkspedisi = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesananDetail = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
@@ -177,10 +127,10 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
 
         jLabel3.setText("No. Pesanan");
 
-        tfNoPesanan.setEnabled(false);
-        tfNoPesanan.addActionListener(new java.awt.event.ActionListener() {
+        tfKodePesanan.setEnabled(false);
+        tfKodePesanan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNoPesananActionPerformed(evt);
+                tfKodePesananActionPerformed(evt);
             }
         });
 
@@ -193,10 +143,10 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
 
         jLabel4.setText("Kode Customer");
 
-        tfKodeCustomer.setEnabled(false);
-        tfKodeCustomer.addActionListener(new java.awt.event.ActionListener() {
+        tfKodeKustomer.setEnabled(false);
+        tfKodeKustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfKodeCustomerActionPerformed(evt);
+                tfKodeKustomerActionPerformed(evt);
             }
         });
 
@@ -211,9 +161,9 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
 
         jLabel15.setText("Nama Ekspedisi");
 
-        tfNamaCustomer.setEnabled(false);
+        tfNamaKustomer.setEnabled(false);
 
-        jTextField2.setEnabled(false);
+        tfNamaEkspedisi.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -234,16 +184,16 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tfNoInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfKodeKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel15))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
-                                    .addComponent(tfNamaCustomer))))
+                                    .addComponent(tfNamaEkspedisi)
+                                    .addComponent(tfNamaKustomer))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnCariPesanan)
@@ -268,19 +218,19 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tfNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCariPesanan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfKodeKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNamaCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNamaKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -335,10 +285,14 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         jLabel14.setText("Rp");
 
         tfOngkir.setEditable(false);
+        tfOngkir.setEnabled(false);
 
         jLabel7.setText("Total Bayar");
 
         jLabel9.setText("Rp");
+
+        tfTotalBayar.setEditable(false);
+        tfTotalBayar.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -405,19 +359,19 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCariInvoiceActionPerformed
 
-    private void tfNoPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNoPesananActionPerformed
+    private void tfKodePesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodePesananActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNoPesananActionPerformed
+    }//GEN-LAST:event_tfKodePesananActionPerformed
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NONE, "");
-        customerGrid.setGridListener(this);
-        customerGrid.setVisible(true);
+        PesananGridFrame frame = new PesananGridFrame("");
+        frame.setGridListener(this);
+        frame.setVisible(true);
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
-    private void tfKodeCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeCustomerActionPerformed
+    private void tfKodeKustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeKustomerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfKodeCustomerActionPerformed
+    }//GEN-LAST:event_tfKodeKustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // Todo
@@ -454,19 +408,21 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable tblPesananDetail;
-    private javax.swing.JTextField tfKodeCustomer;
-    private javax.swing.JTextField tfNamaCustomer;
+    private javax.swing.JTextField tfKodeKustomer;
+    private javax.swing.JTextField tfKodePesanan;
+    private javax.swing.JTextField tfNamaEkspedisi;
+    private javax.swing.JTextField tfNamaKustomer;
     private javax.swing.JTextField tfNoInvoice;
-    private javax.swing.JTextField tfNoPesanan;
     private javax.swing.JFormattedTextField tfOngkir;
     private javax.swing.JTextField tfTotalBayar;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        // Todo
+        if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
+            setPesanan((PesananModel) model);
+        }
     }
 
     @Override
@@ -492,5 +448,14 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    private void setPesanan(PesananModel pesanan) {
+        tfKodePesanan.setText(pesanan.getKodePesanan());
+        tfKodeKustomer.setText(pesanan.getKodeKustomer());
+        tfNamaKustomer.setText(pesanan.getNamaKustomer());
+        tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
+        tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
+        tfTotalBayar.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
     }
 }

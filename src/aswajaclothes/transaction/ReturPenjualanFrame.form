@@ -118,8 +118,8 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="tfNoInvoice" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <Component id="tfNoPesanan" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <Component id="tfKodeCustomer" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
+                                      <Component id="tfKodePesanan" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
+                                      <Component id="tfKodeKustomer" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -129,8 +129,8 @@
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jTextField2" max="32767" attributes="0"/>
-                                      <Component id="tfNamaCustomer" max="32767" attributes="0"/>
+                                      <Component id="tfNamaEkspedisi" max="32767" attributes="0"/>
+                                      <Component id="tfNamaKustomer" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -165,22 +165,22 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfNoPesanan" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfKodePesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCariPesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfKodeCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfKodeKustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfNamaCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfNamaKustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfNamaEkspedisi" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -220,12 +220,12 @@
             <Property name="text" type="java.lang.String" value="No. Pesanan"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNoPesanan">
+        <Component class="javax.swing.JTextField" name="tfKodePesanan">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNoPesananActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodePesananActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCariPesanan">
@@ -241,12 +241,12 @@
             <Property name="text" type="java.lang.String" value="Kode Customer"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfKodeCustomer">
+        <Component class="javax.swing.JTextField" name="tfKodeKustomer">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeCustomerActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeKustomerActionPerformed"/>
           </Events>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="chooserTanggal">
@@ -267,12 +267,12 @@
             <Property name="text" type="java.lang.String" value="Nama Ekspedisi"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tfNamaCustomer">
+        <Component class="javax.swing.JTextField" name="tfNamaKustomer">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField2">
+        <Component class="javax.swing.JTextField" name="tfNamaEkspedisi">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -379,6 +379,7 @@
     <Component class="javax.swing.JFormattedTextField" name="tfOngkir">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber())"/>
@@ -395,6 +396,10 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfTotalBayar">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
