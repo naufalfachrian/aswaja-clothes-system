@@ -8,6 +8,7 @@ package aswajaclothes.transaction;
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PesananGridFrame;
+import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.util.CurrencyUtil;
@@ -15,6 +16,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -448,5 +450,31 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
         tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
         tfTotalBayar.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
+        applyPesananDetail(pesanan);
+    }
+
+    private void applyPesananDetail(PesananModel pesanan) {
+        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+        ArrayList<String[]> rows = new ArrayList<>();
+        int count = 1;
+        for (ItemPesananModel item : items) {
+            String[] rowData = new String[]{
+                String.valueOf(count),
+                item.getBarang().getKode(),
+                item.getBarang().getName(),
+                item.getQuantity().toString(),
+                new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
+                new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
+            };
+            rows.add(rowData);
+            count++;
+        }
+        tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPesananDetail.setModel(tblModel);
     }
 }
