@@ -969,5 +969,13 @@ public class ConnectionManager {
     }
     
     //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Retur Penjualan">
+    
+    public String getKodeReturPenjualan() {
+        return getKode("R1", "retur_penjualan");
+    }
+    
+    //</editor-fold>
     
 }

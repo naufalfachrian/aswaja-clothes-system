@@ -31,7 +31,7 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     public ReturPenjualanFrame() {
         initComponents();
         initDateFormat();
-        initKodePesanan();
+        initKodeReturPenjualan();
         initFormatFieldNumber();
         initTable();
         initListOrderPenjualan();
@@ -44,8 +44,8 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         editor.setEditable(false);
     }
     
-    private void initKodePesanan(){
-        String kode = new ConnectionManager().getKodePesanan();
+    private void initKodeReturPenjualan(){
+        String kode = new ConnectionManager().getKodeReturPenjualan();
         tfNoInvoice.setText(kode);
     }
     
@@ -117,11 +117,6 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
         });
 
         btnCariInvoice.setText("Cari");
-        btnCariInvoice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariInvoiceActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Tanggal");
 
@@ -354,10 +349,6 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     private void tfNoInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNoInvoiceActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfNoInvoiceActionPerformed
-
-    private void btnCariInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariInvoiceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCariInvoiceActionPerformed
 
     private void tfKodePesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodePesananActionPerformed
         // TODO add your handling code here:
