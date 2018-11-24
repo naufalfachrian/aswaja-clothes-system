@@ -489,7 +489,13 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     }//GEN-LAST:event_tfKodeCustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // Todo
+        new ConnectionManager().insertInvoicePenjualan(
+                tfNoInvoice.getText(),
+                tfNoPesanan.getText(),
+                ppn,
+                chooserTanggal.getDate()
+        );
+        // Todo : cetak Invoice
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed

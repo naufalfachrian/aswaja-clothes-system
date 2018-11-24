@@ -830,6 +830,35 @@ public class ConnectionManager {
     public String getKodeInvoicePenjualan() {
         return getKode("INV-", "cetak_invoice_penjualan");
     }
+    
+    public boolean insertInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) {
+        try {
+            if (invoicePenjualanBelumAda(kodeInvoice)) {
+                String dateString = new SimpleDateFormat("ddMMyyyy").format(tanggalInvoice);
+                String query = String.format("INSERT INTO cetak_invoice_penjualan VALUES('%s', '%s', '%d', '%s')", kodeInvoice, kodePesanan, ppn, dateString);
+                return statement.executeUpdate(query) > 0;
+            }
+            // success, but not inserted to table because invoice has been already exists..
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    private boolean invoicePenjualanBelumAda(String kodeInvoice) {
+        try {
+            String query = String.format("SELECT COUNT(*) 'total' FROM cetak_invoice_penjualan WHERE kode_invoice = '%s'", kodeInvoice);
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                int itemsCount = resultSet.getInt("total");
+                return itemsCount == 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
     //</editor-fold>
     
