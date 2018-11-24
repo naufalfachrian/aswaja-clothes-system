@@ -92,30 +92,6 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     private void initListOrderPenjualan(){
         // Todo
     }
-    
-    private void clearBarang(){
-        // Todo
-    }
-    
-    private void clearPesanan(){
-        // Todo
-    }
-    
-    private void clearEkspedisi(){
-        // Todo
-    }
-    
-    private void clearAll(){
-        // Todo
-    }
-    
-    private void tambah() throws ParseException, Exception{
-        // Todo
-    }
-
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
-        return false;
-    }
      
     private void calculateTotal() throws ParseException{
         // Todo
