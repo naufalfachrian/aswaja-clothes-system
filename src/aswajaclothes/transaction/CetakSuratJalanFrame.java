@@ -68,10 +68,6 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     private void initListOrderPenjualan(){
         // Todo
     }
-     
-    private void calculateTotal() throws ParseException{
-        // Todo
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
