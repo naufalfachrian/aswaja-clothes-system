@@ -7,11 +7,13 @@ package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.grid.BarangGridFrame;
+import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.CustomerGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.grid.SupplierGridFrame;
+import aswajaclothes.model.common.KabupatenModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
@@ -53,6 +55,8 @@ import javax.swing.table.TableColumnModel;
  * @author Satrio
  */
 public class InputOrderPembelianFrame extends javax.swing.JFrame implements GridListener, MouseListener {
+    
+    private String kotaTujuanId = "";
 
     /**
      * Creates new form InputOrderPenjualanFrame
@@ -210,7 +214,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         taAlamatPengiriman = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfKotaTujuan = new javax.swing.JTextField();
         btnCariKotaTujuan = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
@@ -609,10 +613,15 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jLabel15.setText("Kota Tujuan");
 
-        jTextField1.setEditable(false);
-        jTextField1.setEnabled(false);
+        tfKotaTujuan.setEditable(false);
+        tfKotaTujuan.setEnabled(false);
 
         btnCariKotaTujuan.setText("Cari");
+        btnCariKotaTujuan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariKotaTujuanActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Hitung");
 
@@ -631,7 +640,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addGap(53, 53, 53)
-                        .addComponent(jTextField1)
+                        .addComponent(tfKotaTujuan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCariKotaTujuan))
                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -652,7 +661,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfKotaTujuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
                     .addComponent(btnCariKotaTujuan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -790,6 +799,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         // TODO add your handling code here:
     }//GEN-LAST:event_tfSupplierKodeSupplierActionPerformed
 
+    private void btnCariKotaTujuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariKotaTujuanActionPerformed
+        CityGridFrame frame = new CityGridFrame(FilterUtil.FilterType.NONE, "");
+        frame.setGridListener(this);
+        frame.setVisible(true);
+    }//GEN-LAST:event_btnCariKotaTujuanActionPerformed
+
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
@@ -841,12 +856,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextArea taAlamatPengiriman;
     private javax.swing.JTable tblPesananDetail;
     private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodePembelian;
+    private javax.swing.JTextField tfKotaTujuan;
     private javax.swing.JTextField tfPesananKodeKustomer;
     private javax.swing.JTextField tfPesananKodePesanan;
     private javax.swing.JTextField tfPesananNamaKustomer;
@@ -869,6 +884,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         }
         if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
             setPesanan((PesananModel) model);
+        }
+        if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
+            setCity((KabupatenModel) model);
         }
     }
 
@@ -993,5 +1011,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void inputOrderPembelianGagalTersimpan() {
         JOptionPane.showMessageDialog(this, "Input Order Pemeblan Gagal Tersimpan", "Gagal Tersimpan", JOptionPane.ERROR_MESSAGE);
         clearAll();
+    }
+
+    private void setCity(KabupatenModel city) {
+        kotaTujuanId = city.getId();
+        tfKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
     }
 }
