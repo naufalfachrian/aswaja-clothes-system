@@ -253,6 +253,18 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         jLabel14 = new javax.swing.JLabel();
         tfOngkir = new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber());
         tfTotal = new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber());
+        jLabel8 = new javax.swing.JLabel();
+        tfJenisLayanan = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        taAlamatPengiriman = new javax.swing.JTextArea();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        tfBerat = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        btnHitung = new javax.swing.JButton();
+        tfNamaKotaTujuan = new javax.swing.JTextField();
+        btnCariKotaTujuan = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -500,7 +512,6 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             }
         });
         tblPesananDetail.setRowHeight(20);
-        tblPesananDetail.setShowGrid(false);
         jScrollPane1.setViewportView(tblPesananDetail);
 
         jLabel9.setText("Kode Ekspedisi");
@@ -570,6 +581,31 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
 
         tfTotal.setEditable(false);
 
+        jLabel8.setText("Jenis Layanan");
+        jLabel8.setToolTipText("");
+
+        tfJenisLayanan.setEditable(false);
+        tfJenisLayanan.setEnabled(false);
+
+        jLabel15.setText("Alamat Pengiriman");
+
+        taAlamatPengiriman.setColumns(20);
+        taAlamatPengiriman.setRows(5);
+        jScrollPane2.setViewportView(taAlamatPengiriman);
+
+        jLabel16.setText("Kota Tujuan");
+
+        jLabel17.setText("Berat");
+
+        jLabel18.setText("Kg");
+
+        btnHitung.setText("Hitung");
+
+        tfNamaKotaTujuan.setEditable(false);
+        tfNamaKotaTujuan.setEnabled(false);
+
+        btnCariKotaTujuan.setText("Cari");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -581,17 +617,20 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel9)
-                                    .addComponent(jLabel10))
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(tfKodeEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnCariEkspedisi)))
+                                        .addComponent(btnCariEkspedisi))
+                                    .addComponent(tfJenisLayanan, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(19, 19, 19)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -606,12 +645,32 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tfOngkir)
                                     .addComponent(tfTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane1))
+                        .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addGap(20, 20, 20))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel17))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel18)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfNamaKotaTujuan))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCariKotaTujuan)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -637,7 +696,26 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                     .addComponent(jLabel12)
                     .addComponent(jLabel14)
                     .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfJenisLayanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(tfNamaKotaTujuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCariKotaTujuan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel18)
+                    .addComponent(btnHitung))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -774,7 +852,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JButton btnCariBarang;
     private javax.swing.JButton btnCariCustomer;
     private javax.swing.JButton btnCariEkspedisi;
+    private javax.swing.JButton btnCariKotaTujuan;
     private javax.swing.JButton btnCariPesanan;
+    private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
@@ -786,20 +866,29 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblQty;
+    private javax.swing.JTextArea taAlamatPengiriman;
     private javax.swing.JTable tblPesananDetail;
+    private javax.swing.JTextField tfBerat;
     private javax.swing.JFormattedTextField tfHargaBarang;
+    private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodeBarang;
     private javax.swing.JTextField tfKodeCustomer;
     private javax.swing.JTextField tfKodeEkspedisi;
@@ -807,6 +896,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JTextField tfNamaBarang;
     private javax.swing.JTextField tfNamaCustomer;
     private javax.swing.JTextField tfNamaEkspedisi;
+    private javax.swing.JTextField tfNamaKotaTujuan;
     private javax.swing.JFormattedTextField tfOngkir;
     private javax.swing.JTextField tfQty;
     private javax.swing.JFormattedTextField tfTotal;
