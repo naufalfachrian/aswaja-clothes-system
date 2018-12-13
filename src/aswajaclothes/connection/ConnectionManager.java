@@ -735,7 +735,7 @@ public class ConnectionManager {
     
     public List<PesananModel> getDaftarPesanan() {
         ArrayList<PesananModel> items = new ArrayList<>();
-        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
+        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +
                 "FROM input_order_penjualan iop " +
                 "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
                 "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi;";
@@ -752,7 +752,6 @@ public class ConnectionManager {
                 item.setOngkir(result.getInt("ongkir"));
                 item.setTotal(result.getInt("total"));
                 item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
-                item.setLunas(result.getBoolean("is_lunas"));
                 items.add(item);
             }
         } catch (SQLException ex) {
@@ -764,7 +763,7 @@ public class ConnectionManager {
     
     public PesananModel getDaftarPesananById(String inputOrderPenjualanId) {
         try {
-            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
+            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +
                     "FROM input_order_penjualan iop " +
                     "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
                     "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi " +
@@ -781,7 +780,6 @@ public class ConnectionManager {
                 item.setOngkir(result.getInt("ongkir"));
                 item.setTotal(result.getInt("total"));
                 item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
-                item.setLunas(result.getBoolean("is_lunas"));
                 return item;
             }
         } catch (SQLException ex) {
@@ -832,7 +830,7 @@ public class ConnectionManager {
         try {
             if (invoicePenjualanBelumAda(kodeInvoice)) {
                 String dateString = new SimpleDateFormat("ddMMyyyy").format(tanggalInvoice);
-                String query = String.format("INSERT INTO cetak_invoice_penjualan VALUES('%s', '%s', '%d', '%s')", kodeInvoice, kodePesanan, ppn, dateString);
+                String query = String.format("INSERT INTO cetak_invoice_penjualan VALUES('%s', '%s', '%d', '%s', '%d')", kodeInvoice, kodePesanan, ppn, dateString, 0);
                 return statement.executeUpdate(query) > 0;
             }
             // success, but not inserted to table because invoice has been already exists..

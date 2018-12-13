@@ -34,9 +34,7 @@ public class PesananModel {
     private String tanggalPemesanan;
     
     private String jenisLayanan;
-    
-    private boolean isLunas = false;
-        
+            
     public String getKodePesanan() {
         return kodePesanan;
     }
@@ -105,14 +103,6 @@ public class PesananModel {
 
     public void setTanggalPemesanan(String tanggalPemesanan) {
         this.tanggalPemesanan = tanggalPemesanan;
-    }
-
-    public boolean isLunas() {
-        return isLunas;
-    }
-
-    public void setLunas(boolean isLunas) {
-        this.isLunas = isLunas;
     }
 
     public String getJenisLayanan() {
