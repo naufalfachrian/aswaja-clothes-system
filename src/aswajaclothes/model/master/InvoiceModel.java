@@ -23,6 +23,8 @@ public class InvoiceModel {
     
     private String namaEkspedisi;
     
+    private String jenisLayanan;
+    
     private Integer ongkir;
     
     private Integer total;
@@ -32,6 +34,8 @@ public class InvoiceModel {
     private String tanggalPemesanan;
     
     private String tanggalInvoice;
+    
+    private boolean isLunas;
 
     public String getKodeInvoice() {
         return kodeInvoice;
@@ -119,6 +123,22 @@ public class InvoiceModel {
 
     public void setTanggalInvoice(String tanggalInvoice) {
         this.tanggalInvoice = tanggalInvoice;
+    }
+
+    public String getJenisLayanan() {
+        return jenisLayanan;
+    }
+
+    public void setJenisLayanan(String jenisLayanan) {
+        this.jenisLayanan = jenisLayanan;
+    }
+
+    public boolean isLunas() {
+        return isLunas;
+    }
+
+    public void setLunas(boolean isLunas) {
+        this.isLunas = isLunas;
     }
     
 }

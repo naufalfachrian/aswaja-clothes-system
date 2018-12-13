@@ -6,41 +6,18 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.grid.BarangGridFrame;
-import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.master.BarangModel;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.EkspedisiModel;
-import aswajaclothes.model.master.PesananModel;
+import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanModel;
-import aswajaclothes.util.Config;
 import aswajaclothes.util.CurrencyUtil;
-import aswajaclothes.util.FilterUtil;
-import aswajaclothes.util.ValidatorUtil;
 import aswajaclothes.widget.ButtonCell;
-import com.toedter.calendar.JTextFieldDateEditor;
-import java.awt.Toolkit;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -139,7 +116,7 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
 
             },
             new String [] {
-                "No", "Kode Pesanan", "Qty", "Total Harga", "Action"
+                "No", "Nomor Invoice", "Qty", "Total Harga", "Action"
             }
         ) {
             Class[] types = new Class [] {
@@ -160,7 +137,7 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
         tblPesananDetail.setRowHeight(20);
         jScrollPane1.setViewportView(tblPesananDetail);
 
-        jLabel10.setText("No. Pesanan");
+        jLabel10.setText("No. Invoice");
 
         btnCari.setText("Cari");
         btnCari.addActionListener(new java.awt.event.ActionListener() {
@@ -226,7 +203,7 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
-    List<PesananModel> daftarPesanan;
+    List<InvoiceModel> invoices;
     
     private static final String VerificationText = "Verifikasi";
     
@@ -280,30 +257,30 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
     }
 
     private void askToConfirmBuktiPembayaran(int rowSelected) {
-        PesananModel pesanan = daftarPesanan.get(rowSelected);
-        int dialogResult = JOptionPane.showConfirmDialog (null, String.format("Konfirmasi pembayaran pesanan %s atas nama %s?", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Warning", JOptionPane.YES_OPTION);
+        InvoiceModel invoice = invoices.get(rowSelected);
+        int dialogResult = JOptionPane.showConfirmDialog (null, String.format("Konfirmasi pembayaran pesanan %s atas nama %s?", invoice.getKodePesanan(), invoice.getNamaKustomer()), "Warning", JOptionPane.YES_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION){
-            confirmBuktiPembayaran(pesanan);
+            confirmBuktiPembayaran(invoice);
         }
     }
 
-    private void confirmBuktiPembayaran(PesananModel pesanan) {
-        new ConnectionManager().setStatusBayarOrderPenjualan(pesanan, true);
+    private void confirmBuktiPembayaran(InvoiceModel invoice) {
+        new ConnectionManager().setStatusBayarInvoice(invoice, true);
         populateTable();
     }
 
     private void populateTable() {
-        daftarPesanan = new ConnectionManager().getDaftarPesanan();
+        invoices = new ConnectionManager().getInvoices();
         ArrayList<String[]> rows = new ArrayList<>();
         int count = 1;
-        for (PesananModel item : daftarPesanan) {
+        for (InvoiceModel item : invoices) {
             String[] rowData = new String[]{
                 String.format("%d", count),
                 item.getKodePesanan(),
                 item.getNamaKustomer(),
                 "0",
                 new CurrencyUtil().formatCurrency(item.getTotal()),
-                item.isLunas() ? SudahLunasText : VerificationText
+                item.isLunas()? SudahLunasText : VerificationText
             };
             rows.add(rowData);
             count++;
@@ -319,8 +296,8 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
     }
 
     private void pesananSudahLunas(int rowSelected) {
-        PesananModel pesanan = daftarPesanan.get(rowSelected);
-        JOptionPane.showMessageDialog(null, String.format("Pembayaran pesanan %s atas nama %s sudah lunas.", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Warning", JOptionPane.INFORMATION_MESSAGE);
+        InvoiceModel invoice = invoices.get(rowSelected);
+        JOptionPane.showMessageDialog(null, String.format("Pembayaran pesanan %s atas nama %s sudah lunas.", invoice.getKodePesanan(), invoice.getNamaKustomer()), "Warning", JOptionPane.INFORMATION_MESSAGE);
     }
     
 }
