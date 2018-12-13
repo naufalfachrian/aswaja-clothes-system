@@ -48,6 +48,8 @@ import javax.swing.table.TableColumnModel;
  * @author Satrio
  */
 public class InputOrderPenjualanFrame extends javax.swing.JFrame implements GridListener, MouseListener {
+    
+    private String kotaTujuanId = "";
 
     /**
      * Creates new form InputOrderPenjualanFrame
@@ -118,14 +120,17 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private void clearEkspedisi(){
         tfKodeEkspedisi.setText("");
         tfNamaEkspedisi.setText("");
+        tfJenisLayanan.setText("");
         tfOngkir.setValue(0);
         tfTotal.setValue(0);
+        tfBerat.setText("");
     }
     
     private void clearAll(){
         clearPesanan();
         clearBarang();
         clearEkspedisi();
+        clearTujuan();
     }
     
     private void tambah() throws ParseException, Exception{
@@ -803,6 +808,10 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             penjualan.setOngkir(new CurrencyUtil().clearFormatToInt(tfOngkir.getText()));
             penjualan.setTotal(new CurrencyUtil().clearFormatToInt(tfTotal.getText()));
             penjualan.setTanggal(new SimpleDateFormat(Config.DATE_FORMAT).format(chooserTanggal.getDate()));
+            penjualan.setAlamatPengiriman(taAlamatPengiriman.getText());
+            penjualan.setKotaTujuan(tfNamaKotaTujuan.getText());
+            penjualan.setKotaTujuanId(kotaTujuanId);
+            penjualan.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
             penjualan.setOrders(listOrderPenjualanDetail);
             ConnectionManager connectionManager = new ConnectionManager();
             if (connectionManager.simpanInputOrderPenjualan(penjualan) > 0) {
@@ -935,6 +944,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         } else if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
             KabupatenModel city = (KabupatenModel) model;
             tfNamaKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
+            kotaTujuanId = city.getId();
         }
     }
 
@@ -986,5 +996,11 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    private void clearTujuan() {
+        tfNamaKotaTujuan.setText("");
+        kotaTujuanId = "";
+        taAlamatPengiriman.setText("");
     }
 }

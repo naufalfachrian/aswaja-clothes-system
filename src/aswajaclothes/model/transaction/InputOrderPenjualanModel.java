@@ -18,6 +18,10 @@ public class InputOrderPenjualanModel {
     private int ongkir;
     private int total;
     private String tanggal;
+    private String alamatPengiriman;
+    private String kotaTujuanId;
+    private String kotaTujuan;
+    private int berat;
     private List<InputOrderPenjualanDetailModel> orders;
 
     public List<InputOrderPenjualanDetailModel> getOrders() {
@@ -78,6 +82,37 @@ public class InputOrderPenjualanModel {
     public void setTanggal(String tanggal) {
         this.tanggal = tanggal;
     }
-    
+
+    public String getAlamatPengiriman() {
+        return alamatPengiriman;
+    }
+
+    public void setAlamatPengiriman(String alamatPengiriman) {
+        this.alamatPengiriman = alamatPengiriman;
+    }
+
+    public String getKotaTujuanId() {
+        return kotaTujuanId;
+    }
+
+    public void setKotaTujuanId(String kotaTujuanId) {
+        this.kotaTujuanId = kotaTujuanId;
+    }
+
+    public String getKotaTujuan() {
+        return kotaTujuan;
+    }
+
+    public void setKotaTujuan(String kotaTujuan) {
+        this.kotaTujuan = kotaTujuan;
+    }
+
+    public int getBerat() {
+        return berat;
+    }
+
+    public void setBerat(int berat) {
+        this.berat = berat;
+    }
     
 }
