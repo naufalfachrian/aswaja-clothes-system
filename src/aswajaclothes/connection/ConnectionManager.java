@@ -14,6 +14,7 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.model.master.ItemPesananModel;
+import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
@@ -946,24 +947,37 @@ public class ConnectionManager {
 
     //<editor-fold defaultstate="collapsed" desc="Input Order Pembelian">
     
-    public boolean simpanInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, Date tanggal, ArrayList<String> selectedKodePesanan, boolean isUpdate) {
-        String dateString = new SimpleDateFormat("ddMMyyyy").format(tanggal);
+    public boolean simpanInputOrderPembelian(PembelianModel pembelian, boolean isUpdate) {
         if (isUpdate) {
-            return updateInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, dateString, selectedKodePesanan);
+            return updateInputOrderPembelian(pembelian);
         } else {
-            return insertInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, dateString, selectedKodePesanan);
+            return insertInputOrderPembelian(pembelian);
         }
     }
     
-    private boolean updateInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, String dateString, ArrayList<String> selectedKodePesanan) {
+    private boolean updateInputOrderPembelian(PembelianModel pembelian) {
         String query = String.format("UPDATE input_order_pembelian SET "
                 + "kode_supplier = '%s', "
                 + "kode_ekspedisi = '%s', "
-                + "tanggal = '%s' "
-                + "WHERE kode_pembelian = '%s'", kodeSupplier, kodeEkspedisi, dateString, kodePembelian);
+                + "tanggal = '%s', "
+                + "alamat_pengiriman = '%s', "
+                + "kota_tujuan_id = '%s', "
+                + "kota_tujuan = '%s', "
+                + "berat = '%d', "
+                + "ongkir = '%d' "
+                + "WHERE kode_pembelian = '%s'", 
+                pembelian.getSupplier().getKode(), 
+                pembelian.getEkspedisi().getKode(), 
+                pembelian.getDateString(), 
+                pembelian.getAlamatPengiriman(),
+                pembelian.getKotaTujuan().getId(),
+                pembelian.getKotaTujuan().getName(),
+                pembelian.getBerat(),
+                pembelian.getOngkir(),
+                pembelian.getKode());
         try {
             boolean result = statement.executeUpdate(query) > 0;
-            boolean applyDetail = applyInputOrderPembelianDetail(kodePembelian, selectedKodePesanan);
+            boolean applyDetail = applyInputOrderPembelianDetail(pembelian.getKode(), pembelian.getSelectedKodePesanan());
             return result && applyDetail;
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -971,11 +985,20 @@ public class ConnectionManager {
         return false;
     }
 
-    private boolean insertInputOrderPembelian(String kodePembelian, String kodeSupplier, String kodeEkspedisi, String dateString, ArrayList<String> selectedKodePesanan) {
+    private boolean insertInputOrderPembelian(PembelianModel pembelian) {
         try {
-            String query = String.format("INSERT INTO input_order_pembelian VALUES ( '%s', '%s', '%s', '%s' )", kodePembelian, kodeSupplier, kodeEkspedisi, dateString);
+            String query = String.format("INSERT INTO input_order_pembelian VALUES ( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d' )", 
+                    pembelian.getKode(), 
+                    pembelian.getSupplier().getKode(), 
+                    pembelian.getEkspedisi().getKode(),
+                    pembelian.getDateString(), 
+                    pembelian.getAlamatPengiriman(),
+                    pembelian.getKotaTujuan().getId(),
+                    pembelian.getKotaTujuan().getName(),
+                    pembelian.getBerat(),
+                    pembelian.getOngkir());
             boolean result = statement.executeUpdate(query) > 0;
-            boolean applyDetail = applyInputOrderPembelianDetail(kodePembelian, selectedKodePesanan);
+            boolean applyDetail = applyInputOrderPembelianDetail(pembelian.getKode(), pembelian.getSelectedKodePesanan());
             return result && applyDetail;
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -983,7 +1006,7 @@ public class ConnectionManager {
         return false;
     }
     
-    private boolean applyInputOrderPembelianDetail(String kodePembelian, ArrayList<String> selectedKodePesanan) {
+    private boolean applyInputOrderPembelianDetail(String kodePembelian, List<String> selectedKodePesanan) {
         boolean terhapus = hapusSemuaInputOrderPembelianDetail(kodePembelian);
         int inserted = 0;
         for (String kodePesanan : selectedKodePesanan) {

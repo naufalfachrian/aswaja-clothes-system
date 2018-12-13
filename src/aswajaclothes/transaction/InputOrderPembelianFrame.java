@@ -18,6 +18,7 @@ import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.model.master.ItemPesananModel;
+import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
@@ -979,23 +980,51 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private boolean simpanInputOrderPembelian() {
-        if (kodePembelian == null) {
-            throw new UnsupportedOperationException("kodePembelian should not be null");
-        }
-        if (kodeSupplier == null) {
-            peringatanHarusDiisi("Supplier");
+        try {
+            if (kodePembelian == null) {
+                throw new UnsupportedOperationException("kodePembelian should not be null");
+            }
+            if (kodeSupplier == null) {
+                peringatanHarusDiisi("Supplier");
+                return false;
+            }
+            if (kodeEkspedisi == null) {
+                peringatanHarusDiisi("Ekspedisi");
+                return false;
+            }
+            if (selectedKodePesanan.isEmpty()) {
+                peringatanHarusDiisi("Pesanann");
+                return false;
+            }
+            Date tanggal = chooserTanggal.getDate();
+            
+            SupplierModel supplier = new SupplierModel();
+            supplier.setKode(kodeSupplier);
+            
+            EkspedisiModel ekspedisi = new EkspedisiModel();
+            ekspedisi.setKode(kodeEkspedisi);
+            
+            KabupatenModel kabupaten = new KabupatenModel();
+            kabupaten.setId(kotaTujuanId);
+            kabupaten.setName(tfKotaTujuan.getText());
+            
+            PembelianModel pembelian = new PembelianModel();
+            pembelian.setKode(kodePembelian);
+            pembelian.setSupplier(supplier);
+            pembelian.setEkspedisi(ekspedisi);
+            pembelian.setDateString(new SimpleDateFormat("ddMMyyyy").format(tanggal));
+            pembelian.setSelectedKodePesanan(selectedKodePesanan);
+            pembelian.setAlamatPengiriman(taAlamatPengiriman.getText());
+            pembelian.setKotaTujuan(kabupaten);
+            pembelian.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
+            pembelian.setOngkir(Integer.valueOf(new ValidatorUtil().isNumber(tfOngkosKirim.getText(), "Ongkos Kirim")));
+            
+            return new ConnectionManager().simpanInputOrderPembelian(pembelian, isUpdate);
+        } catch (Exception ex) {
+            Logger.getLogger(InputOrderPembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
+            inputOrderPembelianGagalTersimpan();
             return false;
         }
-        if (kodeEkspedisi == null) {
-            peringatanHarusDiisi("Ekspedisi");
-            return false;
-        }
-        if (selectedKodePesanan.isEmpty()) {
-            peringatanHarusDiisi("Pesanann");
-            return false;
-        }
-        Date tanggal = chooserTanggal.getDate();
-        return new ConnectionManager().simpanInputOrderPembelian(kodePembelian, kodeSupplier, kodeEkspedisi, tanggal, selectedKodePesanan, isUpdate);
     }
 
     private void peringatanHarusDiisi(String fieldName) {
