@@ -646,7 +646,8 @@ public class ConnectionManager {
         try {
             String query = "";
             if (isUpdate) {
-                query = "UPDATE ekspedisi SET nama_ekspedisi ='" + model.getName() + "' "
+                query = "UPDATE ekspedisi SET nama_ekspedisi ='" + model.getName() + 
+                        "', jenis_layanan = '" + model.getJenisLayanan() + "' "
                         + "WHERE kode_ekspedisi ='" + model.getKode() + "'";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
@@ -655,7 +656,7 @@ public class ConnectionManager {
                 }
             } else {
                 query = "INSERT INTO ekspedisi VALUES ('" + model.getKode() + "', "
-                        + "'" + model.getName() + "')";
+                        + "'" + model.getName() + "', '" + model.getJenisLayanan() + "', 0)";
                 if (statement.executeUpdate(query) > 0) {
                     isResult = true;
                 } else {

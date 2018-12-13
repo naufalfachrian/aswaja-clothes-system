@@ -13,6 +13,7 @@ public class EkspedisiModel {
     
     private String kode;
     private String name;
+    private String jenisLayanan;
 
     public EkspedisiModel() {
     }
@@ -33,5 +34,12 @@ public class EkspedisiModel {
         this.name = name;
     }
     
+    public String getJenisLayanan() {
+        return jenisLayanan;
+    }
+    
+    public void setJenisLayanan(String jenisLayanan) {
+        this.jenisLayanan = jenisLayanan;
+    }
     
 }
