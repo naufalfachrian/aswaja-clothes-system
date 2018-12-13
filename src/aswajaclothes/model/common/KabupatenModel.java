@@ -14,6 +14,8 @@ public class KabupatenModel {
     private String id;
     private String provinsiId;
     private String name;
+    
+    private ProvinsiModel province;
 
     public KabupatenModel(String id, String provinsiId, String name){
         this.id = id;
@@ -47,6 +49,14 @@ public class KabupatenModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ProvinsiModel getProvince() {
+        return province;
+    }
+
+    public void setProvince(ProvinsiModel province) {
+        this.province = province;
     }
     
 }

@@ -7,9 +7,11 @@ package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.grid.BarangGridFrame;
+import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.CustomerGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
+import aswajaclothes.model.common.KabupatenModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
@@ -605,6 +607,11 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         tfNamaKotaTujuan.setEnabled(false);
 
         btnCariKotaTujuan.setText("Cari");
+        btnCariKotaTujuan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariKotaTujuanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -842,6 +849,12 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         }
     }//GEN-LAST:event_tfOngkirCaretUpdate
 
+    private void btnCariKotaTujuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariKotaTujuanActionPerformed
+        CityGridFrame frame = new CityGridFrame(FilterUtil.FilterType.NONE, "");
+        frame.setGridListener(this);
+        frame.setVisible(true);
+    }//GEN-LAST:event_btnCariKotaTujuanActionPerformed
+
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
@@ -918,8 +931,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             EkspedisiModel ekspedisi = (EkspedisiModel) model;
             tfKodeEkspedisi.setText(ekspedisi.getKode());
             tfNamaEkspedisi.setText(ekspedisi.getName());
-        } else {
-            // Do Nothing
+        } else if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
+            KabupatenModel city = (KabupatenModel) model;
+            tfNamaKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
         }
     }
 

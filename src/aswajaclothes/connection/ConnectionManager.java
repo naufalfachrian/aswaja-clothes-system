@@ -978,5 +978,56 @@ public class ConnectionManager {
     }
     
     //</editor-fold>
+
+    public List<KabupatenModel> getCities() {
+        ArrayList<KabupatenModel> cities = new ArrayList<>();
+        String query = "SELECT rc.id as 'CityId', rc.name as 'CityName', "
+                + "rp.id as 'ProvinceId', rp.name as 'ProvinceName' "
+                + "FROM rajaongkir_cities rc "
+                + "INNER JOIN rajaongkir_provinces rp on rc.province_id = rp.id ORDER BY rc.name;";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                ProvinsiModel province = new ProvinsiModel();
+                province.setId(result.getString("ProvinceId"));
+                province.setName(result.getString("ProvinceName"));
+                KabupatenModel city = new KabupatenModel();
+                city.setId(result.getString("CityId"));
+                city.setName(result.getString("CityName"));
+                city.setProvince(province);
+                city.setProvinsiId(province.getId());
+                cities.add(city);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return cities;
+    }
+    
+    public List<KabupatenModel> searchCitiesByName(String searchQuery) {
+        ArrayList<KabupatenModel> cities = new ArrayList<>();
+        String query = String.format("SELECT rc.id as 'CityId', rc.name as 'CityName', "
+                + "rp.id as 'ProvinceId', rp.name as 'ProvinceName' "
+                + "FROM rajaongkir_cities rc INNER JOIN rajaongkir_provinces rp "
+                + "on rc.province_id = rp.id WHERE rc.name LIKE '%s' "
+                + "ORDER BY rc.name;", "%" + searchQuery + "%");
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                ProvinsiModel province = new ProvinsiModel();
+                province.setId(result.getString("ProvinceId"));
+                province.setName(result.getString("ProvinceName"));
+                KabupatenModel city = new KabupatenModel();
+                city.setId(result.getString("CityId"));
+                city.setName(result.getString("CityName"));
+                city.setProvince(province);
+                city.setProvinsiId(province.getId());
+                cities.add(city);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return cities;
+    }
     
 }
