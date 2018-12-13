@@ -110,6 +110,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             tfSupplierNamaEkspedisi,
             tfSupplierNamaSupplier,
             tfSupplierNomorTelepon,
+            tfJenisLayanan,
         });
         tfSupplierAlamat.setText("");
     }
@@ -127,6 +128,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void clearAll(){
         clearPesanan();
         clearSupplier();
+        clearDetailPengiriman();
         initKodePembelian();
         bersihPemesananTable();
     }
@@ -216,12 +218,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jLabel15 = new javax.swing.JLabel();
         tfKotaTujuan = new javax.swing.JTextField();
         btnCariKotaTujuan = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        btnHitung = new javax.swing.JButton();
+        tfBerat = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        tfOngkosKirim = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -509,18 +511,15 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tfPesananNamaKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCariPemesanan)
-                            .addComponent(tfPesananKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tfPesananNamaKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCariPemesanan)
+                        .addComponent(tfPesananKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfPesananKodeKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -623,7 +622,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             }
         });
 
-        jButton1.setText("Hitung");
+        btnHitung.setText("Hitung");
 
         jLabel16.setText("Berat");
 
@@ -646,15 +645,15 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel16)
                         .addGap(88, 88, 88)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(btnHitung)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -666,12 +665,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                     .addComponent(btnCariKotaTujuan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17)
-                    .addComponent(jButton1)
+                    .addComponent(btnHitung)
                     .addComponent(jLabel16)
                     .addComponent(jLabel18)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 6, Short.MAX_VALUE))
         );
 
@@ -823,12 +822,11 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JButton btnCariPemesanan;
     private javax.swing.JButton btnCariPesanan;
     private javax.swing.JButton btnCariSupplier;
+    private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambahPemesanan;
     private com.toedter.calendar.JDateChooser chooserTanggal;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -856,12 +854,13 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextArea taAlamatPengiriman;
     private javax.swing.JTable tblPesananDetail;
+    private javax.swing.JTextField tfBerat;
     private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodePembelian;
     private javax.swing.JTextField tfKotaTujuan;
+    private javax.swing.JFormattedTextField tfOngkosKirim;
     private javax.swing.JTextField tfPesananKodeKustomer;
     private javax.swing.JTextField tfPesananKodePesanan;
     private javax.swing.JTextField tfPesananNamaKustomer;
@@ -1016,5 +1015,13 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void setCity(KabupatenModel city) {
         kotaTujuanId = city.getId();
         tfKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
+    }
+
+    private void clearDetailPengiriman() {
+        kotaTujuanId = "";
+        tfKotaTujuan.setText("");
+        taAlamatPengiriman.setText("");
+        tfBerat.setText("");
+        tfOngkosKirim.setText("");
     }
 }
