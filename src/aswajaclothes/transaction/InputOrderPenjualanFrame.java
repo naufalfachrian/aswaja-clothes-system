@@ -931,6 +931,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             EkspedisiModel ekspedisi = (EkspedisiModel) model;
             tfKodeEkspedisi.setText(ekspedisi.getKode());
             tfNamaEkspedisi.setText(ekspedisi.getName());
+            tfJenisLayanan.setText(ekspedisi.getJenisLayanan());
         } else if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
             KabupatenModel city = (KabupatenModel) model;
             tfNamaKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());

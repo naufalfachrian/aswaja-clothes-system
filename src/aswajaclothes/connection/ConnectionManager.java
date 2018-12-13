@@ -612,6 +612,7 @@ public class ConnectionManager {
                 EkspedisiModel ekspedisi = new EkspedisiModel();
                 ekspedisi.setKode(result.getString("kode_ekspedisi"));
                 ekspedisi.setName(result.getString("nama_ekspedisi"));
+                ekspedisi.setJenisLayanan(result.getString("jenis_layanan"));
                 listEkspedisi.add(ekspedisi);
             }
         } catch (SQLException ex) {
@@ -631,6 +632,7 @@ public class ConnectionManager {
                 EkspedisiModel ekspedisi = new EkspedisiModel();
                 ekspedisi.setKode(result.getString("kode_ekspedisi"));
                 ekspedisi.setName(result.getString("nama_ekspedisi"));
+                ekspedisi.setJenisLayanan(result.getString("jenis_layanan"));
                 listEkspedisi.add(ekspedisi);
             }
         } catch (SQLException ex) {
