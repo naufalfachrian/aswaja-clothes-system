@@ -712,7 +712,7 @@ public class ConnectionManager {
     
     public int simpanInputOrderPenjualan(InputOrderPenjualanModel item) throws SQLException {
         String tableName = "input_order_penjualan";
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d, %d, '%s', 0, '%s', '%s', '%s', '%d')",
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s', '%d')",
                 tableName, item.getKodePesanan(), item.getKodeKustomer(),
                 item.getKodeEkspedisi(), item.getOngkir(), item.getTotal(), item.getTanggal(), 
                 item.getAlamatPengiriman(), item.getKotaTujuanId(), item.getKotaTujuan(), 
