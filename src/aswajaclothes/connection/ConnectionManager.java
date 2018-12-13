@@ -745,7 +745,7 @@ public class ConnectionManager {
     
     public List<PesananModel> getDaftarPesanan() {
         ArrayList<PesananModel> items = new ArrayList<>();
-        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
+        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
                 "FROM input_order_penjualan iop " +
                 "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
                 "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi;";
@@ -758,6 +758,7 @@ public class ConnectionManager {
                 item.setNamaKustomer(result.getString("nama_kustomer"));
                 item.setKodeEkspedisi(result.getString("kode_ekspedisi"));
                 item.setNamaEkspedisi(result.getString("nama_ekspedisi"));
+                item.setJenisLayanan(result.getString("jenis_layanan"));
                 item.setOngkir(result.getInt("ongkir"));
                 item.setTotal(result.getInt("total"));
                 item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
@@ -773,7 +774,7 @@ public class ConnectionManager {
     
     public PesananModel getDaftarPesananById(String inputOrderPenjualanId) {
         try {
-            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
+            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan', iop.is_lunas " +
                     "FROM input_order_penjualan iop " +
                     "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
                     "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi " +
@@ -786,6 +787,7 @@ public class ConnectionManager {
                 item.setNamaKustomer(result.getString("nama_kustomer"));
                 item.setKodeEkspedisi(result.getString("kode_ekspedisi"));
                 item.setNamaEkspedisi(result.getString("nama_ekspedisi"));
+                item.setJenisLayanan(result.getString("jenis_layanan"));
                 item.setOngkir(result.getInt("ongkir"));
                 item.setTotal(result.getInt("total"));
                 item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));

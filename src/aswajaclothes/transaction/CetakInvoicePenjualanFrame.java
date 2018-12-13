@@ -122,6 +122,8 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         tfNamaCustomer = new javax.swing.JTextField();
         tfNamaEkspedisi = new javax.swing.JTextField();
         ppnCheckBox = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
+        tfJenisLayanan = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesananDetail = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
@@ -209,6 +211,11 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
             }
         });
 
+        jLabel10.setText("Jenis Layanan");
+
+        tfJenisLayanan.setEditable(false);
+        tfJenisLayanan.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -233,11 +240,13 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
-                                    .addComponent(jLabel15))
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel10))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tfNamaEkspedisi)
-                                    .addComponent(tfNamaCustomer))))
+                                    .addComponent(tfNamaCustomer)
+                                    .addComponent(tfJenisLayanan))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -280,7 +289,11 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
                     .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
                     .addComponent(ppnCheckBox))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfJenisLayanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         tblPesananDetail.setModel(new javax.swing.table.DefaultTableModel(
@@ -412,7 +425,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -511,6 +524,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     private javax.swing.JButton btnKeluar;
     private com.toedter.calendar.JDateChooser chooserTanggal;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -529,6 +543,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JCheckBox ppnCheckBox;
     private javax.swing.JTable tblPesananDetail;
+    private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodeCustomer;
     private javax.swing.JTextField tfNamaCustomer;
     private javax.swing.JTextField tfNamaEkspedisi;
@@ -550,6 +565,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
             tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
             tfSubTotal.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
             tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
+            tfJenisLayanan.setText(pesanan.getJenisLayanan());
             subTotal = pesanan.getTotal();
             ongkir = pesanan.getOngkir();
             applyPpn();
