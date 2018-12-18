@@ -821,6 +821,16 @@ public class ConnectionManager {
     
     // </editor-fold>
     
+    
+    //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Pembelian">
+    
+    public String getKodeInvoicePembelian() {
+        return getKode("INV-", "cetak_invoice_pembelian");
+    }
+    
+    // </editor-fold>
+    
+    
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
     public String getKodeInvoicePenjualan() {
@@ -953,6 +963,62 @@ public class ConnectionManager {
         } else {
             return insertInputOrderPembelian(pembelian);
         }
+    }
+    
+    public List<PembelianModel> getDaftarPembelian() {
+        String query = String.format("SELECT kode_pembelian as 'KodePembelian', "
+                + "tanggal as 'TanggalPembelian', "
+                + "alamat_pengiriman as 'AlamatPengiriman', "
+                + "kota_tujuan_id as 'KotaTujuanID', "
+                + "kota_tujuan as 'KotaTujuan', "
+                + "berat as 'Berat', "
+                + "ongkir as 'Ongkir', "
+                + "iop.kode_supplier as 'KodeSupplier', "
+                + "nama_supplier as 'NamaSupplier', "
+                + "no_telepon as 'NoTelpSupplier', "
+                + "alamat as 'AlamatSupplier', "
+                + "email as 'EmailSupplier', "
+                + "iop.kode_ekspedisi as 'KodeEkspedisi', "
+                + "nama_ekspedisi as 'NamaEkspedisi', "
+                + "jenis_layanan as 'JenisLayananEkspedisi' "
+                + "FROM input_order_pembelian iop "
+                + "INNER JOIN supplier ON supplier.kode_supplier = iop.kode_supplier "
+                + "INNER JOIN ekspedisi ON iop.kode_ekspedisi = ekspedisi.kode_ekspedisi;");
+        ArrayList<PembelianModel> pembelians = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                PembelianModel pembelian = new PembelianModel();
+                pembelian.setAlamatPengiriman(result.getString("AlamatPengiriman"));
+                pembelian.setBerat(result.getInt("Berat"));
+                pembelian.setOngkir(result.getInt("Ongkir"));
+                pembelian.setKode(result.getString("KodePembelian"));
+                
+                KabupatenModel kabupaten = new KabupatenModel();
+                kabupaten.setId(result.getString("KotaTujuanID"));
+                kabupaten.setName(result.getString("KotaTujuan"));
+                pembelian.setKotaTujuan(kabupaten);
+                
+                SupplierModel supplier = new SupplierModel();
+                supplier.setKode(result.getString("KodeSupplier"));
+                supplier.setName(result.getString("NamaSupplier"));
+                supplier.setNoTelepon(result.getString("NoTelpSupplier"));
+                supplier.setAlamat(result.getString("AlamatSupplier"));
+                supplier.setEmail(result.getString("EmailSupplier"));
+                pembelian.setSupplier(supplier);
+                
+                EkspedisiModel ekspedisi = new EkspedisiModel();
+                ekspedisi.setKode(result.getString("KodeEkspedisi"));
+                ekspedisi.setName(result.getString("NamaEkspedisi"));
+                ekspedisi.setJenisLayanan(result.getString("JenisLayananEkspedisi"));
+                pembelian.setEkspedisi(ekspedisi);
+                
+                pembelians.add(pembelian);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return pembelians;
     }
     
     private boolean updateInputOrderPembelian(PembelianModel pembelian) {
