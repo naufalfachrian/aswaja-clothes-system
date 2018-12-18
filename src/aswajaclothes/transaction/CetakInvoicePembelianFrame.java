@@ -14,6 +14,7 @@ import aswajaclothes.grid.PembelianGridFrame;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanModel;
@@ -42,6 +43,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -579,5 +581,36 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
         tfNamaEkspedisi.setText(pembelian.getEkspedisi().getName());
         tfJenisEkspedisi.setText(pembelian.getEkspedisi().getJenisLayanan());
         tfOngkir.setText(String.valueOf(pembelian.getOngkir()));
+        
+        List<PembelianBarangModel> goods = new ConnectionManager().getDaftarPembelianBarang(pembelian.getKode());
+        setPembelianBarang(pembelian, goods);
+    }
+
+    private void setPembelianBarang(PembelianModel pembelian, List<PembelianBarangModel> goods) {
+        String[] customerColumn = new String [] { "Kode Barang", "Nama Barang", "Warna", "Area", "Ukuran", "Jumlah", "Harga Satuan"};
+        ArrayList<String[]> rows = new ArrayList<>();     
+        int totalBayar = 0;
+        for (PembelianBarangModel item : goods) {
+            totalBayar += item.getQuantity() * item.getHargaHpp();
+            String[] rowData = new String[]{
+                item.getKodeBarang(),
+                item.getNamaBarang(),
+                item.getWarna(),
+                item.getArea(),
+                item.getUkuran(),
+                String.valueOf(item.getQuantity()),
+                new CurrencyUtil().formatCurrency(item.getHargaHpp())
+            };
+            rows.add(rowData);
+        }
+        TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), customerColumn){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPesananDetail.setModel(tblModel);
+        
+        tfTotalBayar.setText(new CurrencyUtil().formatCurrency(totalBayar + pembelian.getOngkir()));
     }
 }

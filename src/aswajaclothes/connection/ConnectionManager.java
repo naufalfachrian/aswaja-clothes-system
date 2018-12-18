@@ -14,6 +14,7 @@ import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.model.master.ItemPesananModel;
+import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
@@ -826,6 +827,44 @@ public class ConnectionManager {
     
     public String getKodeInvoicePembelian() {
         return getKode("INV-", "cetak_invoice_pembelian");
+    }
+    
+    public List<PembelianBarangModel> getDaftarPembelianBarang(String kodePembelian) {
+        String query = String.format("SELECT kode_pesanan as 'KodePesanan', "
+                + "iopd.kode_barang as 'KodeBarang', "
+                + "qty as 'Quantity', "
+                + "tipe_lengan as 'TipeLengan', "
+                + "nama_barang as 'NamaBarang', "
+                + "warna as 'Warna', "
+                + "area as 'Area', "
+                + "ukuran as 'Ukuran', "
+                + "harga_hpp as 'HargaHPP', "
+                + "harga_jual_satuan as 'HargaJualSatuan' "
+                + "FROM input_order_penjualan_detail iopd "
+                + "INNER JOIN barang ON iopd.kode_barang = barang.kode_barang "
+                + "WHERE kode_pesanan IN "
+                + "(SELECT kode_pesanan FROM input_order_pembelian_detail WHERE kode_pembelian = '%s');", kodePembelian);
+        ArrayList<PembelianBarangModel> items = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                PembelianBarangModel item = new PembelianBarangModel();
+                item.setArea(result.getString("Area"));
+                item.setHargaHpp(result.getInt("HargaHPP"));
+                item.setHargaJualSatuan(result.getInt("HargaJualSatuan"));
+                item.setKodeBarang(result.getString("KodeBarang"));
+                item.setKodePesanan(result.getString("KodePesanan"));
+                item.setNamaBarang(result.getString("NamaBarang"));
+                item.setQuantity(result.getInt("Quantity"));
+                item.setTipeLengan(result.getString("TipeLengan"));
+                item.setUkuran(result.getString("Ukuran"));
+                item.setWarna(result.getString("Warna"));
+                items.add(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return items;
     }
     
     // </editor-fold>
