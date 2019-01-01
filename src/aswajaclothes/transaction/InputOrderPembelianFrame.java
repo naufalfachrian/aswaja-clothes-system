@@ -230,7 +230,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Pembelian"));
 
-        jLabel1.setText("No Pembelian");
+        jLabel1.setText("Nomor Invoice");
 
         tfKodePembelian.setEnabled(false);
         tfKodePembelian.addActionListener(new java.awt.event.ActionListener() {

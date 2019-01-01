@@ -131,7 +131,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="No Pembelian"/>
+            <Property name="text" type="java.lang.String" value="Nomor Invoice"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tfKodePembelian">
