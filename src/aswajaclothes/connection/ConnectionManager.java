@@ -873,7 +873,7 @@ public class ConnectionManager {
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
     public String getKodeInvoicePenjualan() {
-        return getKode("INV-", "cetak_invoice_penjualan");
+        return getKode("PO", "cetak_invoice_penjualan");
     }
     
     public boolean insertInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) {
