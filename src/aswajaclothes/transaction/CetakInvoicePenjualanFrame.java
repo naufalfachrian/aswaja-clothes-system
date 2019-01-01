@@ -11,10 +11,13 @@ import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -456,13 +459,21 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     }//GEN-LAST:event_tfKodeCustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        new ConnectionManager().insertInvoicePenjualan(
-                tfNoInvoice.getText(),
-                tfNoPesanan.getText(),
-                ppn,
-                chooserTanggal.getDate()
-        );
-        // Todo : cetak Invoice
+        try {
+            new ConnectionManager().insertInvoicePenjualan(
+                    tfNoInvoice.getText(),
+                    tfNoPesanan.getText(),
+                    ppn,
+                    chooserTanggal.getDate()
+            );
+            PdfGenerator.cetakInvoicePenjualan(tfNoInvoice.getText(),
+                    tfNoPesanan.getText(),
+                    ppn,
+                    chooserTanggal.getDate()
+            );
+        } catch (DocumentException | IOException ex) {
+            Logger.getLogger(CetakInvoicePenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
