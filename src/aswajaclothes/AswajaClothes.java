@@ -6,7 +6,6 @@
 
 package aswajaclothes;
 
-import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.master.EntriBarangFrame;
 import aswajaclothes.master.EntriEkspedisiFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
@@ -19,9 +18,6 @@ import aswajaclothes.transaction.InputOrderPembelianFrame;
 import aswajaclothes.transaction.InputOrderPenjualanFrame;
 import aswajaclothes.transaction.ReturPembelianFrame;
 import aswajaclothes.transaction.ReturPenjualanFrame;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
