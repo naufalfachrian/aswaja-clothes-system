@@ -601,26 +601,26 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     private void applyPesananDetail(PesananModel pesanan) {
         List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
-            ArrayList<String[]> rows = new ArrayList<>();
-            int count = 1;
-            for (ItemPesananModel item : items) {
-                String[] rowData = new String[]{
-                    String.valueOf(count),
-                    item.getBarang().getKode(),
-                    item.getBarang().getName(),
-                    item.getQuantity().toString(),
-                    new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
-                    new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
-                };
-                rows.add(rowData);
-                count++;
-            }
-            tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
+        ArrayList<String[]> rows = new ArrayList<>();
+        int count = 1;
+        for (ItemPesananModel item : items) {
+            String[] rowData = new String[]{
+                String.valueOf(count),
+                item.getBarang().getKode(),
+                item.getBarang().getName(),
+                item.getQuantity().toString(),
+                new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
+                new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
             };
-            tblPesananDetail.setModel(tblModel);
+            rows.add(rowData);
+            count++;
+        }
+        tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[] {"No.", "Kode Barang", "Nama Barang", "Qty", "Harga Barang", "Total Per Item"}){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblPesananDetail.setModel(tblModel);
     }
 }

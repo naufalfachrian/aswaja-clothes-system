@@ -190,6 +190,33 @@ public class ConnectionManager {
         return listCustomer;
     }
     
+    public CustomerModel getCustomer(String kodeKustumer) {
+        ArrayList<CustomerModel> listCustomer = new ArrayList<>();
+        String query = "SELECT * FROM customer WHERE kode_kustomer = '" + kodeKustumer + "' AND deleted = false";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                CustomerModel customer = new CustomerModel();
+                customer.setKode(result.getString("kode_kustomer"));
+                customer.setName(result.getString("nama_kustomer"));
+                customer.setProvinsiId(result.getString("provinsi_id"));
+                customer.setKabupatenId(result.getString("kabupaten_id"));
+                customer.setKecamatanId(result.getString("kecamatan_id"));
+                customer.setKelurahanId(result.getString("kelurahan_id"));
+                customer.setAlamat(result.getString("alamat"));
+                customer.setNoTelepon(result.getString("no_telepon"));
+                listCustomer.add(customer);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        if (listCustomer.isEmpty()) {
+            return null;
+        }
+        return listCustomer.get(0);
+    }
+    
     public ArrayList<CustomerModel> getCustomersByNoTelepon(String noTelepon) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
         String query = "SELECT * FROM customer WHERE no_telepon LIKE '" + noTelepon + "%' AND deleted = false";
@@ -945,6 +972,52 @@ public class ConnectionManager {
             System.out.println(ex.getMessage());
         }
         return invoices;
+    }
+    
+    public InvoiceModel getInvoice(String kodeInvoice) {
+        ArrayList<InvoiceModel> invoices = new ArrayList<>();
+        String query = String.format("SELECT kode_invoice as 'KodeInvoice', "
+                + "iop.kode_pesanan as 'KodePesanan', "
+                + "customer.kode_kustomer as 'KodeKustomer', "
+                + "customer.nama_kustomer as 'NamaKustomer', "
+                + "ekspedisi.kode_ekspedisi as 'KodeEkspedisi', "
+                + "ekspedisi.nama_ekspedisi as 'NamaEkspedisi', "
+                + "ekspedisi.jenis_layanan as 'JenisLayanan', "
+                + "ongkir as 'Ongkir', total as 'Total', "
+                + "ppn as 'Ppn', iop.tanggal as 'TanggalPemesanan', "
+                + "inv.tanggal as 'TanggalInvoice', "
+                + "inv.is_lunas as 'IsLunas' "
+                + "from cetak_invoice_penjualan inv "
+                + "INNER JOIN input_order_penjualan iop ON iop.kode_pesanan = inv.kode_pesanan "
+                + "INNER JOIN customer ON customer.kode_kustomer = iop.kode_kustomer "
+                + "INNER JOIN ekspedisi ON ekspedisi.kode_ekspedisi = iop.kode_ekspedisi "
+                + "WHERE kode_invoice = '%s';", kodeInvoice);
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                InvoiceModel invoice = new InvoiceModel();
+                invoice.setKodeInvoice(result.getString("KodeInvoice"));
+                invoice.setKodePesanan(result.getString("KodePesanan"));
+                invoice.setKodeKustomer(result.getString("KodeKustomer"));
+                invoice.setNamaKustomer(result.getString("NamaKustomer"));
+                invoice.setKodeEkspedisi(result.getString("KodeEkspedisi"));
+                invoice.setNamaEkspedisi(result.getString("NamaEkspedisi"));
+                invoice.setJenisLayanan(result.getString("JenisLayanan"));
+                invoice.setOngkir(result.getInt("Ongkir"));
+                invoice.setTotal(result.getInt("Total"));
+                invoice.setPpn(result.getInt("Ppn"));
+                invoice.setTanggalInvoice(result.getString("TanggalInvoice"));
+                invoice.setTanggalPemesanan(result.getString("TanggalPemesanan"));
+                invoice.setLunas(result.getBoolean("IsLunas"));
+                invoices.add(invoice);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        if (invoices.size() > 0) {
+            return invoices.get(0);
+        }
+        return null;
     }
     
     public int setStatusBayarInvoice(InvoiceModel invoice, boolean statusBayar) {

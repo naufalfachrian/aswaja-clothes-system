@@ -5,6 +5,10 @@
  */
 package aswajaclothes.pdf;
 
+import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.model.master.InvoiceModel;
+import aswajaclothes.model.master.ItemPesananModel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -22,8 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -48,13 +54,32 @@ public class PdfGenerator {
 
         document.open();
         
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(tanggalInvoice));
-        data.put("Invoice No.", kodeInvoice);
-        data.put("No. Pesanan", kodePesanan);
-        setupHeader("Invoice", data, document);
+        HashMap<String, String> headerData = new HashMap<>();
+        headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(tanggalInvoice));
+        headerData.put("Invoice No.", kodeInvoice);
+        headerData.put("No. Pesanan", kodePesanan);
+        setupHeader("Invoice", headerData, document);
+        
+        insertSpacing(24, document);
+        
+        InvoiceModel invoice = new ConnectionManager().getInvoice(kodeInvoice);
+        
+        CustomerModel customer = new ConnectionManager().getCustomer(invoice.getKodeKustomer());
+        ArrayList<String> addressData = new ArrayList<>();
+        addressData.add(customer.getName());
+        addressData.add(customer.getAlamat());
+        addressData.add(customer.getNoTelepon());
+        setupAddres(addressData, document);
+        
+        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(kodePesanan);
         
         document.close();
+    }
+    
+    private static void insertSpacing(float spaceValue, Document document) throws DocumentException {
+        Paragraph space = new Paragraph("");
+        space.setSpacingAfter(spaceValue);
+        document.add(space);
     }
     
     private static void setupHeader(String title, HashMap<String, String> data, Document document) throws DocumentException {
@@ -88,6 +113,18 @@ public class PdfGenerator {
         });
         
         document.add(table);
+    }
+    
+    private static void setupAddres(List<String> data, Document document) throws DocumentException {
+        String text = "Kepada Yth.\n";
+        for (String value : data) {
+            text += value + "\n";
+        }
+        Paragraph paragraph = new Paragraph(text);
+        paragraph.setAlignment(Rectangle.ALIGN_RIGHT);
+        paragraph.setFont(SMALL_FONT);
+        paragraph.setSpacingAfter(0);
+        document.add(paragraph);
     }
     
     
