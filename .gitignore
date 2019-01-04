@@ -11,3 +11,9 @@ nb-configuration.xml
 
 # Class Files #
 *.class
+
+# Print output #
+print/
+
+# Unix specific #
+.directory
