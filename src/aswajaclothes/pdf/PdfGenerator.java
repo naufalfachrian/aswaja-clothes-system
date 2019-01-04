@@ -45,11 +45,6 @@ public class PdfGenerator {
     public static void cetakInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) throws FileNotFoundException, DocumentException, IOException {
         Document document = createDocument();
         PdfWriter.getInstance(document, new FileOutputStream(createFile(RESULT_PATH + "/invoice-penjualan-"  + kodeInvoice + ".pdf")));
-        
-        Font smallfont = new Font(FontFamily.HELVETICA, 10);
-        
-        Font headerFont = new Font(FontFamily.HELVETICA, 18);
-        headerFont.setStyle(Font.BOLD);
 
         document.open();
         
