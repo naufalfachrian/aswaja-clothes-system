@@ -9,6 +9,7 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -71,7 +72,10 @@ public class PdfGenerator {
         addressData.add(customer.getNoTelepon());
         setupAddres(addressData, document);
         
+        insertSpacing(24, document);
+        
         List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(kodePesanan);
+        setupDaftarItemPesanan(items, document);
         
         document.close();
     }
@@ -127,6 +131,69 @@ public class PdfGenerator {
         document.add(paragraph);
     }
     
+    private static void setupDaftarItemPesanan(List<ItemPesananModel> daftarPesanan, Document document) throws DocumentException {
+        PdfPTable table = new PdfPTable(6);
+        table.setTotalWidth(new float[]{ 24, 100, 100, 48, 96, 96 });
+        table.setWidthPercentage(100);
+        
+        PdfPCell blankCell = new PdfPCell();
+        blankCell.setColspan(3);
+        blankCell.setBorder(Rectangle.NO_BORDER);
+        
+        PdfPCell cell = new PdfPCell(new Phrase("No", SMALL_FONT));
+        cell.setBorder(Rectangle.BOX);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Kode Barang", SMALL_FONT));
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Nama Barang", SMALL_FONT));
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Jumlah", SMALL_FONT));        
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Harga Satuan", SMALL_FONT));
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Total", SMALL_FONT));
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        int i = 1;
+        for (ItemPesananModel item : daftarPesanan) {
+            cell = new PdfPCell(new Phrase("" + i, SMALL_FONT));
+            cell.setBorder(Rectangle.BOX);
+            cell.setBackgroundColor(BaseColor.WHITE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase(item.getBarang().getKode(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase(item.getBarang().getName(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("" + item.getQuantity(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("" + item.getBarang().getHargaJualSatuan(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("" + (item.getQuantity() * item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            table.addCell(cell);
+            
+            i++;
+        }
+        
+        document.add(table);
+    }
     
     private static File createFile(String path) throws IOException {
         File file = new File(path);
