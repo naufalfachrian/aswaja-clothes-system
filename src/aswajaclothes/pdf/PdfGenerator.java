@@ -46,6 +46,8 @@ public class PdfGenerator {
     
     private static final Font HEADER_FONT = new Font(FontFamily.HELVETICA, 18);
     
+    private static final Font BIG_HEADER_FONT = new Font(FontFamily.HELVETICA, 26);
+    
     
     public static void cetakInvoicePembelian() {
         // Todo
@@ -109,7 +111,7 @@ public class PdfGenerator {
     private static void setupHeader(String title, HashMap<String, String> data, Document document) throws DocumentException {
         Paragraph paragraph = new Paragraph(title);
         paragraph.setAlignment(Rectangle.ALIGN_CENTER);
-        paragraph.setFont(HEADER_FONT);
+        paragraph.setFont(BIG_HEADER_FONT);
         paragraph.setSpacingAfter(24);
         document.add(paragraph);
         
@@ -127,6 +129,7 @@ public class PdfGenerator {
         
             PdfPCell cell = new PdfPCell(new Phrase(key, SMALL_FONT));
             cell.setBorder(Rectangle.BOX);
+            cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
 
@@ -167,22 +170,27 @@ public class PdfGenerator {
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Kode Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Nama Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Jumlah", SMALL_FONT));        
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Harga Satuan", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
 
         cell = new PdfPCell(new Phrase("Total", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         table.addCell(cell);
         
@@ -238,6 +246,7 @@ public class PdfGenerator {
                 PdfPCell cell = new PdfPCell(new Phrase(key, SMALL_FONT));
                 cell.setBorder(Rectangle.BOX);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 table.addCell(cell);
 
                 cell = new PdfPCell(new Phrase(value, SMALL_FONT));
