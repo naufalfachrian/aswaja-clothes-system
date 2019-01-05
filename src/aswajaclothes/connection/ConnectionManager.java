@@ -853,7 +853,7 @@ public class ConnectionManager {
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Pembelian">
     
     public String getKodeInvoicePembelian() {
-        return getKode("INV-", "cetak_invoice_pembelian");
+        return getKode("PO", "cetak_invoice_pembelian");
     }
     
     public List<PembelianBarangModel> getDaftarPembelianBarang(String kodePembelian) {
@@ -900,7 +900,7 @@ public class ConnectionManager {
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
     public String getKodeInvoicePenjualan() {
-        return getKode("PO", "cetak_invoice_penjualan");
+        return getKode("PJ", "cetak_invoice_penjualan");
     }
     
     public boolean insertInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) {
