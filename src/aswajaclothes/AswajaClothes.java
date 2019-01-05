@@ -6,6 +6,10 @@
 
 package aswajaclothes;
 
+import aswajaclothes.laporan.CetakLaporanBarangTerlaris;
+import aswajaclothes.laporan.CetakLaporanCostRevenue;
+import aswajaclothes.laporan.CetakLaporanPembelian;
+import aswajaclothes.laporan.CetakLaporanPenjualan;
 import aswajaclothes.master.EntriBarangFrame;
 import aswajaclothes.master.EntriEkspedisiFrame;
 import aswajaclothes.master.EntriKonsumenFrame;
@@ -200,15 +204,35 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenu3.setText("Report");
 
         jMenuItem12.setText("Cetak Laporan Penjualan");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem12);
 
         jMenuItem13.setText("Cetak Laporan Pembelian");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem13);
 
         jMenuItem14.setText("Cetak Laporan Cost Revenue");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem14);
 
         jMenuItem15.setText("Cetak Laporan Barang Terlaris");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem15);
 
         jMenuBar1.add(jMenu3);
@@ -270,6 +294,22 @@ public class AswajaClothes extends javax.swing.JFrame {
     private void mnCetakSuratJalanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCetakSuratJalanActionPerformed
         new CetakSuratJalanFrame().setVisible(true);
     }//GEN-LAST:event_mnCetakSuratJalanActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        new CetakLaporanPenjualan().setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        new CetakLaporanPembelian().setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        new CetakLaporanCostRevenue().setVisible(true);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        new CetakLaporanBarangTerlaris().setVisible(true);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     /**
      * @param args the command line arguments
