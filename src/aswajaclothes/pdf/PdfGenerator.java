@@ -29,6 +29,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,7 +59,8 @@ public class PdfGenerator {
     
     public static void cetakInvoicePembelian(String purchaseNumber, PembelianModel pembelianModel, List<PembelianBarangModel> goods) throws IOException, DocumentException {
         Document document = createDocument();
-        PdfWriter.getInstance(document, new FileOutputStream(createFile(RESULT_PATH + "/purchase-order-"  + purchaseNumber + ".pdf")));
+        File file = createFile(RESULT_PATH + "/purchase-order-"  + purchaseNumber + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
 
         document.open();
         
@@ -103,11 +105,13 @@ public class PdfGenerator {
         insertFooterText("Thank you for your bussiness!", document);
         
         document.close();
+        Desktop.getDesktop().open(file);
     }
     
     public static void cetakInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) throws FileNotFoundException, DocumentException, IOException {
         Document document = createDocument();
-        PdfWriter.getInstance(document, new FileOutputStream(createFile(RESULT_PATH + "/invoice-penjualan-"  + kodeInvoice + ".pdf")));
+        File file = createFile(RESULT_PATH + "/invoice-penjualan-"  + kodeInvoice + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
 
         document.open();
         
@@ -157,6 +161,7 @@ public class PdfGenerator {
         insertFooterText("Thank you for shopping with us!", document);
         
         document.close();
+        Desktop.getDesktop().open(file);
     }
     
     private static void insertKopSurat(Document document) throws BadElementException, IOException, DocumentException {
