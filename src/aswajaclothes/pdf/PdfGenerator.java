@@ -99,6 +99,9 @@ public class PdfGenerator {
         insertSpacing(24, document);
         setupBankAccountPdfPrint(document);
         
+        insertSpacing(48, document);
+        insertFooterText("Thank you for shopping with us!", document);
+        
         document.close();
     }
     
@@ -267,6 +270,13 @@ public class PdfGenerator {
         Paragraph paragraph = new Paragraph(text);
         paragraph.setAlignment(Rectangle.ALIGN_LEFT);
         paragraph.setFont(SMALL_FONT);
+        paragraph.setSpacingAfter(0);
+        document.add(paragraph);
+    }
+    
+    private static void insertFooterText(String footerText, Document document) throws DocumentException {
+        Paragraph paragraph = new Paragraph(footerText);
+        paragraph.setAlignment(Rectangle.ALIGN_CENTER);
         paragraph.setSpacingAfter(0);
         document.add(paragraph);
     }
