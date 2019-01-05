@@ -94,6 +94,9 @@ public class PdfGenerator {
         details.add(item4);
         setupInvoiceTableFooter(details, document);
         
+        insertSpacing(24, document);
+        setupBankAccountPdfPrint(document);
+        
         document.close();
     }
     
@@ -245,6 +248,18 @@ public class PdfGenerator {
         }
         
         document.add(table);
+    }
+    
+    private static void setupBankAccountPdfPrint(Document document) throws DocumentException {
+        String text = "Pembayaran untuk invoice ini mohon ditransfer ke rekening:\n"
+                + "Bank BRI Cab. Jakarta\n"
+                + "No. Rek: 037-701-023-406-501\n"
+                + "Atas Nama: Mazza Fakkar Alam";
+        Paragraph paragraph = new Paragraph(text);
+        paragraph.setAlignment(Rectangle.ALIGN_LEFT);
+        paragraph.setFont(SMALL_FONT);
+        paragraph.setSpacingAfter(0);
+        document.add(paragraph);
     }
     
     private static File createFile(String path) throws IOException {
