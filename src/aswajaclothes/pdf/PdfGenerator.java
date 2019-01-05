@@ -9,6 +9,7 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
+import aswajaclothes.util.CurrencyUtil;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -76,6 +78,21 @@ public class PdfGenerator {
         
         List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(kodePesanan);
         setupDaftarItemPesanan(items, document);
+        
+        ArrayList<HashMap<String, String>> details = new ArrayList<>();
+        HashMap<String, String> item1 = new HashMap<>();
+        item1.put("Subtotal", CurrencyUtil.getInstance().formatCurrency(invoice.getTotal()));
+        details.add(item1);
+        HashMap<String, String> item2 = new HashMap<>();
+        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(invoice.getOngkir()));
+        details.add(item2);
+        HashMap<String, String> item3 = new HashMap<>();
+        item3.put("PPN", CurrencyUtil.getInstance().formatCurrency(invoice.getPpn()));
+        details.add(item3);
+        HashMap<String, String> item4 = new HashMap<>();
+        item4.put("Total Bayar", CurrencyUtil.getInstance().formatCurrency(invoice.getTotal() + invoice.getOngkir() + invoice.getPpn()));
+        details.add(item4);
+        setupInvoiceTableFooter(details, document);
         
         document.close();
     }
@@ -181,15 +198,50 @@ public class PdfGenerator {
             table.addCell(cell);
             
             cell = new PdfPCell(new Phrase("" + item.getQuantity(), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase("" + item.getBarang().getHargaJualSatuan(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase("" + (item.getQuantity() * item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
             i++;
+        }
+        
+        document.add(table);
+    }
+    
+    private static void setupInvoiceTableFooter(ArrayList<HashMap<String,String>> details, Document document) throws DocumentException {
+        PdfPTable table = new PdfPTable(6);
+        table.setTotalWidth(new float[]{ 24, 100, 100, 48, 96, 96 });
+        table.setWidthPercentage(100);
+        
+        PdfPCell blankCell = new PdfPCell();
+        blankCell.setColspan(4);
+        blankCell.setBorder(Rectangle.NO_BORDER);
+        
+        for (Map<String, String> detail : details) {
+            
+            for (Map.Entry<String, String> entry : detail.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                
+                table.addCell(blankCell);
+        
+                PdfPCell cell = new PdfPCell(new Phrase(key, SMALL_FONT));
+                cell.setBorder(Rectangle.BOX);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(value, SMALL_FONT));
+                cell.setBorder(Rectangle.BOX);
+                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(cell);
+            }
         }
         
         document.add(table);
