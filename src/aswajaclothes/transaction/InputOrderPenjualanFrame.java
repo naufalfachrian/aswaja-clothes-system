@@ -935,7 +935,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             BarangModel barang = (BarangModel) model;
             tfKodeBarang.setText(barang.getKode());
             tfNamaBarang.setText(barang.getName());
-            tfHargaBarang.setText(String.valueOf(barang.getHargaHPP()));
+            tfHargaBarang.setText(String.valueOf(barang.getHargaJualSatuan()));
         } else if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())){
             EkspedisiModel ekspedisi = (EkspedisiModel) model;
             tfKodeEkspedisi.setText(ekspedisi.getKode());
