@@ -10,12 +10,14 @@ import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -58,6 +60,8 @@ public class PdfGenerator {
         PdfWriter.getInstance(document, new FileOutputStream(createFile(RESULT_PATH + "/invoice-penjualan-"  + kodeInvoice + ".pdf")));
 
         document.open();
+        
+        insertKopSurat(document);
         
         HashMap<String, String> headerData = new HashMap<>();
         headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(tanggalInvoice));
@@ -103,6 +107,12 @@ public class PdfGenerator {
         insertFooterText("Thank you for shopping with us!", document);
         
         document.close();
+    }
+    
+    private static void insertKopSurat(Document document) throws BadElementException, IOException, DocumentException {
+        Image img = Image.getInstance("resources/header.png");
+        img.scalePercent(50);
+        document.add(img);
     }
     
     private static void insertSpacing(float spaceValue, Document document) throws DocumentException {
