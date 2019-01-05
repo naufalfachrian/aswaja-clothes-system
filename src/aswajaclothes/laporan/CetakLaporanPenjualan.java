@@ -6,10 +6,17 @@
 package aswajaclothes.laporan;
 
 import aswajaclothes.grid.BarangGridFrame;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.DocumentException;
 import com.sun.glass.events.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -94,6 +101,11 @@ public class CetakLaporanPenjualan extends javax.swing.JFrame {
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         btnCetak.setText("Cetak");
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnCetak);
 
         btnKeluar.setText("Keluar");
@@ -171,6 +183,20 @@ public class CetakLaporanPenjualan extends javax.swing.JFrame {
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
         dispose();
     }//GEN-LAST:event_btnKeluarActionPerformed
+
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
+        if (jDateChooser1.getDate() == null || jDateChooser2.getDate() == null) {
+            JOptionPane optionPane = new JOptionPane("Tanggal belum dipilih", JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Kesalahan");
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+        }
+        try {
+            PdfGenerator.cetakLaporanPenjualan(jDateChooser1.getDate(), jDateChooser2.getDate());
+        } catch (IOException | DocumentException ex) {
+            Logger.getLogger(CetakLaporanBarangTerlaris.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCetakActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCetak;

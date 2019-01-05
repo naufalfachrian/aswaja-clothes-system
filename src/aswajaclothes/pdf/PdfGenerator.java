@@ -57,6 +57,79 @@ public class PdfGenerator {
     
     private static final Font BIG_HEADER_FONT = new Font(FontFamily.HELVETICA, 26);
     
+    public static void cetakLaporanPenjualan(Date start, Date end) throws IOException, DocumentException, FileNotFoundException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dddd");
+        
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/laporan-penjualan-"  + sdf.format(start) + "-" + sdf.format(end) + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        setupHeader("Laporan Penjualan Detail", headerData, document);
+                
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
+    
+    public static void cetakLaporanPembelian(Date start, Date end) throws IOException, FileNotFoundException, DocumentException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dddd");
+        
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/laporan-penjualan-"  + sdf.format(start) + "-" + sdf.format(end) + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        setupHeader("Laporan Pembelian Detail", headerData, document);
+                
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
+    
+    public static void cetakLaporanBarangTerlaris(Date start, Date end) throws IOException, FileNotFoundException, DocumentException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dddd");
+        
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/laporan-penjualan-"  + sdf.format(start) + "-" + sdf.format(end) + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        setupHeader("Laporan Barang Terlaris", headerData, document);
+                
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
+    
+    public static void cetakLaporanCostRevenue(Date start, Date end) throws IOException, FileNotFoundException, DocumentException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dddd");
+        
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/laporan-penjualan-"  + sdf.format(start) + "-" + sdf.format(end) + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        setupHeader("Laporan Cost Revenue", headerData, document);
+                
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
+
+    
     public static void cetakReturPenjualan(String kodeRetur, PesananModel pesanan, List<ItemPesananModel> items) throws IOException, DocumentException, BadElementException, FileNotFoundException {
         Document document = createDocument();
         File file = createFile(RESULT_PATH + "/retur-penjualan-"  + kodeRetur + ".pdf");
