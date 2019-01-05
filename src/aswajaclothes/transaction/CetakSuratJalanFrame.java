@@ -11,14 +11,19 @@ import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -332,6 +337,13 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // Todo : insert surat jalan ke database
         // Todo : cetak Invoice
+        if (pesanan != null && items != null) {
+            try {
+                PdfGenerator.cetakSuratJalan(tfKodeSuratJalan.getText(), pesanan, items);
+            } catch (DocumentException | IOException ex) {
+                Logger.getLogger(CetakSuratJalanFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
@@ -345,6 +357,9 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    
+    PesananModel pesanan = null;
+    List<ItemPesananModel> items = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -372,7 +387,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            PesananModel pesanan = (PesananModel) model;
+            this.pesanan = (PesananModel) model;
             tfKodePesanan.setText(pesanan.getKodePesanan());
             tfKodeCustomer.setText(pesanan.getKodeKustomer());
             tfNamaCustomer.setText(pesanan.getNamaKustomer());
@@ -407,7 +422,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     }
 
     private void applyPesananDetail(PesananModel pesanan) {
-        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+        items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
         ArrayList<String[]> rows = new ArrayList<>();
         int count = 1;
         for (ItemPesananModel item : items) {

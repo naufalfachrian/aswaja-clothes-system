@@ -12,6 +12,7 @@ import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
+import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.util.CurrencyUtil;
 import com.itextpdf.text.BadElementException;
@@ -56,6 +57,37 @@ public class PdfGenerator {
     
     private static final Font BIG_HEADER_FONT = new Font(FontFamily.HELVETICA, 26);
     
+    public static void cetakSuratJalan(String kodeSuratJalan, PesananModel pesanan, List<ItemPesananModel> items) throws DocumentException, FileNotFoundException, BadElementException, IOException {
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/surat-jalan-"  + kodeSuratJalan + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(new Date()));
+        headerData.put("No. Surat Jalan", kodeSuratJalan);
+        headerData.put("No. Pesanan", pesanan.getKodePesanan());
+        setupHeader("Surat Jalan", headerData, document);
+        
+        CustomerModel customer = new ConnectionManager().getCustomer(pesanan.getKodeKustomer());
+        ArrayList<String> addressData = new ArrayList<>();
+        addressData.add(customer.getName());
+        addressData.add(customer.getAlamat());
+        addressData.add(customer.getNoTelepon());
+        setupAddres(addressData, document);
+        
+        insertSpacing(24, document);
+        setupDaftarItemPesananSuratJalan(items, document);
+        
+        insertSpacing(48, document);
+        insertFooterText("Thank you for shopping with us!", document);
+        
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
     
     public static void cetakInvoicePembelian(String purchaseNumber, PembelianModel pembelianModel, List<PembelianBarangModel> goods) throws IOException, DocumentException {
         Document document = createDocument();
@@ -285,6 +317,60 @@ public class PdfGenerator {
             table.addCell(cell);
             
             cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(cell);
+            
+            i++;
+        }
+        
+        document.add(table);
+    }
+    
+    private static void setupDaftarItemPesananSuratJalan(List<ItemPesananModel> daftarPesanan, Document document) throws DocumentException {
+        PdfPTable table = new PdfPTable(4);
+        table.setTotalWidth(new float[]{ 24, 100, 100, 48 });
+        table.setWidthPercentage(100);
+        
+        PdfPCell blankCell = new PdfPCell();
+        blankCell.setColspan(3);
+        blankCell.setBorder(Rectangle.NO_BORDER);
+        
+        PdfPCell cell = new PdfPCell(new Phrase("No", SMALL_FONT));
+        cell.setBorder(Rectangle.BOX);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Kode Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Nama Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Jumlah", SMALL_FONT));        
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        int i = 1;
+        for (ItemPesananModel item : daftarPesanan) {
+            cell = new PdfPCell(new Phrase("" + i, SMALL_FONT));
+            cell.setBorder(Rectangle.BOX);
+            cell.setBackgroundColor(BaseColor.WHITE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase(item.getBarang().getKode(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase(item.getBarang().getName(), SMALL_FONT));
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("" + item.getQuantity(), SMALL_FONT));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
