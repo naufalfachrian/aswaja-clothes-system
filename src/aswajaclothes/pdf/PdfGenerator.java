@@ -57,6 +57,53 @@ public class PdfGenerator {
     
     private static final Font BIG_HEADER_FONT = new Font(FontFamily.HELVETICA, 26);
     
+    public static void cetakReturPenjualan(String kodeRetur, PesananModel pesanan, List<ItemPesananModel> items) throws IOException, DocumentException, BadElementException, FileNotFoundException {
+        Document document = createDocument();
+        File file = createFile(RESULT_PATH + "/retur-penjualan-"  + kodeRetur + ".pdf");
+        PdfWriter.getInstance(document, new FileOutputStream(file));
+
+        document.open();
+        
+        insertKopSurat(document);
+        
+        HashMap<String, String> headerData = new HashMap<>();
+        headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(new Date()));
+        headerData.put("No. Retur", kodeRetur);
+        headerData.put("No. Pesanan", pesanan.getKodePesanan());
+        setupHeader("Retur Penjualan", headerData, document);
+        
+        CustomerModel customer = new ConnectionManager().getCustomer(pesanan.getKodeKustomer());
+        ArrayList<String> addressData = new ArrayList<>();
+        addressData.add(customer.getName());
+        addressData.add(customer.getAlamat());
+        addressData.add(customer.getNoTelepon());
+        setupAddres(addressData, document);
+        
+        insertSpacing(24, document);
+        setupDaftarItemPesanan(items, document);
+        
+        ArrayList<HashMap<String, String>> details = new ArrayList<>();
+        HashMap<String, String> item1 = new HashMap<>();
+        item1.put("Subtotal", CurrencyUtil.getInstance().formatCurrency(pesanan.getTotal() - pesanan.getOngkir()));
+        details.add(item1);
+        HashMap<String, String> item2 = new HashMap<>();
+        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(pesanan.getOngkir()));
+        details.add(item2);
+        HashMap<String, String> item3 = new HashMap<>();
+        item3.put("PPN", CurrencyUtil.getInstance().formatCurrency(0));
+        details.add(item3);
+        HashMap<String, String> item4 = new HashMap<>();
+        item4.put("Total Bayar", CurrencyUtil.getInstance().formatCurrency(pesanan.getTotal()));
+        details.add(item4);
+        setupInvoiceTableFooter(details, document);
+        
+        insertSpacing(48, document);
+        insertFooterText("We are aplogies for the inconvenience!", document);
+        
+        document.close();
+        Desktop.getDesktop().open(file);
+    }
+    
     public static void cetakSuratJalan(String kodeSuratJalan, PesananModel pesanan, List<ItemPesananModel> items) throws DocumentException, FileNotFoundException, BadElementException, IOException {
         Document document = createDocument();
         File file = createFile(RESULT_PATH + "/surat-jalan-"  + kodeSuratJalan + ".pdf");

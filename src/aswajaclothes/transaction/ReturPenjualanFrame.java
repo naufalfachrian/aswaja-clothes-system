@@ -11,14 +11,19 @@ import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -367,7 +372,13 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     }//GEN-LAST:event_tfKodeKustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // Todo
+        if (pesanan != null && items != null) {
+            try {
+                PdfGenerator.cetakReturPenjualan(tfNoInvoice.getText(), pesanan, items);
+            } catch (IOException | DocumentException ex) {
+                Logger.getLogger(ReturPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
@@ -381,6 +392,9 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    
+    PesananModel pesanan = null;
+    List<ItemPesananModel> items = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -444,6 +458,7 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     }
 
     private void setPesanan(PesananModel pesanan) {
+        this.pesanan = pesanan;
         tfKodePesanan.setText(pesanan.getKodePesanan());
         tfKodeKustomer.setText(pesanan.getKodeKustomer());
         tfNamaKustomer.setText(pesanan.getNamaKustomer());
@@ -454,7 +469,7 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     }
 
     private void applyPesananDetail(PesananModel pesanan) {
-        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+        this.items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
         ArrayList<String[]> rows = new ArrayList<>();
         int count = 1;
         for (ItemPesananModel item : items) {
