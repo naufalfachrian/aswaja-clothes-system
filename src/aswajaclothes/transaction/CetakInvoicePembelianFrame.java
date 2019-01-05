@@ -18,11 +18,13 @@ import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanModel;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.Config;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import aswajaclothes.widget.ButtonCell;
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -40,6 +42,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -486,7 +489,18 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     }//GEN-LAST:event_tfKodeSupplierActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // Todo
+        if (pembelian == null || goods == null) {
+            JOptionPane optionPane = new JOptionPane("ErrorMsg", JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Failure");
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
+        } else {
+            try {
+                PdfGenerator.cetakInvoicePembelian(tfNoPurchase.getText(), pembelian, goods);
+            } catch (IOException | DocumentException ex) {
+                Logger.getLogger(CetakInvoicePembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
@@ -500,6 +514,9 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    
+    PembelianModel pembelian = null;
+    List<PembelianBarangModel> goods = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -572,6 +589,8 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     }
 
     private void setPembelian(PembelianModel pembelian) {
+        this.pembelian = pembelian;
+        
         tfNoPembelian.setText(pembelian.getKode());
         tfKodeSupplier.setText(pembelian.getSupplier().getKode());
         tfNamaSupplier.setText(pembelian.getSupplier().getName());
@@ -582,7 +601,7 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
         tfJenisEkspedisi.setText(pembelian.getEkspedisi().getJenisLayanan());
         tfOngkir.setText(String.valueOf(pembelian.getOngkir()));
         
-        List<PembelianBarangModel> goods = new ConnectionManager().getDaftarPembelianBarang(pembelian.getKode());
+        this.goods = new ConnectionManager().getDaftarPembelianBarang(pembelian.getKode());
         setPembelianBarang(pembelian, goods);
     }
 

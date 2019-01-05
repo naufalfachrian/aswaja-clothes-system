@@ -432,6 +432,32 @@ public class ConnectionManager {
         return listBarang;
     }
     
+    public BarangModel getBarang(String kodeBarang) {
+        ArrayList<BarangModel> listBarang = new ArrayList<>();
+        String query = "SELECT * FROM barang WHERE kode_barang = '"+ kodeBarang +"' AND deleted = false";
+        try {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                BarangModel barang = new BarangModel();
+                barang.setKode(result.getString("kode_barang"));
+                barang.setName(result.getString("nama_barang"));
+                barang.setWarna(result.getString("warna"));
+                barang.setArea(result.getString("area"));
+                barang.setUkuran(result.getString("ukuran"));
+                barang.setHargaHPP(result.getInt("harga_hpp"));
+                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
+                listBarang.add(barang);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        if (listBarang.size() == 0) {
+            return null;
+        }
+        return listBarang.get(0);
+    }
+    
     public boolean deleteBarang(String barangId) {
         String query = "UPDATE barang SET deleted = true WHERE kode_barang = '"  + barangId + "'";
         try {
