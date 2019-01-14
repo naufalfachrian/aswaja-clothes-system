@@ -29,11 +29,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 
 public class ConnectionManager {
+    
+    private static EntityManager entityManager;
+    
+    public static EntityManager getDefaultEntityManager() {
+        if (entityManager == null) {
+            entityManager = Persistence.createEntityManagerFactory("AswajaClothesPU").createEntityManager();
+        }
+        return entityManager;
+    }
 
     private static ConnectionManager instance;
     private Connection connection;
@@ -319,155 +329,21 @@ public class ConnectionManager {
     }
     //</editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Master Barang">
-    public String getKodeBarang() {
+    public static String getKodeBarang() {
         String kode = "BR";
-        String query = "SELECT COUNT(*) 'total' FROM barang";
-        int totalBarang = 0;
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                totalBarang = result.getInt("total") + 1;
-            }
-            if (totalBarang < 10) {
-                kode += "000" + totalBarang;
-            } else if (totalBarang < 100) {
-                kode += "00" + totalBarang;
-            } else if (totalBarang < 1000) {
-                kode += "0" + totalBarang;
-            } else {
-                kode += "" + totalBarang;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data barang gagal");
-            return kode;
+        int count = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findAll").getResultList().size();
+        int newId = count + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
         }
         return kode;
     }
-    
-    public Boolean saveBarang(Boolean isUpdate, BarangModel model) {
-        Boolean isResult = false;
-        try {
-            String query = "";
-            if (isUpdate) {
-                query = "UPDATE barang SET nama_barang ='" + model.getName()+ "',"
-                        + "warna = '" + model.getWarna() + "',"
-                        + "area = '" + model.getArea() + "',"
-                        + "ukuran = '" + model.getUkuran() + "',"
-                        + "harga_hpp = '" + model.getHargaHPP()+ "',"
-                        + "harga_jual_satuan = '" + model.getHargaJualSatuan() + "' "
-                        + "WHERE kode_barang ='" + model.getKode() + "'";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            } else {
-                query = "INSERT INTO barang VALUES ('" + model.getKode() + "', "
-                        + "'" + model.getName() + "',"
-                        + "'" + model.getWarna()+ "',"
-                        + "'" + model.getArea() + "',"
-                        + "'" + model.getUkuran() + "',"
-                        + "'" + model.getHargaHPP() + "',"
-                        + "'" + model.getHargaJualSatuan()+ "')";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getLocalizedMessage());
-            isResult = false;
-            return isResult;
-        }
-        return isResult;
-    }
-    
-    public ArrayList<BarangModel> getBarangs() {
-        ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM barang WHERE deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                BarangModel barang = new BarangModel();
-                barang.setKode(result.getString("kode_barang"));
-                barang.setName(result.getString("nama_barang"));
-                barang.setWarna(result.getString("warna"));
-                barang.setArea(result.getString("area"));
-                barang.setUkuran(result.getString("ukuran"));
-                barang.setHargaHPP(result.getInt("harga_hpp"));
-                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
-                listBarang.add(barang);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listBarang;
-        }
-
-        return listBarang;
-    }
-    
-    public ArrayList<BarangModel> getBarangsByNama(String nama) {
-        ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM barang WHERE nama_barang LIKE '%"+ nama +"%' AND deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                BarangModel barang = new BarangModel();
-                barang.setKode(result.getString("kode_barang"));
-                barang.setName(result.getString("nama_barang"));
-                barang.setWarna(result.getString("warna"));
-                barang.setArea(result.getString("area"));
-                barang.setUkuran(result.getString("ukuran"));
-                barang.setHargaHPP(result.getInt("harga_hpp"));
-                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
-                listBarang.add(barang);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listBarang;
-        }
-
-        return listBarang;
-    }
-    
-    public BarangModel getBarang(String kodeBarang) {
-        ArrayList<BarangModel> listBarang = new ArrayList<>();
-        String query = "SELECT * FROM barang WHERE kode_barang = '"+ kodeBarang +"' AND deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                BarangModel barang = new BarangModel();
-                barang.setKode(result.getString("kode_barang"));
-                barang.setName(result.getString("nama_barang"));
-                barang.setWarna(result.getString("warna"));
-                barang.setArea(result.getString("area"));
-                barang.setUkuran(result.getString("ukuran"));
-                barang.setHargaHPP(result.getInt("harga_hpp"));
-                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
-                listBarang.add(barang);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return null;
-        }
-        if (listBarang.size() == 0) {
-            return null;
-        }
-        return listBarang.get(0);
-    }
-    
-    public boolean deleteBarang(String barangId) {
-        String query = "UPDATE barang SET deleted = true WHERE kode_barang = '"  + barangId + "'";
-        try {
-            return statement.executeUpdate(query) > 0 ;
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Master Supplier">
     public String getKodeSupplier() {
