@@ -6,6 +6,7 @@
 package aswajaclothes.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,6 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Kelurahan.findById", query = "SELECT k FROM Kelurahan k WHERE k.id = :id"),
     @NamedQuery(name = "Kelurahan.findByName", query = "SELECT k FROM Kelurahan k WHERE k.name = :name")})
 public class Kelurahan implements Serializable {
+
+    @OneToMany(mappedBy = "kelurahan")
+    private List<Kustomer> kustomerList;
 
     private static final long serialVersionUID = 1L;
     
@@ -104,6 +110,15 @@ public class Kelurahan implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    @XmlTransient
+    public List<Kustomer> getKustomerList() {
+        return kustomerList;
+    }
+
+    public void setKustomerList(List<Kustomer> kustomerList) {
+        this.kustomerList = kustomerList;
     }
     
 }

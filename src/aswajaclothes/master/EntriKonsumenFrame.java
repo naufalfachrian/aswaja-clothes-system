@@ -9,6 +9,7 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Kecamatan;
 import aswajaclothes.entity.Kelurahan;
 import aswajaclothes.entity.Kota;
+import aswajaclothes.entity.Kustomer;
 import aswajaclothes.entity.Provinsi;
 import aswajaclothes.grid.CustomerGridFrame;
 import aswajaclothes.model.master.CustomerModel;
@@ -74,100 +75,56 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         String kode = new ConnectionManager().getKodeCustomer();
         tfKodeCustomer.setText(kode);
     }
+    
+    private Kustomer selectedKustomer;
 
     private void simpanCustomer(Boolean isUpdate) {
-//        try {
-//            String kode = new ValidatorUtil().isEmpty(tfKodeCustomer.getText(), "Kode Kustomer");
-//            String nama = new ValidatorUtil().isEmpty(tfNama.getText(), "Nama Kustomer");
-//            String provinsiId = listProvinsi.get(cbProvinsi.getSelectedIndex()).getId();
-//            String kabupatenId = listKabupaten.get(cbKabupaten.getSelectedIndex()).getId();
-//            String kecamatanId = listKecamatan.get(cbKecamatan.getSelectedIndex()).getId();
-//            String kelurahanId = listKelurahan.get(cbKelurahan.getSelectedIndex()).getId();
-//            String alamat = new ValidatorUtil().isEmpty(taAlamat.getText(), "Alamat");
-//            String noTelepon = new ValidatorUtil().isNumber(tfNoTelepon.getText(), "No Telepon");
-//            CustomerModel customer = new CustomerModel();
-//            customer.setKode(kode);
-//            customer.setName(nama);
-//            customer.setProvinsiId(provinsiId);
-//            customer.setKabupatenId(kabupatenId);
-//            customer.setKecamatanId(kecamatanId);
-//            customer.setKelurahanId(kelurahanId);
-//            customer.setAlamat(alamat);
-//            customer.setNoTelepon(noTelepon);
-//            Boolean isResult = new ConnectionManager().saveCustomer(isUpdate, customer);
-//            if (isResult) {
-//                JOptionPane.showMessageDialog(this, "Simpan kustomer berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-//                clear();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Simpan kustomer gagal", "Pesan", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
-//        }
+        if (selectedKelurahan == null) {
+            JOptionPane.showMessageDialog(this, "Mohon isi data lokasi kustomer.", "Pesan", JOptionPane.ERROR_MESSAGE);
+        }
+        if (selectedKustomer == null) {
+            selectedKustomer = new Kustomer();
+        }
+        selectedKustomer.setKodeKustomer(tfKodeCustomer.getText());
+        selectedKustomer.setNamaKustomer(tfNama.getText());
+        selectedKustomer.setNoTelepon(tfNoTelepon.getText());
+        selectedKustomer.setAlamat(taAlamat.getText());
+        selectedKustomer.setTerhapus(false);
+        selectedKustomer.setKelurahan(selectedKelurahan);
+        
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().persist(selectedKustomer);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+        
+        JOptionPane.showMessageDialog(this, "Simpan kustomer berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        clear();
     }
     
     private void clear(){
         initKodeCustomer();
+        
+        selectedKustomer = null;
+        selectedProvinsi = null;
+        selectedKota = null;
+        selectedKecamatan = null;
+        selectedKelurahan = null;
+        
         tfNama.setText("");
         cbProvinsi.setSelectedIndex(0);
         tfNoTelepon.setText("");
         taAlamat.setText("");
     }
     
-    private void setCustomer(CustomerModel customer){
-//        tfKodeCustomer.setText(customer.getKode());
-//        tfNama.setText(customer.getName());
-//        tfNoTelepon.setText(customer.getNoTelepon());
-//        taAlamat.setText(customer.getAlamat());
-//        cbProvinsi.setSelectedIndex(findProvinsiById(customer.getProvinsiId()));
-//        cbKabupaten.setSelectedIndex(findKabupatenById(customer.getKabupatenId()));
-//        cbKecamatan.setSelectedIndex(findKecamatanById(customer.getKecamatanId()));
-//        cbKelurahan.setSelectedIndex(findKelurahanById(customer.getKelurahanId()));
+    private void setCustomer(Kustomer customer){
+        tfKodeCustomer.setText(customer.getKodeKustomer());
+        tfNama.setText(customer.getNamaKustomer());
+        tfNoTelepon.setText(customer.getNoTelepon());
+        taAlamat.setText(customer.getAlamat());
+        cbProvinsi.setSelectedItem(customer.getKelurahan().getKecamatan().getKota().getProvinsi());
+        cbKabupaten.setSelectedItem(customer.getKelurahan().getKecamatan().getKota());
+        cbKecamatan.setSelectedItem(customer.getKelurahan().getKecamatan());
+        cbKelurahan.setSelectedItem(customer.getKelurahan());
     }
-    
-//    private int findProvinsiById(String provinsiId){
-//        int index = 0;
-//        for(int i = 0; i < listProvinsi.size(); i++){
-//            if (listProvinsi.get(i).getId().equals(provinsiId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKabupatenById(String kabupatenId){
-//        int index = 0;
-//        for(int i = 0; i < listKabupaten.size(); i++){
-//            if (listKabupaten.get(i).getId().equals(kabupatenId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKecamatanById(String kecamatanId){
-//        int index = 0;
-//        for(int i = 0; i < listKecamatan.size(); i++){
-//            if (listKecamatan.get(i).getId().equals(kecamatanId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKelurahanById(String kelurahanId){
-//        int index = 0;
-//        for(int i = 0; i < listKelurahan.size(); i++){
-//            if (listKelurahan.get(i).getId().equals(kelurahanId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -195,7 +152,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         btnCariNoTelepon = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
-        btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
@@ -371,14 +327,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         });
         jPanel2.add(btnSimpan);
 
-        btnUbah.setText("Ubah");
-        btnUbah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbahActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnUbah);
-
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -479,10 +427,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
         clear();
     }//GEN-LAST:event_btnBatalActionPerformed
 
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        simpanCustomer(true);
-    }//GEN-LAST:event_btnUbahActionPerformed
-
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         simpanCustomer(false);
     }//GEN-LAST:event_btnSimpanActionPerformed
@@ -511,7 +455,6 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<Kota> cbKabupaten;
     private javax.swing.JComboBox<Kecamatan> cbKecamatan;
     private javax.swing.JComboBox<Kelurahan> cbKelurahan;
@@ -535,8 +478,8 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        CustomerModel customer = (CustomerModel) model;
-        setCustomer(customer);
+        selectedKustomer = (Kustomer) model;
+        setCustomer(selectedKustomer);
     }
 
     private void konfirmasiHapusCustomer() {

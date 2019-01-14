@@ -6,11 +6,12 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.model.master.CustomerModel;
+import aswajaclothes.entity.Kustomer;
 import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -22,6 +23,8 @@ public class CustomerGridFrame extends javax.swing.JFrame implements MouseListen
 
     /**
      * Creates new form CustomerGridFrame
+     * @param filter
+     * @param valueFilter
      */
     public CustomerGridFrame(FilterUtil.FilterType filter, String valueFilter) {
         initComponents();
@@ -121,20 +124,20 @@ public class CustomerGridFrame extends javax.swing.JFrame implements MouseListen
         ArrayList<String[]> customersRow = new ArrayList<>();
         switch (filter) {
             case NO_TELEPON:
-                listCustomer = new ConnectionManager().getCustomersByNoTelepon(valueFilter);
+                listCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByNoTelepon", Kustomer.class).setParameter("noTelepon", valueFilter).getResultList();
                 break;
             case NAMA:
-                listCustomer = new ConnectionManager().getCustomersByNama(valueFilter);
+                listCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByNamaKustomer", Kustomer.class).setParameter("namaKustomer", valueFilter).getResultList();
                 break;
             default:
-                listCustomer = new ConnectionManager().getCustomers();
+                listCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findAll", Kustomer.class).getResultList();
                 break;
         }
         
-        for (CustomerModel customer : listCustomer) {
+        for (Kustomer customer : listCustomer) {
             String[] rowData = new String[]{
-                customer.getKode(),
-                customer.getName(),
+                customer.getKodeKustomer(),
+                customer.getNamaKustomer(),
                 customer.getAlamat(),
                 customer.getNoTelepon()
             };
@@ -154,7 +157,7 @@ public class CustomerGridFrame extends javax.swing.JFrame implements MouseListen
     }
     
     // Variables declaration - able to modify
-    private ArrayList<CustomerModel> listCustomer;
+    private List<Kustomer> listCustomer;
     private GridListener listener;
     private String noTelepon;
     
@@ -169,7 +172,7 @@ public class CustomerGridFrame extends javax.swing.JFrame implements MouseListen
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblCustomer.getSelectedRow();
-        CustomerModel customer = listCustomer.get(rowSelected);
+        Kustomer customer = listCustomer.get(rowSelected);
         listener.onSelectedRow(customer, CustomerGridFrame.class.getSimpleName());
         dispose();
     }

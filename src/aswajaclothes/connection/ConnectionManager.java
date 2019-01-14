@@ -68,56 +68,23 @@ public class ConnectionManager {
     }
     
     // <editor-fold defaultstate="collapsed" desc="Master Customer">
-    public String getKodeCustomer() {
+    
+    public static String getKodeCustomer() {
         String kode = "CS";
-        String query = "SELECT COUNT(*) 'total' FROM customer";
-        int totalCustomer = 0;
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                totalCustomer = result.getInt("total") + 1;
-            }
-            if (totalCustomer < 10) {
-                kode += "000" + totalCustomer;
-            } else if (totalCustomer < 100) {
-                kode += "00" + totalCustomer;
-            } else if (totalCustomer < 1000) {
-                kode += "0" + totalCustomer;
-            } else {
-                kode += "" + totalCustomer;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data kustomer gagal");
-            return kode;
+        int totalCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findAll").getResultList().size();
+        int newId = totalCustomer + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
         }
         return kode;
     }
-    
-    public ArrayList<CustomerModel> getCustomers() {
-        ArrayList<CustomerModel> listCustomer = new ArrayList<>();
-        String query = "SELECT * FROM customer WHERE deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                CustomerModel customer = new CustomerModel();
-                customer.setKode(result.getString("kode_kustomer"));
-                customer.setName(result.getString("nama_kustomer"));
-                customer.setProvinsiId(result.getString("provinsi_id"));
-                customer.setKabupatenId(result.getString("kabupaten_id"));
-                customer.setKecamatanId(result.getString("kecamatan_id"));
-                customer.setKelurahanId(result.getString("kelurahan_id"));
-                customer.setAlamat(result.getString("alamat"));
-                customer.setNoTelepon(result.getString("no_telepon"));
-                listCustomer.add(customer);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listCustomer;
-        }
-
-        return listCustomer;
-    }
-    
+        
     public CustomerModel getCustomer(String kodeKustumer) {
         ArrayList<CustomerModel> listCustomer = new ArrayList<>();
         String query = "SELECT * FROM customer WHERE kode_kustomer = '" + kodeKustumer + "' AND deleted = false";

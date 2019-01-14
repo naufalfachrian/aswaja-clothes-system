@@ -6,6 +6,7 @@
 package aswajaclothes.pdf;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Barang;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
@@ -563,7 +564,7 @@ public class PdfGenerator {
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             
-            BarangModel barang = new ConnectionManager().getBarang(item.getKodeBarang());
+            Barang barang = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findByKodeBarang", Barang.class).setParameter("kodeBarang", item.getKodeBarang()).getSingleResult();
             
             cell = new PdfPCell(new Phrase(item.getKodeBarang(), SMALL_FONT));
             table.addCell(cell);
