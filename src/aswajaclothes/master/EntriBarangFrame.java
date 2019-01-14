@@ -6,29 +6,16 @@
 package aswajaclothes.master;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.common.KecamatanModel;
-import aswajaclothes.model.common.KelurahanModel;
-import aswajaclothes.model.common.ProvinsiModel;
+import aswajaclothes.entity.Barang;
 import aswajaclothes.grid.BarangGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.ValidatorUtil;
 import com.sun.glass.events.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -85,7 +72,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     }
 
     private void initKodeBarang() {
-        String kode = new ConnectionManager().getKodeBarang();
+        String kode = ConnectionManager.getKodeBarang();
         tfKodeBarang.setText(kode);
     }
     
@@ -102,23 +89,24 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
             String area = listArea.get(cbArea.getSelectedIndex());
             String ukuran = listUkuran.get(cbUkuran.getSelectedIndex());
             String hargaHPP = new CurrencyUtil().clearFormat(tfHargaHpp.getText());
-            String hargaJualSatuan = new CurrencyUtil().clearFormat(tfHargaJualSatuan.getText());;
-            BarangModel barang = new BarangModel();
-            barang.setKode(kode);
-            barang.setName(nama);
-            barang.setWarna(warna);
-            barang.setArea(area);
-            barang.setUkuran(ukuran);
-            barang.setHargaHPP(Integer.parseInt(hargaHPP));
-            barang.setHargaJualSatuan(Integer.parseInt(hargaJualSatuan));
-           
-            Boolean isResult = new ConnectionManager().saveBarang(isUpdate, barang);
-            if (isResult) {
-                JOptionPane.showMessageDialog(this, "Simpan barang berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-                clear();
-            } else {
-                JOptionPane.showMessageDialog(this, "Simpan barang gagal", "Pesan", JOptionPane.ERROR_MESSAGE);
+            String hargaJualSatuan = new CurrencyUtil().clearFormat(tfHargaJualSatuan.getText());
+
+            if (selectedBarang == null) {
+                selectedBarang = new Barang();
             }
+            selectedBarang.setKodeBarang(kode);
+            selectedBarang.setNamaBarang(nama);
+            selectedBarang.setWarna(warna);
+            selectedBarang.setArea(area);
+            selectedBarang.setUkuran(ukuran);
+            selectedBarang.setHargaHpp(Integer.parseInt(hargaHPP));
+            selectedBarang.setHargaJualSatuan(Integer.parseInt(hargaJualSatuan));
+           
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedBarang);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            JOptionPane.showMessageDialog(this, "Simpan barang berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            clear();
         } catch (Exception ex) {
             if (ex instanceof ParseException){
                 System.out.println("Parsing number failed");
@@ -137,17 +125,17 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         cbUkuran.setSelectedIndex(0);
         tfHargaJualSatuan.setValue(0);
         tfHargaHpp.setValue(0);
-
+        selectedBarang = null;
     }
 
-    private void setBarang(BarangModel barang) {
-        tfKodeBarang.setText(barang.getKode());
-        tfNama.setText(barang.getName());
+    private void setBarang(Barang barang) {
+        tfKodeBarang.setText(barang.getKodeBarang());
+        tfNama.setText(barang.getNamaBarang());
         cbWarna.setSelectedIndex(findWarna(barang.getWarna()));
         cbArea.setSelectedIndex(findArea(barang.getArea()));
         cbUkuran.setSelectedIndex(findUkuran(barang.getUkuran()));
         tfHargaJualSatuan.setText(String.valueOf(barang.getHargaJualSatuan()));
-        tfHargaHpp.setText(String.valueOf(barang.getHargaHPP()));
+        tfHargaHpp.setText(String.valueOf(barang.getHargaHpp()));
     }
 
     private int findWarna(String warna) {
@@ -205,7 +193,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         tfHargaJualSatuan = new javax.swing.JFormattedTextField(new CurrencyUtil().formatNumber());
         jPanel4 = new javax.swing.JPanel();
         btnSimpanBarang = new javax.swing.JButton();
-        btnUbahBarang = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
@@ -355,14 +342,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         });
         jPanel4.add(btnSimpanBarang);
 
-        btnUbahBarang.setText("Ubah");
-        btnUbahBarang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbahBarangActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnUbahBarang);
-
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -440,10 +419,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
         barangGrid.setVisible(true);
     }//GEN-LAST:event_btnCariBarangActionPerformed
 
-    private void btnUbahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahBarangActionPerformed
-        simpanBarang(true);
-    }//GEN-LAST:event_btnUbahBarangActionPerformed
-
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
         clear();
     }//GEN-LAST:event_btnBatalActionPerformed
@@ -480,6 +455,7 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private ArrayList<String> listWarna;
     private ArrayList<String> listArea;
     private ArrayList<String> listUkuran;
+    private Barang selectedBarang = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -487,7 +463,6 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpanBarang;
-    private javax.swing.JButton btnUbahBarang;
     private javax.swing.JComboBox<String> cbArea;
     private javax.swing.JComboBox<String> cbUkuran;
     private javax.swing.JComboBox<String> cbWarna;
@@ -508,8 +483,8 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        BarangModel barang = (BarangModel) model;
-        setBarang(barang);
+        selectedBarang = (Barang) model;
+        setBarang(selectedBarang);
     }
 
     private void konfirmasiHapusBarang() {
@@ -521,11 +496,10 @@ public class EntriBarangFrame extends javax.swing.JFrame implements GridListener
     }
 
     private void hapusBarang() {
-        if (new ConnectionManager().deleteBarang(tfKodeBarang.getText())) {
-            JOptionPane.showMessageDialog(this, "Barang terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            clear();
-        } else {
-            JOptionPane.showMessageDialog(this, "Barang gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
-        }
+        Barang barang = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findByKodeBarang", Barang.class).setParameter("kodeBarang", tfKodeBarang.getText()).getSingleResult();
+        barang.setDelete(true);
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().persist(barang);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
     }
 }

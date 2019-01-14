@@ -6,12 +6,14 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Barang;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.util.CurrencyUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -141,18 +143,18 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
             "Ukuran", "Harga HPP", "Harga Jual Satuan"};
         ArrayList<String[]> barangsRow = new ArrayList<>();
         if (byNama.isEmpty()) {
-           listBarang = new ConnectionManager().getBarangs();
+           listBarang = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findAll", Barang.class).getResultList();
         } else {
-            listBarang = new ConnectionManager().getBarangsByNama(byNama);
+            listBarang = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findByNamaBarang", Barang.class).setParameter("namaBarang", byNama).getResultList();
         }
-        for (BarangModel barang : listBarang) {
+        for (Barang barang : listBarang) {
             String[] rowData = new String[]{
-                barang.getKode(),
-                barang.getName(),
+                barang.getKodeBarang(),
+                barang.getNamaBarang(),
                 barang.getWarna(),
                 barang.getArea(),
                 barang.getUkuran(),
-                new CurrencyUtil().formatCurrency(barang.getHargaHPP()),
+                new CurrencyUtil().formatCurrency(barang.getHargaHpp()),
                 new CurrencyUtil().formatCurrency(barang.getHargaJualSatuan())
             };
             barangsRow.add(rowData);
@@ -175,7 +177,7 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
     }
     
     // Variables declaration - able to modify
-    private ArrayList<BarangModel> listBarang;
+    private List<Barang> listBarang;
     private GridListener listener;
     private String namaBarang;
     
@@ -190,7 +192,7 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblBarang.getSelectedRow();
-        BarangModel barang = listBarang.get(rowSelected);
+        Barang barang = listBarang.get(rowSelected);
         listener.onSelectedRow(barang, BarangGridFrame.class.getSimpleName());
         dispose();
     }
