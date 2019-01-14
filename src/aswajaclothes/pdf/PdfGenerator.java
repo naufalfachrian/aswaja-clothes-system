@@ -7,6 +7,7 @@ package aswajaclothes.pdf;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Barang;
+import aswajaclothes.entity.Kustomer;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
@@ -146,9 +147,9 @@ public class PdfGenerator {
         headerData.put("No. Pesanan", pesanan.getKodePesanan());
         setupHeader("Retur Penjualan", headerData, document);
         
-        CustomerModel customer = new ConnectionManager().getCustomer(pesanan.getKodeKustomer());
+        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", pesanan.getKodeKustomer()).getSingleResult();
         ArrayList<String> addressData = new ArrayList<>();
-        addressData.add(customer.getName());
+        addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
         addressData.add(customer.getNoTelepon());
         setupAddres(addressData, document);
@@ -193,9 +194,9 @@ public class PdfGenerator {
         headerData.put("No. Pesanan", pesanan.getKodePesanan());
         setupHeader("Surat Jalan", headerData, document);
         
-        CustomerModel customer = new ConnectionManager().getCustomer(pesanan.getKodeKustomer());
+        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", pesanan.getKodeKustomer()).getSingleResult();
         ArrayList<String> addressData = new ArrayList<>();
-        addressData.add(customer.getName());
+        addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
         addressData.add(customer.getNoTelepon());
         setupAddres(addressData, document);
@@ -280,9 +281,9 @@ public class PdfGenerator {
         
         InvoiceModel invoice = new ConnectionManager().getInvoice(kodeInvoice);
         
-        CustomerModel customer = new ConnectionManager().getCustomer(invoice.getKodeKustomer());
+        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", invoice.getKodeKustomer()).getSingleResult();
         ArrayList<String> addressData = new ArrayList<>();
-        addressData.add(customer.getName());
+        addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
         addressData.add(customer.getNoTelepon());
         setupAddres(addressData, document);

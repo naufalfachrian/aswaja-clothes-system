@@ -483,19 +483,21 @@ public class EntriKonsumenFrame extends javax.swing.JFrame implements GridListen
     }
 
     private void konfirmasiHapusCustomer() {
+        if (selectedKustomer == null) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih konsumen yang hendak dihapus.", "Kesalahan", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         int option = JOptionPane.showConfirmDialog(this, "Apakah anda yakin hendak menghapus konsumen " + tfNama.getText() + "?", "Hapus Konsumen", JOptionPane.OK_CANCEL_OPTION);
-        // OK = 0
         if (option == 0) {
             hapusCustomer();
         }
     }
 
     private void hapusCustomer() {
-        if (new ConnectionManager().deleteCustomer(tfKodeCustomer.getText())) {
-            JOptionPane.showMessageDialog(this, "Konsumen terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            clear();
-        } else {
-            JOptionPane.showMessageDialog(this, "Konsumen gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
-        }
+        if (selectedKustomer == null) return;
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().remove(selectedKustomer);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+        clear();
     }
 }
