@@ -8,8 +8,6 @@ package aswajaclothes.connection;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.common.KecamatanModel;
-import aswajaclothes.model.common.KelurahanModel;
 import aswajaclothes.model.common.ProvinsiModel;
 import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
@@ -68,86 +66,6 @@ public class ConnectionManager {
             System.out.println(ex.getLocalizedMessage());
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="Common">
-    public ArrayList<ProvinsiModel> getProvinsi() {
-        String query = "SELECT * FROM provinces";
-        ArrayList<ProvinsiModel> listProvinsi = new ArrayList<>();
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                ProvinsiModel provinsi = new ProvinsiModel();
-                provinsi.setId(result.getString("id"));
-                provinsi.setName(result.getString("name"));
-                listProvinsi.add(provinsi);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data provinsi gagal");
-            return listProvinsi;
-        }
-        return listProvinsi;
-    }
-
-    public ArrayList<KabupatenModel> getKabupten(String provinsiId) {
-        String query = "SELECT * FROM regencies WHERE province_id = " + provinsiId;
-        ArrayList<KabupatenModel> listKabupaten = new ArrayList<>();
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                KabupatenModel kabupaten = new KabupatenModel();
-                kabupaten.setId(result.getString("id"));
-                kabupaten.setName(result.getString("name"));
-                kabupaten.setProvinsiId(provinsiId);
-                listKabupaten.add(kabupaten);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data kabupaten gagal");
-            return listKabupaten;
-        }
-
-        return listKabupaten;
-    }
-
-    public ArrayList<KecamatanModel> getKecamatan(String kabupatenId) {
-        String query = "SELECT * FROM districts WHERE regency_id = " + kabupatenId;
-        ArrayList<KecamatanModel> listKecamatan = new ArrayList<>();
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                KecamatanModel kecamatan = new KecamatanModel();
-                kecamatan.setId(result.getString("id"));
-                kecamatan.setName(result.getString("name"));
-                kecamatan.setKabupatenId(kabupatenId);
-                listKecamatan.add(kecamatan);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data kecamatan gagal");
-            return listKecamatan;
-        }
-
-        return listKecamatan;
-    }
-
-    public ArrayList<KelurahanModel> getKelurahan(String kecamatanId) {
-        String query = "SELECT * FROM villages WHERE district_id = " + kecamatanId;
-        ArrayList<KelurahanModel> listKelurahan = new ArrayList<>();
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                KelurahanModel kelurahan = new KelurahanModel();
-                kelurahan.setId(result.getString("id"));
-                kelurahan.setName(result.getString("name"));
-                kelurahan.setKecamatanId(kecamatanId);
-                listKelurahan.add(kelurahan);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data kelurahan gagal");
-            return listKelurahan;
-        }
-
-        return listKelurahan;
-    }
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Master Customer">
     public String getKodeCustomer() {
