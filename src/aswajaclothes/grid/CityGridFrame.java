@@ -7,8 +7,6 @@ package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -25,6 +23,8 @@ public class CityGridFrame extends javax.swing.JFrame implements MouseListener {
 
     /**
      * Creates new form CustomerGridFrame
+     * @param filter
+     * @param valueFilter
      */
     public CityGridFrame(FilterUtil.FilterType filter, String valueFilter) {
         initComponents();

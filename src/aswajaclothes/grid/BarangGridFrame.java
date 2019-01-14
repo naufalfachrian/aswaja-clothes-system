@@ -7,8 +7,6 @@ package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Barang;
-import aswajaclothes.model.master.BarangModel;
-import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.util.CurrencyUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -27,6 +25,7 @@ public class BarangGridFrame extends javax.swing.JFrame implements MouseListener
 
     /**
      * Creates new form CustomerGridFrame
+     * @param filterByNama
      */
     public BarangGridFrame(String filterByNama) {
         initComponents();
