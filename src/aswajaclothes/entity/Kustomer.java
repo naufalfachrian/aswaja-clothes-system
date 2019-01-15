@@ -6,7 +6,9 @@
 package aswajaclothes.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,6 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Kustomer.findByNoTelepon", query = "SELECT k FROM Kustomer k WHERE k.noTelepon = :noTelepon"),
     @NamedQuery(name = "Kustomer.findByTerhapus", query = "SELECT k FROM Kustomer k WHERE k.terhapus = :terhapus")})
 public class Kustomer implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kustomer")
+    private List<Pesanan> pesananList;
 
     private static final long serialVersionUID = 1L;
     
@@ -146,6 +153,15 @@ public class Kustomer implements Serializable {
     @Override
     public String toString() {
         return "aswajaclothes.entity.Kustomer[ kodeKustomer=" + kodeKustomer + " ]";
+    }
+
+    @XmlTransient
+    public List<Pesanan> getPesananList() {
+        return pesananList;
+    }
+
+    public void setPesananList(List<Pesanan> pesananList) {
+        this.pesananList = pesananList;
     }
     
 }

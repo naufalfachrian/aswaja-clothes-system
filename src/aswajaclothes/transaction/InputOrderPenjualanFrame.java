@@ -23,12 +23,9 @@ import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import aswajaclothes.widget.ButtonCell;
 import com.toedter.calendar.JTextFieldDateEditor;
-import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +33,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -71,7 +65,7 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }
     
     private void initKodePesanan(){
-        String kode = new ConnectionManager().getKodePesanan();
+        String kode = ConnectionManager.getKodePesanan();
         tfKodePesanan.setText(kode);
     }
     

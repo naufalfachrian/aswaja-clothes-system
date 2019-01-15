@@ -106,14 +106,14 @@ public class ConnectionManager {
         int totalSupplier = ConnectionManager.getDefaultEntityManager().createNamedQuery("Supplier.findAll").getResultList().size();
         int newId = totalSupplier + 1;
         if (newId < 10) {
-                kode += "000" + newId;
-            } else if (newId < 100) {
-                kode += "00" + newId;
-            } else if (newId < 1000) {
-                kode += "0" + newId;
-            } else {
-                kode += "" + newId;
-            }
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
         return kode;
     }
     
@@ -123,39 +123,30 @@ public class ConnectionManager {
         int totalEkspedisi = ConnectionManager.getDefaultEntityManager().createNamedQuery("Ekspedisi.findAll").getResultList().size();
         int newId = totalEkspedisi + 1;
         if (newId < 10) {
-                kode += "000" + newId;
-            } else if (newId < 100) {
-                kode += "00" + newId;
-            } else if (newId < 1000) {
-                kode += "0" + newId;
-            } else {
-                kode += "" + newId;
-            }
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
         return kode;
     }
     
     // <editor-fold defaultstate="collapsed" desc="Input Order Penjualan">
-    public String getKodePesanan() {
+    public static String getKodePesanan() {
         String kode = "PS";
-        String query = "SELECT COUNT(*) 'total' FROM input_order_penjualan";
-        int totalPesanan = 0;
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                totalPesanan = result.getInt("total") + 1;
-            }
-            if (totalPesanan < 10) {
-                kode += "000" + totalPesanan;
-            } else if (totalPesanan < 100) {
-                kode += "00" + totalPesanan;
-            } else if (totalPesanan < 1000) {
-                kode += "0" + totalPesanan;
-            } else {
-                kode += "" + totalPesanan;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data order pesanan gagal");
-            return kode;
+        int totalPesanan = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pesanan.findAll").getResultList().size();
+        int newId = totalPesanan + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
         }
         return kode;
     }

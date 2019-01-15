@@ -6,14 +6,18 @@
 package aswajaclothes.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Barang.findByHargaJualSatuan", query = "SELECT b FROM Barang b WHERE b.hargaJualSatuan = :hargaJualSatuan"),
     @NamedQuery(name = "Barang.findByDelete", query = "SELECT b FROM Barang b WHERE b.delete = :delete")})
 public class Barang implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "barang")
+    private List<PesananDetail> pesananDetailList;
 
     private static final long serialVersionUID = 1L;
     
@@ -172,6 +179,15 @@ public class Barang implements Serializable {
     @Override
     public String toString() {
         return "aswajaclothes.entity.Barang[ kodeBarang=" + kodeBarang + " ]";
+    }
+
+    @XmlTransient
+    public List<PesananDetail> getPesananDetailList() {
+        return pesananDetailList;
+    }
+
+    public void setPesananDetailList(List<PesananDetail> pesananDetailList) {
+        this.pesananDetailList = pesananDetailList;
     }
     
 }
