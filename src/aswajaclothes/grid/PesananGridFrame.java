@@ -6,11 +6,8 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.model.master.InvoiceModel;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.PesananModel;
+import aswajaclothes.entity.Pesanan;
 import aswajaclothes.util.CurrencyUtil;
-import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -123,13 +120,13 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     private void initDaftarPesanan(String valueFilter) {
         String[] customerColumn = new String [] { "Kode", "Nama Pelanggan", "Ekspedisi", "Ongkos Kirim", "Total"};
         ArrayList<String[]> rows = new ArrayList<>();
-        items = new ConnectionManager().getDaftarPesanan();
+        items = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pesanan.findAll", Pesanan.class).getResultList();
         
-        for (PesananModel item : items) {
+        for (Pesanan item : items) {
             String[] rowData = new String[]{
                 item.getKodePesanan(),
-                item.getNamaKustomer(),
-                item.getNamaEkspedisi(),
+                item.getKustomer().getNamaKustomer(),
+                item.getEkspedisi().getNamaEkspedisi(),
                 new CurrencyUtil().formatCurrency(item.getOngkir()),
                 new CurrencyUtil().formatCurrency(item.getTotal()),
             };
@@ -149,7 +146,7 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     }
     
     // Variables declaration - able to modify
-    private List<PesananModel> items;
+    private List<Pesanan> items;
     private GridListener listener;
     private String noTelepon;
     
@@ -164,7 +161,7 @@ public class PesananGridFrame extends javax.swing.JFrame implements MouseListene
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblPesanan.getSelectedRow();
-        PesananModel pesanan  = items.get(rowSelected);
+        Pesanan pesanan  = items.get(rowSelected);
         listener.onSelectedRow(pesanan, PesananGridFrame.class.getSimpleName());
         dispose();
     }

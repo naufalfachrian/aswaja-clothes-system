@@ -151,57 +151,6 @@ public class ConnectionManager {
         return kode;
     }
     
-    public int simpanInputOrderPenjualan(InputOrderPenjualanModel item) throws SQLException {
-        String tableName = "input_order_penjualan";
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s', '%d')",
-                tableName, item.getKodePesanan(), item.getKodeKustomer(),
-                item.getKodeEkspedisi(), item.getOngkir(), item.getTotal(), item.getTanggal(), 
-                item.getAlamatPengiriman(), item.getKotaTujuanId(), item.getKotaTujuan(), 
-                item.getBerat());
-        int inserted = statement.executeUpdate(query);
-        if (inserted > 0) {
-            for (InputOrderPenjualanDetailModel itemDetail : item.getOrders()) {
-                itemDetail.setKodePesanan(item.getKodePesanan());
-                simpanInputOrderPenjualanDetail(itemDetail);
-            }
-        }
-        return inserted;
-    }
-    
-    public int simpanInputOrderPenjualanDetail(InputOrderPenjualanDetailModel item) throws SQLException {
-        String tableName = "input_order_penjualan_detail";
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', %d, '%s')", tableName, item.getKodePesanan(), item.getKodeBarang(), item.getQty(), item.getTipeLengan());
-        return statement.executeUpdate(query);
-    }
-    
-    public List<PesananModel> getDaftarPesanan() {
-        ArrayList<PesananModel> items = new ArrayList<>();
-        String query = "SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +
-                "FROM input_order_penjualan iop " +
-                "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
-                "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi;";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                PesananModel item = new PesananModel();
-                item.setKodePesanan(result.getString("kode_pesanan"));
-                item.setKodeKustomer(result.getString("kode_kustomer"));
-                item.setNamaKustomer(result.getString("nama_kustomer"));
-                item.setKodeEkspedisi(result.getString("kode_ekspedisi"));
-                item.setNamaEkspedisi(result.getString("nama_ekspedisi"));
-                item.setJenisLayanan(result.getString("jenis_layanan"));
-                item.setOngkir(result.getInt("ongkir"));
-                item.setTotal(result.getInt("total"));
-                item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
-                items.add(item);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return items;
-        }
-        return items;
-    }
-    
     public PesananModel getDaftarPesananById(String inputOrderPenjualanId) {
         try {
             String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +

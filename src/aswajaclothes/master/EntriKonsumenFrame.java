@@ -12,7 +12,6 @@ import aswajaclothes.entity.Kota;
 import aswajaclothes.entity.Kustomer;
 import aswajaclothes.entity.Provinsi;
 import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.util.FilterUtil;
 import java.util.List;
