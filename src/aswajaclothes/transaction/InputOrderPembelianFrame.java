@@ -6,6 +6,8 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Pesanan;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
@@ -13,7 +15,6 @@ import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.grid.SupplierGridFrame;
 import aswajaclothes.model.common.KabupatenModel;
 import aswajaclothes.model.master.EkspedisiModel;
-import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
@@ -743,20 +744,23 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_btnCariPemesananActionPerformed
 
     private void btnTambahPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPemesananActionPerformed
-        PesananModel pesanan = new ConnectionManager().getDaftarPesananById(kodePesanan);
+        if (kodePesanan == null) {
+            return;
+        }
+        Pesanan pesanan = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pesanan.findByKodePesanan", Pesanan.class).setParameter("kodePesanan", kodePesanan).getSingleResult();
         if (!kodePesananHasBeenSelected()) {
-            List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+            List<PesananDetail> items = pesanan.getPesananDetailList();
             tblModel.addRow(new String[] {
                 String.valueOf((tblModel.getRowCount() + 1)),
                 pesanan.getKodePesanan(),
-                pesanan.getNamaKustomer(),
+                pesanan.getKustomer().getNamaKustomer(),
                 String.valueOf(items.size()),
                 new CurrencyUtil().formatCurrency(pesanan.getTotal()),
                 "Hapus"
             });
             selectedKodePesanan.add(kodePesanan);
         } else {
-            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", pesanan.getKodePesanan(), pesanan.getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", pesanan.getKodePesanan(), pesanan.getKustomer().getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnTambahPemesananActionPerformed
 

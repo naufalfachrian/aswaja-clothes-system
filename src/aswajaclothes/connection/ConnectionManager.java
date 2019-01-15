@@ -8,12 +8,9 @@ package aswajaclothes.connection;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.common.KabupatenModel;
 import aswajaclothes.model.common.ProvinsiModel;
-import aswajaclothes.model.master.BarangModel;
 import aswajaclothes.model.master.EkspedisiModel;
-import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
-import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
@@ -145,67 +142,7 @@ public class ConnectionManager {
             kode += "" + newId;
         }
         return kode;
-    }
-    
-    public PesananModel getDaftarPesananById(String inputOrderPenjualanId) {
-        try {
-            String query = String.format("SELECT iop.kode_pesanan, iop.kode_kustomer, c.nama_kustomer, iop.kode_ekspedisi, e.nama_ekspedisi, e.jenis_layanan, iop.ongkir, iop.total, iop.tanggal as 'tanggal_pemesanan' " +
-                    "FROM input_order_penjualan iop " +
-                    "LEFT JOIN customer c ON iop.kode_kustomer = c.kode_kustomer " +
-                    "LEFT JOIN ekspedisi e ON iop.kode_ekspedisi = e.kode_ekspedisi " +
-                    "WHERE iop.kode_pesanan = '%s';", inputOrderPenjualanId);
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                PesananModel item = new PesananModel();
-                item.setKodePesanan(result.getString("kode_pesanan"));
-                item.setKodeKustomer(result.getString("kode_kustomer"));
-                item.setNamaKustomer(result.getString("nama_kustomer"));
-                item.setKodeEkspedisi(result.getString("kode_ekspedisi"));
-                item.setNamaEkspedisi(result.getString("nama_ekspedisi"));
-                item.setJenisLayanan(result.getString("jenis_layanan"));
-                item.setOngkir(result.getInt("ongkir"));
-                item.setTotal(result.getInt("total"));
-                item.setTanggalPemesanan(result.getString("tanggal_pemesanan"));
-                return item;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    public List<ItemPesananModel> getDaftarPesananItem(String kodePesanan) {
-        ArrayList<ItemPesananModel> items = new ArrayList<>();
-        String query = String.format("SELECT * FROM input_order_penjualan_detail iopd "
-                + "LEFT JOIN barang b ON iopd.kode_barang = b.kode_barang "
-                + "WHERE iopd.kode_pesanan = '%s'", kodePesanan);
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                ItemPesananModel item = new ItemPesananModel();
-                item.setKodePesanan(kodePesanan);
-                
-                BarangModel barang = new BarangModel();
-                barang.setKode(result.getString("kode_barang"));
-                barang.setName(result.getString("nama_barang"));
-                barang.setWarna(result.getString("warna"));
-                barang.setArea(result.getString("area"));
-                barang.setUkuran(result.getString("ukuran"));
-                barang.setHargaHPP(result.getInt("harga_hpp"));
-                barang.setHargaJualSatuan(result.getInt("harga_jual_satuan"));
-                item.setBarang(barang);
-                
-                item.setQuantity(result.getInt("qty"));
-                items.add(item);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return items;
-    }
-    
-    // </editor-fold>
-    
+    }    
     
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Pembelian">
     

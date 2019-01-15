@@ -6,24 +6,18 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Pesanan;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PesananGridFrame;
-import aswajaclothes.model.master.ItemPesananModel;
-import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
-import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
-import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -372,12 +366,12 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     }//GEN-LAST:event_tfKodeKustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        if (pesanan != null && items != null) {
-            try {
-                PdfGenerator.cetakReturPenjualan(tfNoInvoice.getText(), pesanan, items);
-            } catch (IOException | DocumentException ex) {
-                Logger.getLogger(ReturPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (selectedPesanan != null && items != null) {
+//            try {
+//                PdfGenerator.cetakReturPenjualan(tfNoInvoice.getText(), selectedPesanan, items);
+//            } catch (IOException | DocumentException ex) {
+//                Logger.getLogger(ReturPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }//GEN-LAST:event_btnCetakActionPerformed
 
@@ -393,8 +387,8 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     
-    PesananModel pesanan = null;
-    List<ItemPesananModel> items = null;
+    Pesanan selectedPesanan = null;
+    List<PesananDetail> items = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -428,7 +422,7 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            setPesanan((PesananModel) model);
+            setPesanan((Pesanan) model);
         }
     }
 
@@ -456,30 +450,30 @@ public class ReturPenjualanFrame extends javax.swing.JFrame implements GridListe
     public void mouseExited(MouseEvent e) {
 
     }
-
-    private void setPesanan(PesananModel pesanan) {
-        this.pesanan = pesanan;
+    
+    private void setPesanan(Pesanan pesanan) {
+        selectedPesanan = pesanan;
         tfKodePesanan.setText(pesanan.getKodePesanan());
-        tfKodeKustomer.setText(pesanan.getKodeKustomer());
-        tfNamaKustomer.setText(pesanan.getNamaKustomer());
-        tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
+        tfKodeKustomer.setText(pesanan.getKustomer().getKodeKustomer());
+        tfNamaKustomer.setText(pesanan.getKustomer().getNamaKustomer());
+        tfNamaEkspedisi.setText(pesanan.getEkspedisi().getNamaEkspedisi());
         tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
         tfTotalBayar.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
         applyPesananDetail(pesanan);
     }
 
-    private void applyPesananDetail(PesananModel pesanan) {
-        this.items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+    private void applyPesananDetail(Pesanan pesanan) {
+        this.items = pesanan.getPesananDetailList();
         ArrayList<String[]> rows = new ArrayList<>();
         int count = 1;
-        for (ItemPesananModel item : items) {
+        for (PesananDetail item : items) {
             String[] rowData = new String[]{
                 String.valueOf(count),
-                item.getBarang().getKode(),
-                item.getBarang().getName(),
-                item.getQuantity().toString(),
+                item.getBarang().getKodeBarang(),
+                item.getBarang().getNamaBarang(),
+                String.valueOf(item.getQty()),
                 new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
-                new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
+                new CurrencyUtil().formatCurrency(item.getQty() * item.getBarang().getHargaJualSatuan()),
             };
             rows.add(rowData);
             count++;
