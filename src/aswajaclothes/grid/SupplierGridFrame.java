@@ -6,12 +6,12 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.SupplierModel;
+import aswajaclothes.entity.Supplier;
 import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -23,6 +23,8 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
 
     /**
      * Creates new form CustomerGridFrame
+     * @param filter
+     * @param valueFilter
      */
     public SupplierGridFrame(FilterUtil.FilterType filter, String valueFilter) {
         initComponents();
@@ -122,20 +124,20 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
         ArrayList<String[]> suppliersRow = new ArrayList<>();
         switch (filterType) {
             case NAMA:
-                listSupplier = new ConnectionManager().getSupplierByNama(valueFilter);
+                listSupplier = ConnectionManager.getDefaultEntityManager().createNamedQuery("Supplier.findByNamaSupplier", Supplier.class).setParameter("namaSupplier", valueFilter).getResultList();
                 break;
             case NO_TELEPON:
-                listSupplier = new ConnectionManager().getSupplierByNoTelepon(valueFilter);
+                listSupplier = ConnectionManager.getDefaultEntityManager().createNamedQuery("Supplier.findByNoTelepon", Supplier.class).setParameter("noTelepon", valueFilter).getResultList();
                 break;
             default:
-                listSupplier = new ConnectionManager().getSuppliers();
+                listSupplier = ConnectionManager.getDefaultEntityManager().createNamedQuery("Supplier.findAll", Supplier.class).getResultList();
                 break;
         }
         
-        for (SupplierModel supplier : listSupplier) {
+        for (Supplier supplier : listSupplier) {
             String[] rowData = new String[]{
-                supplier.getKode(),
-                supplier.getName(),
+                supplier.getKodeSupplier(),
+                supplier.getNamaSupplier(),
                 supplier.getAlamat(),
                 supplier.getNoTelepon()
             };
@@ -155,7 +157,7 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
     }
     
     // Variables declaration - able to modify
-    private ArrayList<SupplierModel> listSupplier;
+    private List<Supplier> listSupplier;
     private GridListener listener;
     private String noTelepon;
     
@@ -170,7 +172,7 @@ public class SupplierGridFrame extends javax.swing.JFrame implements MouseListen
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblCustomer.getSelectedRow();
-        SupplierModel supplier = listSupplier.get(rowSelected);
+        Supplier supplier = listSupplier.get(rowSelected);
         listener.onSelectedRow(supplier, SupplierGridFrame.class.getSimpleName());
         dispose();
     }

@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Kelurahan implements Serializable {
 
     @OneToMany(mappedBy = "kelurahan")
+    private List<Supplier> supplierList;
+
+    @OneToMany(mappedBy = "kelurahan")
     private List<Kustomer> kustomerList;
 
     private static final long serialVersionUID = 1L;
@@ -119,6 +122,15 @@ public class Kelurahan implements Serializable {
 
     public void setKustomerList(List<Kustomer> kustomerList) {
         this.kustomerList = kustomerList;
+    }
+
+    @XmlTransient
+    public List<Supplier> getSupplierList() {
+        return supplierList;
+    }
+
+    public void setSupplierList(List<Supplier> supplierList) {
+        this.supplierList = supplierList;
     }
     
 }

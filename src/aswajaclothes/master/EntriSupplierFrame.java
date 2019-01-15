@@ -10,16 +10,14 @@ import aswajaclothes.entity.Kecamatan;
 import aswajaclothes.entity.Kelurahan;
 import aswajaclothes.entity.Kota;
 import aswajaclothes.entity.Provinsi;
-import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.common.KecamatanModel;
-import aswajaclothes.model.common.KelurahanModel;
-import aswajaclothes.model.common.ProvinsiModel;
+import aswajaclothes.entity.Supplier;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.SupplierGridFrame;
-import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -76,47 +74,48 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     }
 
     private void initKodeSupplier() {
-        String kode = new ConnectionManager().getKodeSupplier();
+        String kode = ConnectionManager.getKodeSupplier();
         tfKodeSupplier.setText(kode);
     }
+    
+    private Supplier selectedSupplier = null;
 
     private void simpanSupplier(Boolean isUpdate) {
-//        try {
-//            String kode = new ValidatorUtil().isEmpty(tfKodeSupplier.getText(), "Kode Supplier");
-//            String nama = new ValidatorUtil().isEmpty(tfNama.getText(), "Nama Supplier");
-//            String provinsiId = listProvinsi.get(cbProvinsi.getSelectedIndex()).getId();
-//            String kabupatenId = listKabupaten.get(cbKabupaten.getSelectedIndex()).getId();
-//            String kecamatanId = listKecamatan.get(cbKecamatan.getSelectedIndex()).getId();
-//            String kelurahanId = listKelurahan.get(cbKelurahan.getSelectedIndex()).getId();
-//            String alamat = new ValidatorUtil().isEmpty(taAlamat.getText(), "Alamat");
-//            String noTelepon = new ValidatorUtil().isNumber(tfNoTelepon.getText(), "No Telepon");
-//            String noFax = tfNoFax.getText();
-//            String email = tfEmail.getText();
-//            SupplierModel supplier = new SupplierModel();
-//            supplier.setKode(kode);
-//            supplier.setName(nama);
-//            supplier.setProvinsiId(provinsiId);
-//            supplier.setKabupatenId(kabupatenId);
-//            supplier.setKecamatanId(kecamatanId);
-//            supplier.setKelurahanId(kelurahanId);
-//            supplier.setAlamat(alamat);
-//            supplier.setNoTelepon(noTelepon);
-//            supplier.setNoFax(noFax);
-//            supplier.setEmail(email);
-//            Boolean isResult = new ConnectionManager().saveSupplier(isUpdate, supplier);
-//            if (isResult) {
-//                JOptionPane.showMessageDialog(this, "Simpan supplier berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-//                clear();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Simpan supplier gagal", "Pesan", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            if (selectedSupplier == null) {
+                selectedSupplier = new Supplier();
+            }
+            if (selectedKelurahan == null) {
+                throw new RuntimeException("Lokasi supplier belum diisi.");
+            }
+            String kode = new ValidatorUtil().isEmpty(tfKodeSupplier.getText(), "Kode Supplier");
+            String nama = new ValidatorUtil().isEmpty(tfNama.getText(), "Nama Supplier");
+            String alamat = new ValidatorUtil().isEmpty(taAlamat.getText(), "Alamat");
+            String noTelepon = new ValidatorUtil().isNumber(tfNoTelepon.getText(), "No Telepon");
+            String noFax = tfNoFax.getText();
+            String email = tfEmail.getText();
+            Supplier supplier = new Supplier();
+            supplier.setKodeSupplier(kode);
+            supplier.setNamaSupplier(nama);
+            supplier.setKelurahan(selectedKelurahan);
+            supplier.setAlamat(alamat);
+            supplier.setNoTelepon(noTelepon);
+            supplier.setNoFax(noFax);
+            supplier.setEmail(email);
+        } catch (Exception ex) {
+            Logger.getLogger(EntriSupplierFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void clear(){
         initKodeSupplier();
+        
+        selectedSupplier = null;
+        selectedProvinsi = null;
+        selectedKota = null;
+        selectedKecamatan = null;
+        selectedKelurahan = null;
+        
         tfNama.setText("");
         cbProvinsi.setSelectedIndex(0);
         tfNoTelepon.setText("");
@@ -125,62 +124,18 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
         tfEmail.setText("");
     }
     
-    private void setSupplier(SupplierModel supplier){
-//        tfKodeSupplier.setText(supplier.getKode());
-//        tfNama.setText(supplier.getName());
-//        tfNoTelepon.setText(supplier.getNoTelepon());
-//        taAlamat.setText(supplier.getAlamat());
-//        cbProvinsi.setSelectedIndex(findProvinsiById(supplier.getProvinsiId()));
-//        cbKabupaten.setSelectedIndex(findKabupatenById(supplier.getKabupatenId()));
-//        cbKecamatan.setSelectedIndex(findKecamatanById(supplier.getKecamatanId()));
-//        cbKelurahan.setSelectedIndex(findKelurahanById(supplier.getKelurahanId()));
-//        tfNoFax.setText(supplier.getNoFax());
-//        tfEmail.setText(supplier.getEmail());
+    private void setSupplier(Supplier supplier){
+        tfKodeSupplier.setText(supplier.getKodeSupplier());
+        tfNama.setText(supplier.getNamaSupplier());
+        tfNoTelepon.setText(supplier.getNoTelepon());
+        taAlamat.setText(supplier.getAlamat());
+        cbProvinsi.setSelectedItem(supplier.getKelurahan().getKecamatan().getKota().getProvinsi());
+        cbKabupaten.setSelectedItem(supplier.getKelurahan().getKecamatan().getKota());
+        cbKecamatan.setSelectedItem(supplier.getKelurahan().getKecamatan());
+        cbKelurahan.setSelectedItem(supplier.getKelurahan());
+        tfNoFax.setText(supplier.getNoFax());
+        tfEmail.setText(supplier.getEmail());
     }
-    
-//    private int findProvinsiById(String provinsiId){
-//        int index = 0;
-//        for(int i = 0; i < listProvinsi.size(); i++){
-//            if (listProvinsi.get(i).getId().equals(provinsiId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKabupatenById(String kabupatenId){
-//        int index = 0;
-//        for(int i = 0; i < listKabupaten.size(); i++){
-//            if (listKabupaten.get(i).getId().equals(kabupatenId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKecamatanById(String kecamatanId){
-//        int index = 0;
-//        for(int i = 0; i < listKecamatan.size(); i++){
-//            if (listKecamatan.get(i).getId().equals(kecamatanId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
-//    
-//    private int findKelurahanById(String kelurahanId){
-//        int index = 0;
-//        for(int i = 0; i < listKelurahan.size(); i++){
-//            if (listKelurahan.get(i).getId().equals(kelurahanId)){
-//                index = i;
-//                break;
-//            }
-//        }
-//        return index;
-//    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -508,7 +463,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
 
     private void cbKelurahanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKelurahanActionPerformed
         JComboBox cb = (JComboBox) evt.getSource();
-        selectKelurahan = (Kelurahan) cb.getSelectedItem();
+        selectedKelurahan = (Kelurahan) cb.getSelectedItem();
     }//GEN-LAST:event_cbKelurahanActionPerformed
 
     private void tfNoTeleponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNoTeleponActionPerformed
@@ -560,7 +515,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     private Provinsi selectedProvinsi;
     private Kota selectedKota;
     private Kecamatan selectedKecamatan;
-    private Kelurahan selectKelurahan;
+    private Kelurahan selectedKelurahan;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -597,8 +552,8 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        SupplierModel supplier = (SupplierModel) model;
-        setSupplier(supplier);
+        selectedSupplier = (Supplier) model;
+        setSupplier(selectedSupplier);
     }
 
     private void konfirmasiHapusSupplier() {
@@ -610,11 +565,14 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     }
 
     private void hapusSupplier() {
-        if (new ConnectionManager().deleteSupplier(tfKodeSupplier.getText())) {
-            JOptionPane.showMessageDialog(this, "Supplier terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            clear();
-        } else {
-            JOptionPane.showMessageDialog(this, "Supplier gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
+        if (selectedSupplier == null) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih supplier yang hendak dihapus terlebih dahulu.", "Berhasil", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().remove(selectedSupplier);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+        JOptionPane.showMessageDialog(this, "Supplier terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        clear();
     }
 }

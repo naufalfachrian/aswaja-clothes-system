@@ -8,8 +8,6 @@ package aswajaclothes.pdf;
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Barang;
 import aswajaclothes.entity.Kustomer;
-import aswajaclothes.model.master.BarangModel;
-import aswajaclothes.model.master.CustomerModel;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianBarangModel;
@@ -41,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

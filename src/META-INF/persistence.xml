@@ -8,6 +8,7 @@
     <class>aswajaclothes.entity.Kota</class>
     <class>aswajaclothes.entity.Kecamatan</class>
     <class>aswajaclothes.entity.Kustomer</class>
+    <class>aswajaclothes.entity.Supplier</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/aswaja_clothes?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="bungamungil"/>

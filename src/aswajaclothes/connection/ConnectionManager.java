@@ -101,167 +101,21 @@ public class ConnectionManager {
     }
     
     // <editor-fold defaultstate="collapsed" desc="Master Supplier">
-    public String getKodeSupplier() {
+    public static String getKodeSupplier() {
         String kode = "SU";
-        String query = "SELECT COUNT(*) 'total' FROM supplier";
-        int totalSupplier = 0;
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                totalSupplier = result.getInt("total") + 1;
-            }
-            if (totalSupplier < 10) {
-                kode += "000" + totalSupplier;
-            } else if (totalSupplier < 100) {
-                kode += "00" + totalSupplier;
-            } else if (totalSupplier < 1000) {
-                kode += "0" + totalSupplier;
+        int totalSupplier = ConnectionManager.getDefaultEntityManager().createNamedQuery("Supplier.findAll").getResultList().size();
+        int newId = totalSupplier + 1;
+        if (newId < 10) {
+                kode += "000" + newId;
+            } else if (newId < 100) {
+                kode += "00" + newId;
+            } else if (newId < 1000) {
+                kode += "0" + newId;
             } else {
-                kode += "" + totalSupplier;
+                kode += "" + newId;
             }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data supplier gagal");
-            return kode;
-        }
         return kode;
     }
-    
-    public ArrayList<SupplierModel> getSuppliers() {
-        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier WHERE deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                SupplierModel supplier = new SupplierModel();
-                supplier.setKode(result.getString("kode_supplier"));
-                supplier.setName(result.getString("nama_supplier"));
-                supplier.setProvinsiId(result.getString("provinsi_id"));
-                supplier.setKabupatenId(result.getString("kabupaten_id"));
-                supplier.setKecamatanId(result.getString("kecamatan_id"));
-                supplier.setKelurahanId(result.getString("kelurahan_id"));
-                supplier.setAlamat(result.getString("alamat"));
-                supplier.setNoTelepon(result.getString("no_telepon"));
-                supplier.setNoFax(result.getString("no_fax"));
-                supplier.setEmail(result.getString("email"));
-                listSupplier.add(supplier);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listSupplier;
-        }
-
-        return listSupplier;
-    }
-    
-    public ArrayList<SupplierModel> getSupplierByNoTelepon(String noTelepon) {
-        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier WHERE no_telepon LIKE '" + noTelepon + "%' AND deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                SupplierModel supplier = new SupplierModel();
-                supplier.setKode(result.getString("kode_supplier"));
-                supplier.setName(result.getString("nama_supplier"));
-                supplier.setProvinsiId(result.getString("provinsi_id"));
-                supplier.setKabupatenId(result.getString("kabupaten_id"));
-                supplier.setKecamatanId(result.getString("kecamatan_id"));
-                supplier.setKelurahanId(result.getString("kelurahan_id"));
-                supplier.setAlamat(result.getString("alamat"));
-                supplier.setNoTelepon(result.getString("no_telepon"));
-                supplier.setNoFax(result.getString("no_fax"));
-                supplier.setEmail(result.getString("email"));
-                listSupplier.add(supplier);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listSupplier;
-        }
-
-        return listSupplier;
-    }
-    
-    public ArrayList<SupplierModel> getSupplierByNama(String nama) {
-        ArrayList<SupplierModel> listSupplier = new ArrayList<>();
-        String query = "SELECT * FROM supplier WHERE nama_supplier LIKE '" + nama + "%' AND deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                SupplierModel supplier = new SupplierModel();
-                supplier.setKode(result.getString("kode_supplier"));
-                supplier.setName(result.getString("nama_supplier"));
-                supplier.setProvinsiId(result.getString("provinsi_id"));
-                supplier.setKabupatenId(result.getString("kabupaten_id"));
-                supplier.setKecamatanId(result.getString("kecamatan_id"));
-                supplier.setKelurahanId(result.getString("kelurahan_id"));
-                supplier.setAlamat(result.getString("alamat"));
-                supplier.setNoTelepon(result.getString("no_telepon"));
-                supplier.setNoFax(result.getString("no_fax"));
-                supplier.setEmail(result.getString("email"));
-                listSupplier.add(supplier);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listSupplier;
-        }
-
-        return listSupplier;
-    }
-    
-    public Boolean saveSupplier(Boolean isUpdate, SupplierModel model) {
-        Boolean isResult = false;
-        try {
-            String query = "";
-            if (isUpdate) {
-                query = "UPDATE supplier SET nama_supplier ='" + model.getName() + "',"
-                        + "provinsi_id = '" + model.getProvinsiId() + "',"
-                        + "kabupaten_id = '" + model.getKabupatenId() + "',"
-                        + "kecamatan_id = '" + model.getKecamatanId() + "',"
-                        + "kelurahan_id = '" + model.getKelurahanId() + "',"
-                        + "alamat = '" + model.getAlamat() + "',"
-                        + "no_telepon = '" + model.getNoTelepon() + "',"
-                        + "no_fax ='" + model.getNoFax() + "',"
-                        + "email = '" + model.getEmail() + "' "
-                        + "WHERE kode_supplier ='" + model.getKode() + "'";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            } else {
-                query = "INSERT INTO supplier VALUES ('" + model.getKode() + "', "
-                        + "'" + model.getName() + "',"
-                        + "'" + model.getProvinsiId() + "',"
-                        + "'" + model.getKabupatenId() + "',"
-                        + "'" + model.getKecamatanId() + "',"
-                        + "'" + model.getKelurahanId() + "',"
-                        + "'" + model.getAlamat() + "',"
-                        + "'" + model.getNoTelepon()+ "',"
-                        + "'" + model.getNoFax()+ "',"
-                        + "'" + model.getEmail() + "')";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getLocalizedMessage());
-            isResult = false;
-            return isResult;
-        }
-        return isResult;
-    }
-    
-    public boolean deleteSupplier(String supplierId) {
-        String query = "UPDATE supplier SET deleted = true WHERE kode_supplier = '" + supplierId + "'";
-        try {
-            return statement.executeUpdate(query) > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Master Ekspedisi">
     public String getKodeEkspedisi() {
