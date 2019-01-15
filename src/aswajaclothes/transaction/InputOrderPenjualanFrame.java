@@ -6,18 +6,16 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Barang;
+import aswajaclothes.entity.Ekspedisi;
+import aswajaclothes.entity.Kustomer;
+import aswajaclothes.entity.Pesanan;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.BarangGridFrame;
 import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.CustomerGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.master.BarangModel;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.EkspedisiModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanModel;
-import aswajaclothes.util.Config;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
@@ -27,7 +25,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,10 +85,11 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }
     
     private void initListOrderPenjualan(){
-        listOrderPenjualanDetail = new ArrayList<>();
+        listPesananDetail = new ArrayList<>();
     }
     
-    private void clearBarang(){
+    private void clearBarang() {
+        selectedBarang = null;
         tfKodeBarang.setText("");
         tfNamaBarang.setText("");
         tfHargaBarang.setValue(0);
@@ -100,18 +98,20 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         btnTambah.setText("Tambah");
     }
     
-    private void clearPesanan(){
+    private void clearPesanan() {
+        selectedPesanan = null;
         initKodePesanan();
         tfKodeCustomer.setText("");
         tfNamaCustomer.setText("");
         initDateFormat();
         ((DefaultTableModel)tblPesananDetail.getModel()).setRowCount(0);
-        listOrderPenjualanDetail.clear();
+        listPesananDetail.clear();
         tfTotal.setValue(0);
         btnCariCustomer.setEnabled(true);
     }
     
-    private void clearEkspedisi(){
+    private void clearEkspedisi() {
+        selectedEkspedisi = null;
         tfKodeEkspedisi.setText("");
         tfNamaEkspedisi.setText("");
         tfJenisLayanan.setText("");
@@ -128,6 +128,10 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }
     
     private void tambah() throws ParseException, Exception{
+        if (selectedBarang == null) {
+            throw new RuntimeException("Pilih barang terlebih dahulu.");
+        }
+        
         if (tfKodeCustomer.getText().isEmpty()){
             throw new Exception("Kode kustomer harus diisi");
         } else if (tfKodeBarang.getText().isEmpty()){
@@ -144,23 +148,21 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
             harga += 10000;
         }
         
-        InputOrderPenjualanDetailModel model = new InputOrderPenjualanDetailModel();
-        model.setKodeBarang(kodeBarang);
-        model.setNamaBarang(namaBarang);
-        model.setQty(qty);
-        model.setTipeLengan(tipeLengan);
-        model.setHargaBarang(harga);
-        if (!isDuplikasiBarang(model, isUpdate)){
-           listOrderPenjualanDetail.add(model);
+        PesananDetail pesananDetail = new PesananDetail();
+        pesananDetail.setBarang(selectedBarang);
+        pesananDetail.setQty(qty);
+        pesananDetail.setTipeLengan(tipeLengan);
+        if (!isDuplikasiBarang(pesananDetail, isUpdate)){
+           listPesananDetail.add(pesananDetail);
         }
         tblModel.setRowCount(0);
         int index = 1;
-        for(InputOrderPenjualanDetailModel modelDetail: listOrderPenjualanDetail){
-            String hargaBarang = new CurrencyUtil().formatCurrency(modelDetail.getHargaBarang());
+        for(PesananDetail modelDetail: listPesananDetail){
+            String hargaBarang = new CurrencyUtil().formatCurrency(modelDetail.getBarang().getHargaJualSatuan());
             tblModel.addRow(new Object[]{
                 index,
-                modelDetail.getKodeBarang(),
-                modelDetail.getNamaBarang(),
+                modelDetail.getBarang().getKodeBarang(),
+                modelDetail.getBarang().getNamaBarang(),
                 modelDetail.getQty(),
                 hargaBarang,
                 modelDetail.getTipeLengan(),
@@ -174,10 +176,10 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         calculateTotal();
     }
 
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
+    private boolean isDuplikasiBarang(PesananDetail model, boolean isUpdate){
         boolean isDuplikasi = false;
-        for(InputOrderPenjualanDetailModel obj : listOrderPenjualanDetail){
-            if (obj.getKodeBarang().equals(model.getKodeBarang())){
+        for(PesananDetail obj : listPesananDetail){
+            if (obj.getBarang().equals(model.getBarang()) && obj.getTipeLengan().equals(model.getTipeLengan())) {
                 if (isUpdate == false){
                    int currQty = obj.getQty();
                    int accumulateQty = currQty + model.getQty();
@@ -194,9 +196,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
      
     private void calculateTotal() throws ParseException{
         int totalHargaBarang = 0;
-        if (listOrderPenjualanDetail != null){
-           for(InputOrderPenjualanDetailModel model: listOrderPenjualanDetail){
-            totalHargaBarang += model.getHargaBarang() * model.getQty();
+        if (listPesananDetail != null){
+           for(PesananDetail model: listPesananDetail){
+            totalHargaBarang += model.getBarang().getHargaJualSatuan() * model.getQty();
         }
         int ongkir = new CurrencyUtil().clearFormatToInt(tfOngkir.getText());
         totalHargaBarang += ongkir;
@@ -259,13 +261,10 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         jLabel15 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         taAlamatPengiriman = new javax.swing.JTextArea();
-        jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         tfBerat = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         btnHitung = new javax.swing.JButton();
-        tfNamaKotaTujuan = new javax.swing.JTextField();
-        btnCariKotaTujuan = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -592,25 +591,15 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
 
         taAlamatPengiriman.setColumns(20);
         taAlamatPengiriman.setRows(5);
+        taAlamatPengiriman.setEnabled(false);
         jScrollPane2.setViewportView(taAlamatPengiriman);
-
-        jLabel16.setText("Kota Tujuan");
 
         jLabel17.setText("Berat");
 
         jLabel18.setText("Kg");
 
         btnHitung.setText("Hitung");
-
-        tfNamaKotaTujuan.setEditable(false);
-        tfNamaKotaTujuan.setEnabled(false);
-
-        btnCariKotaTujuan.setText("Cari");
-        btnCariKotaTujuan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariKotaTujuanActionPerformed(evt);
-            }
-        });
+        btnHitung.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -662,20 +651,13 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17))
+                                .addComponent(jLabel17)
+                                .addGap(67, 67, 67)
+                                .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel18)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(tfNamaKotaTujuan))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCariKotaTujuan)))
+                                .addComponent(jLabel18)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -710,11 +692,6 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(tfNamaKotaTujuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCariKotaTujuan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -792,29 +769,42 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         ekspedisiGrid.setGridListener(this);
         ekspedisiGrid.setVisible(true);
     }//GEN-LAST:event_btnCariEkspedisiActionPerformed
-
+    
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        try {
-            InputOrderPenjualanModel penjualan = new InputOrderPenjualanModel();
-            penjualan.setKodePesanan(tfKodePesanan.getText());
-            penjualan.setKodeKustomer(tfKodeCustomer.getText());
-            penjualan.setKodeEkspedisi(tfKodeEkspedisi.getText());
-            penjualan.setOngkir(new CurrencyUtil().clearFormatToInt(tfOngkir.getText()));
-            penjualan.setTotal(new CurrencyUtil().clearFormatToInt(tfTotal.getText()));
-            penjualan.setTanggal(new SimpleDateFormat(Config.DATE_FORMAT).format(chooserTanggal.getDate()));
-            penjualan.setAlamatPengiriman(taAlamatPengiriman.getText());
-            penjualan.setKotaTujuan(tfNamaKotaTujuan.getText());
-            penjualan.setKotaTujuanId(kotaTujuanId);
-            penjualan.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
-            penjualan.setOrders(listOrderPenjualanDetail);
-            ConnectionManager connectionManager = new ConnectionManager();
-            if (connectionManager.simpanInputOrderPenjualan(penjualan) > 0) {
-                JOptionPane.showMessageDialog(this, "Order penjualan berhasil disimpan", "Tersimpan", JOptionPane.INFORMATION_MESSAGE);
-                clearAll();
+        try {                                          
+            if (selectedKustomer == null) {
+                JOptionPane.showMessageDialog(this, "Kustomer belum dipilih.", "Gagal", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+            if (selectedEkspedisi == null) {
+                JOptionPane.showMessageDialog(this, "Ekspedisi belum dipilih.", "Gagal", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (selectedPesanan == null) {
+                selectedPesanan = new Pesanan();
+            }
+            selectedPesanan.setKodePesanan(tfKodePesanan.getText());
+            selectedPesanan.setKustomer(selectedKustomer);
+            selectedPesanan.setEkspedisi(selectedEkspedisi);
+            selectedPesanan.setOngkir(new CurrencyUtil().clearFormatToInt(tfOngkir.getText()));
+            selectedPesanan.setTotal(new CurrencyUtil().clearFormatToInt(tfTotal.getText()));
+            selectedPesanan.setTanggal(chooserTanggal.getDate());
+            selectedPesanan.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
+            selectedPesanan.setPesananDetailList(listPesananDetail);
+            
+            for (PesananDetail pesananDetail : listPesananDetail) {
+                pesananDetail.setPesanan(selectedPesanan);
+            }
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedPesanan);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            
+            JOptionPane.showMessageDialog(this, "Order penjualan berhasil disimpan", "Tersimpan", JOptionPane.INFORMATION_MESSAGE);
+            clearAll();
         } catch (Exception ex) {
-            Logger.getLogger(InputOrderPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Gagal", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -852,15 +842,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         }
     }//GEN-LAST:event_tfOngkirCaretUpdate
 
-    private void btnCariKotaTujuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariKotaTujuanActionPerformed
-        CityGridFrame frame = new CityGridFrame(FilterUtil.FilterType.NONE, "");
-        frame.setGridListener(this);
-        frame.setVisible(true);
-    }//GEN-LAST:event_btnCariKotaTujuanActionPerformed
-
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
-    List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
+    List<PesananDetail> listPesananDetail;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -868,7 +852,6 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JButton btnCariBarang;
     private javax.swing.JButton btnCariCustomer;
     private javax.swing.JButton btnCariEkspedisi;
-    private javax.swing.JButton btnCariKotaTujuan;
     private javax.swing.JButton btnCariPesanan;
     private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnKeluar;
@@ -883,7 +866,6 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -912,33 +894,42 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JTextField tfNamaBarang;
     private javax.swing.JTextField tfNamaCustomer;
     private javax.swing.JTextField tfNamaEkspedisi;
-    private javax.swing.JTextField tfNamaKotaTujuan;
     private javax.swing.JFormattedTextField tfOngkir;
     private javax.swing.JTextField tfQty;
     private javax.swing.JFormattedTextField tfTotal;
     // End of variables declaration//GEN-END:variables
 
+    private Kustomer selectedKustomer = null;
+    
+    private Barang selectedBarang = null;
+    
+    private Ekspedisi selectedEkspedisi = null;
+    
+    private Pesanan selectedPesanan = null;
+    
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
+        
         if (fromGrid.equals(CustomerGridFrame.class.getSimpleName())){
-            CustomerModel customer = (CustomerModel) model;
-            tfKodeCustomer.setText(customer.getKode());
-            tfNamaCustomer.setText(customer.getName());
+            selectedKustomer = (Kustomer) model;
+            tfKodeCustomer.setText(selectedKustomer.getKodeKustomer());
+            tfNamaCustomer.setText(selectedKustomer.getNamaKustomer());
+            taAlamatPengiriman.setText(selectedKustomer.getAlamat());
             btnCariCustomer.setEnabled(false);
-        } else if (fromGrid.equals(BarangGridFrame.class.getSimpleName())){
-            BarangModel barang = (BarangModel) model;
-            tfKodeBarang.setText(barang.getKode());
-            tfNamaBarang.setText(barang.getName());
-            tfHargaBarang.setText(String.valueOf(barang.getHargaJualSatuan()));
-        } else if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())){
-            EkspedisiModel ekspedisi = (EkspedisiModel) model;
-            tfKodeEkspedisi.setText(ekspedisi.getKode());
-            tfNamaEkspedisi.setText(ekspedisi.getName());
-            tfJenisLayanan.setText(ekspedisi.getJenisLayanan());
-        } else if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
-            KabupatenModel city = (KabupatenModel) model;
-            tfNamaKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
-            kotaTujuanId = city.getId();
+        }
+        
+        else if (fromGrid.equals(BarangGridFrame.class.getSimpleName())){
+            selectedBarang = (Barang) model;
+            tfKodeBarang.setText(selectedBarang.getKodeBarang());
+            tfNamaBarang.setText(selectedBarang.getNamaBarang());
+            tfHargaBarang.setText(String.valueOf(selectedBarang.getHargaJualSatuan()));
+        } 
+        
+        else if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())){
+            selectedEkspedisi = (Ekspedisi) model;
+            tfKodeEkspedisi.setText(selectedEkspedisi.getKodeEkspedisi());
+            tfNamaEkspedisi.setText(selectedEkspedisi.getNamaEkspedisi());
+            tfJenisLayanan.setText(selectedEkspedisi.getJenisLayanan());
         }
     }
 
@@ -947,9 +938,9 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
         int rowSelected = tblPesananDetail.getSelectedRow();
         int columnSelected = tblPesananDetail.getSelectedColumn();
         if (columnSelected == 7) {
-            int dialogResult = JOptionPane.showConfirmDialog (null, "Yakin ingin hapus? ","Warning", JOptionPane.YES_OPTION);
-            if (dialogResult == JOptionPane.YES_OPTION){
-                listOrderPenjualanDetail.remove(rowSelected);
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin ingin hapus? ", "Warning", JOptionPane.YES_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                listPesananDetail.remove(rowSelected);
                 tblModel.removeRow(rowSelected);
                 try {
                     calculateTotal();
@@ -957,14 +948,15 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
                     Logger.getLogger(InputOrderPenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } else if (columnSelected == 6){
-            InputOrderPenjualanDetailModel model = listOrderPenjualanDetail.get(rowSelected);
-            int hargaBarang = model.getHargaBarang();
-            if (model.getTipeLengan().equals("Panjang")){
+        } else if (columnSelected == 6) {
+            PesananDetail model = listPesananDetail.get(rowSelected);
+            selectedBarang = model.getBarang();
+            int hargaBarang = selectedBarang.getHargaJualSatuan();
+            if (model.getTipeLengan().equals("Panjang")) {
                 hargaBarang -= 10000;
             }
-            tfKodeBarang.setText(model.getKodeBarang());
-            tfNamaBarang.setText(model.getNamaBarang());
+            tfKodeBarang.setText(selectedBarang.getKodeBarang());
+            tfNamaBarang.setText(selectedBarang.getNamaBarang());
             tfQty.setText(String.valueOf(model.getQty()));
             tfHargaBarang.setText(String.valueOf(hargaBarang));
             cbLenganPanjang.setSelected(model.getTipeLengan().equals("Panjang"));
@@ -993,8 +985,5 @@ public class InputOrderPenjualanFrame extends javax.swing.JFrame implements Grid
     }
 
     private void clearTujuan() {
-        tfNamaKotaTujuan.setText("");
-        kotaTujuanId = "";
-        taAlamatPengiriman.setText("");
     }
 }
