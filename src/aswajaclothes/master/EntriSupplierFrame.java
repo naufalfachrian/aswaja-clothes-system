@@ -94,14 +94,19 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
             String noTelepon = new ValidatorUtil().isNumber(tfNoTelepon.getText(), "No Telepon");
             String noFax = tfNoFax.getText();
             String email = tfEmail.getText();
-            Supplier supplier = new Supplier();
-            supplier.setKodeSupplier(kode);
-            supplier.setNamaSupplier(nama);
-            supplier.setKelurahan(selectedKelurahan);
-            supplier.setAlamat(alamat);
-            supplier.setNoTelepon(noTelepon);
-            supplier.setNoFax(noFax);
-            supplier.setEmail(email);
+            selectedSupplier.setKodeSupplier(kode);
+            selectedSupplier.setNamaSupplier(nama);
+            selectedSupplier.setKelurahan(selectedKelurahan);
+            selectedSupplier.setAlamat(alamat);
+            selectedSupplier.setNoTelepon(noTelepon);
+            selectedSupplier.setNoFax(noFax);
+            selectedSupplier.setEmail(email);
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedSupplier);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            JOptionPane.showMessageDialog(this, "Supplier berhasil disimpan..", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            clear();
         } catch (Exception ex) {
             Logger.getLogger(EntriSupplierFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -167,7 +172,6 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
         tfEmail = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
-        btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
@@ -376,14 +380,6 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
         });
         jPanel2.add(btnSimpan);
 
-        btnUbah.setText("Ubah");
-        btnUbah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbahActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnUbah);
-
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -484,10 +480,6 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
         clear();
     }//GEN-LAST:event_btnBatalActionPerformed
 
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        simpanSupplier(true);
-    }//GEN-LAST:event_btnUbahActionPerformed
-
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         simpanSupplier(false);
     }//GEN-LAST:event_btnSimpanActionPerformed
@@ -524,7 +516,6 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<Kota> cbKabupaten;
     private javax.swing.JComboBox<Kecamatan> cbKecamatan;
     private javax.swing.JComboBox<Kelurahan> cbKelurahan;
@@ -566,7 +557,7 @@ public class EntriSupplierFrame extends javax.swing.JFrame implements GridListen
 
     private void hapusSupplier() {
         if (selectedSupplier == null) {
-            JOptionPane.showMessageDialog(this, "Silakan pilih supplier yang hendak dihapus terlebih dahulu.", "Berhasil", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Silakan pilih supplier yang hendak dihapus terlebih dahulu.", "Gagal", JOptionPane.ERROR_MESSAGE);
             return;
         }
         ConnectionManager.getDefaultEntityManager().getTransaction().begin();

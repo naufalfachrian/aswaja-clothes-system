@@ -89,7 +89,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnSimpan = new javax.swing.JButton();
-        btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
@@ -177,14 +176,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         });
         jPanel2.add(btnSimpan);
 
-        btnUbah.setText("Ubah");
-        btnUbah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbahActionPerformed(evt);
-            }
-        });
-        jPanel2.add(btnUbah);
-
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -258,10 +249,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
         clear();
     }//GEN-LAST:event_btnBatalActionPerformed
 
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        simpanEkspedisi(true);
-    }//GEN-LAST:event_btnUbahActionPerformed
-
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         simpanEkspedisi(false);
     }//GEN-LAST:event_btnSimpanActionPerformed
@@ -278,7 +265,6 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<String> comboBoxJenisLayanan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
