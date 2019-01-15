@@ -118,111 +118,21 @@ public class ConnectionManager {
     }
     
     // <editor-fold defaultstate="collapsed" desc="Master Ekspedisi">
-    public String getKodeEkspedisi() {
+    public static String getKodeEkspedisi() {
         String kode = "EX";
-        String query = "SELECT COUNT(*) 'total' FROM ekspedisi";
-        int totalEkspedisi = 0;
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                totalEkspedisi = result.getInt("total") + 1;
-            }
-            if (totalEkspedisi < 10) {
-                kode += "000" + totalEkspedisi;
-            } else if (totalEkspedisi < 100) {
-                kode += "00" + totalEkspedisi;
-            } else if (totalEkspedisi < 1000) {
-                kode += "0" + totalEkspedisi;
+        int totalEkspedisi = ConnectionManager.getDefaultEntityManager().createNamedQuery("Ekspedisi.findAll").getResultList().size();
+        int newId = totalEkspedisi + 1;
+        if (newId < 10) {
+                kode += "000" + newId;
+            } else if (newId < 100) {
+                kode += "00" + newId;
+            } else if (newId < 1000) {
+                kode += "0" + newId;
             } else {
-                kode += "" + totalEkspedisi;
+                kode += "" + newId;
             }
-        } catch (SQLException ex) {
-            System.out.println("Ambil data ekspedisi gagal");
-            return kode;
-        }
         return kode;
     }
-    
-    public ArrayList<EkspedisiModel> getEkspedisis() {
-        ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM ekspedisi WHERE deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                EkspedisiModel ekspedisi = new EkspedisiModel();
-                ekspedisi.setKode(result.getString("kode_ekspedisi"));
-                ekspedisi.setName(result.getString("nama_ekspedisi"));
-                ekspedisi.setJenisLayanan(result.getString("jenis_layanan"));
-                listEkspedisi.add(ekspedisi);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listEkspedisi;
-        }
-
-        return listEkspedisi;
-    }
-    
-    public ArrayList<EkspedisiModel> getEkspedisiByNama(String nama) {
-        ArrayList<EkspedisiModel> listEkspedisi = new ArrayList<>();
-        String query = "SELECT * FROM ekspedisi WHERE nama_ekspedisi LIKE '%" + nama + "%' AND deleted = false";
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                EkspedisiModel ekspedisi = new EkspedisiModel();
-                ekspedisi.setKode(result.getString("kode_ekspedisi"));
-                ekspedisi.setName(result.getString("nama_ekspedisi"));
-                ekspedisi.setJenisLayanan(result.getString("jenis_layanan"));
-                listEkspedisi.add(ekspedisi);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return listEkspedisi;
-        }
-
-        return listEkspedisi;
-    }
-
-    public Boolean saveEkspedisi(Boolean isUpdate, EkspedisiModel model) {
-        Boolean isResult = false;
-        try {
-            String query = "";
-            if (isUpdate) {
-                query = "UPDATE ekspedisi SET nama_ekspedisi ='" + model.getName() + 
-                        "', jenis_layanan = '" + model.getJenisLayanan() + "' "
-                        + "WHERE kode_ekspedisi ='" + model.getKode() + "'";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            } else {
-                query = "INSERT INTO ekspedisi VALUES ('" + model.getKode() + "', "
-                        + "'" + model.getName() + "', '" + model.getJenisLayanan() + "', 0)";
-                if (statement.executeUpdate(query) > 0) {
-                    isResult = true;
-                } else {
-                    isResult = false;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getLocalizedMessage());
-            isResult = false;
-            return isResult;
-        }
-        return isResult;
-    }
-    
-    public boolean deleteEkspedisi(String ekspedisiId) {
-        String query = "UPDATE ekspedisi SET deleted = true WHERE kode_ekspedisi = '" + ekspedisiId + "'";
-        try {
-            return statement.executeUpdate(query) > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Input Order Penjualan">
     public String getKodePesanan() {

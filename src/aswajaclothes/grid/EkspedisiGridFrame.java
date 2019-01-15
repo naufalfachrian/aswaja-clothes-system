@@ -6,12 +6,12 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.master.EkspedisiModel;
+import aswajaclothes.entity.Ekspedisi;
 import aswajaclothes.util.FilterUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -23,6 +23,8 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
 
     /**
      * Creates new form CustomerGridFrame
+     * @param filter
+     * @param valueFilter
      */
     public EkspedisiGridFrame(FilterUtil.FilterType filter, String valueFilter) {
         initComponents();
@@ -121,15 +123,15 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
         String[] ekspedisiColumn = new String [] { "Kode", "Nama"};
         ArrayList<String[]> ekspedisisRow = new ArrayList<>();
         if (filter.equals(FilterUtil.FilterType.NAMA)){
-            listEkspedisi = new ConnectionManager().getEkspedisiByNama(valueFilter);
+            listEkspedisi = ConnectionManager.getDefaultEntityManager().createNamedQuery("Ekspedisi.findByNamaEkspedisi", Ekspedisi.class).setParameter("namaEkspedisi", valueFilter).getResultList();
         } else {
-            listEkspedisi = new ConnectionManager().getEkspedisis();
+            listEkspedisi = ConnectionManager.getDefaultEntityManager().createNamedQuery("Ekspedisi.findAll", Ekspedisi.class).getResultList();
         }
         
-        for (EkspedisiModel ekspedisi : listEkspedisi) {
+        for (Ekspedisi ekspedisi : listEkspedisi) {
             String[] rowData = new String[]{
-                ekspedisi.getKode(),
-                ekspedisi.getName(),
+                ekspedisi.getKodeEkspedisi(),
+                ekspedisi.getNamaEkspedisi(),
             };
             ekspedisisRow.add(rowData);
         }
@@ -147,7 +149,7 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
     }
     
     // Variables declaration - able to modify
-    private ArrayList<EkspedisiModel> listEkspedisi;
+    private List<Ekspedisi> listEkspedisi;
     private GridListener listener;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -161,7 +163,7 @@ public class EkspedisiGridFrame extends javax.swing.JFrame implements MouseListe
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblEkspedisi.getSelectedRow();
-        EkspedisiModel ekspedisi = listEkspedisi.get(rowSelected);
+        Ekspedisi ekspedisi = listEkspedisi.get(rowSelected);
         listener.onSelectedRow(ekspedisi, EkspedisiGridFrame.class.getSimpleName());
         dispose();
     }

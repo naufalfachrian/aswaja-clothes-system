@@ -6,22 +6,11 @@
 package aswajaclothes.master;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.model.master.CustomerModel;
-import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.common.KecamatanModel;
-import aswajaclothes.model.common.KelurahanModel;
-import aswajaclothes.model.common.ProvinsiModel;
+import aswajaclothes.entity.Ekspedisi;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.master.EkspedisiModel;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.util.ValidatorUtil;
-import java.util.ArrayList;
-import java.util.Vector;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +19,8 @@ import javax.swing.JOptionPane;
  */
 public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListener {
 
+    private Ekspedisi selectedEkspedisi = null;
+    
     /**
      * Creates new form EntriKonsumenFrame
      */
@@ -45,42 +36,43 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
      */
 
     private void InitKodeEkspedisi() {
-        String kode = new ConnectionManager().getKodeEkspedisi();
+        String kode = ConnectionManager.getKodeEkspedisi();
         tfKodeEkspedisi.setText(kode);
     }
 
     private void simpanEkspedisi(Boolean isUpdate) {
+        if (selectedEkspedisi == null) {
+            selectedEkspedisi = new Ekspedisi();
+        }
         try {
             String kode = new ValidatorUtil().isEmpty(tfKodeEkspedisi.getText(), "Kode Ekspedisi");
             String nama = new ValidatorUtil().isEmpty(tfNama.getText(), "Nama Ekspedisi");
             String jenisLayanan = comboBoxJenisLayanan.getItemAt(comboBoxJenisLayanan.getSelectedIndex());
+
+            selectedEkspedisi.setKodeEkspedisi(kode);
+            selectedEkspedisi.setNamaEkspedisi(nama);
+            selectedEkspedisi.setJenisLayanan(jenisLayanan);
             
-            EkspedisiModel ekspedisi = new EkspedisiModel();
-            ekspedisi.setKode(kode);
-            ekspedisi.setName(nama);
-            ekspedisi.setJenisLayanan(jenisLayanan);
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedEkspedisi);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
             
-            Boolean isResult = new ConnectionManager().saveEkspedisi(isUpdate, ekspedisi);
-            if (isResult) {
-                JOptionPane.showMessageDialog(this, "Simpan ekspedisi berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-                clear();
-            } else {
-                JOptionPane.showMessageDialog(this, "Simpan ekspedisi gagal", "Pesan", JOptionPane.ERROR_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "Simpan ekspedisi berhasil", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            clear();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
         }
-
     }
     
     private void clear(){
+        selectedEkspedisi = null;
         InitKodeEkspedisi();
         tfNama.setText("");
     }
     
-    private void setEkspedisi(EkspedisiModel customer){
-        tfKodeEkspedisi.setText(customer.getKode());
-        tfNama.setText(customer.getName());
+    private void setEkspedisi(Ekspedisi customer){
+        tfKodeEkspedisi.setText(customer.getKodeEkspedisi());
+        tfNama.setText(customer.getNamaEkspedisi());
     }
 
     @SuppressWarnings("unchecked")
@@ -299,11 +291,15 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        EkspedisiModel ekspedisi = (EkspedisiModel) model;
-        setEkspedisi(ekspedisi);
+        selectedEkspedisi = (Ekspedisi) model;
+        setEkspedisi(selectedEkspedisi);
     }
 
     private void konfirmasiHapusEkspedisi() {
+        if (selectedEkspedisi == null) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih ekspedisi yang hendak dihapus.", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         int option = JOptionPane.showConfirmDialog(this, "Apakah anda yakin hendak menghapus ekspedisi " + tfNama.getText() + "?", "Hapus Ekspedisi", JOptionPane.OK_CANCEL_OPTION);
         // OK = 0
         if (option == 0) {
@@ -312,11 +308,10 @@ public class EntriEkspedisiFrame extends javax.swing.JFrame implements GridListe
     }
 
     private void hapusEkspedisi() {
-        if (new ConnectionManager().deleteEkspedisi(tfKodeEkspedisi.getText())) {
-            JOptionPane.showMessageDialog(this, "Ekspedisi terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            clear();
-        } else {
-            JOptionPane.showMessageDialog(this, "Ekspedisi gagal terhapus", "Berhasil", JOptionPane.ERROR_MESSAGE);
-        }
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().remove(selectedEkspedisi);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+        JOptionPane.showMessageDialog(this, "Ekspedisi terhapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+        clear();
     }
 }
