@@ -6,11 +6,11 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.InvoicePesanan;
+import aswajaclothes.entity.Pesanan;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PesananGridFrame;
-import aswajaclothes.model.master.ItemPesananModel;
-import aswajaclothes.model.master.PesananModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
 import com.itextpdf.text.DocumentException;
@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -52,7 +53,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     }
     
     private void initKodeInvoice(){
-        String kode = new ConnectionManager().getKodeInvoicePenjualan();
+        String kode = ConnectionManager.getKodeInvoicePesanan();
         tfNoInvoice.setText(kode);
     }
     
@@ -460,19 +461,23 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         try {
-            new ConnectionManager().insertInvoicePenjualan(
-                    tfNoInvoice.getText(),
-                    tfNoPesanan.getText(),
-                    ppn,
-                    chooserTanggal.getDate()
-            );
-            PdfGenerator.cetakInvoicePenjualan(tfNoInvoice.getText(),
-                    tfNoPesanan.getText(),
-                    ppn,
-                    chooserTanggal.getDate()
-            );
+            if (selectedPesanan == null) {
+                throw new RuntimeException("Silakan pilih pesanan yang mau dicetak invoicenya.");
+            }
+            InvoicePesanan invoicePesanan = new InvoicePesanan();
+            invoicePesanan.setKodeInvoice(tfNoInvoice.getText());
+            invoicePesanan.setLunas(false);
+            invoicePesanan.setPpn(ppn);
+            invoicePesanan.setTanggal(chooserTanggal.getDate());
+            invoicePesanan.setPesanan(selectedPesanan);
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(invoicePesanan);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            
+            PdfGenerator.cetakInvoicePesanan(invoicePesanan);
         } catch (DocumentException | IOException ex) {
-            Logger.getLogger(CetakInvoicePenjualanFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCetakActionPerformed
 
@@ -499,12 +504,12 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
-    List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     boolean withPpn = false;
     Integer subTotal = 0;
     Integer ongkir = 0;
     Integer ppn = 0;
     Integer total = 0;
+    private Pesanan selectedPesanan = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -547,18 +552,18 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            PesananModel pesanan = (PesananModel) model;
-            tfNoPesanan.setText(pesanan.getKodePesanan());
-            tfKodeCustomer.setText(pesanan.getKodeKustomer());
-            tfNamaCustomer.setText(pesanan.getNamaKustomer());
-            tfNamaEkspedisi.setText(pesanan.getNamaEkspedisi());
-            tfSubTotal.setText(new CurrencyUtil().formatCurrency(pesanan.getTotal()));
-            tfOngkir.setText(new CurrencyUtil().formatCurrency(pesanan.getOngkir()));
-            tfJenisLayanan.setText(pesanan.getJenisLayanan());
-            subTotal = pesanan.getTotal();
-            ongkir = pesanan.getOngkir();
+            selectedPesanan = (Pesanan) model;
+            tfNoPesanan.setText(selectedPesanan.getKodePesanan());
+            tfKodeCustomer.setText(selectedPesanan.getKustomer().getKodeKustomer());
+            tfNamaCustomer.setText(selectedPesanan.getKustomer().getNamaKustomer());
+            tfNamaEkspedisi.setText(selectedPesanan.getEkspedisi().getNamaEkspedisi());
+            tfSubTotal.setText(new CurrencyUtil().formatCurrency(selectedPesanan.getTotal()));
+            tfOngkir.setText(new CurrencyUtil().formatCurrency(selectedPesanan.getOngkir()));
+            tfJenisLayanan.setText(selectedPesanan.getEkspedisi().getJenisLayanan());
+            subTotal = selectedPesanan.getTotal();
+            ongkir = selectedPesanan.getOngkir();
             applyPpn();
-            applyPesananDetail(pesanan);
+            applyPesananDetail(selectedPesanan);
         }
     }
 
@@ -599,18 +604,18 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         tfTotalBayar.setText(new CurrencyUtil().formatCurrency(total));
     }
 
-    private void applyPesananDetail(PesananModel pesanan) {
-        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(pesanan.getKodePesanan());
+    private void applyPesananDetail(Pesanan pesanan) {
+        List<PesananDetail> items = pesanan.getPesananDetailList();
         ArrayList<String[]> rows = new ArrayList<>();
         int count = 1;
-        for (ItemPesananModel item : items) {
+        for (PesananDetail item : items) {
             String[] rowData = new String[]{
                 String.valueOf(count),
-                item.getBarang().getKode(),
-                item.getBarang().getName(),
-                item.getQuantity().toString(),
+                item.getBarang().getKodeBarang(),
+                item.getBarang().getNamaBarang(),
+                String.valueOf(item.getQty()),
                 new CurrencyUtil().formatCurrency(item.getBarang().getHargaJualSatuan()),
-                new CurrencyUtil().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()),
+                new CurrencyUtil().formatCurrency(item.getQty()* item.getBarang().getHargaJualSatuan()),
             };
             rows.add(rowData);
             count++;

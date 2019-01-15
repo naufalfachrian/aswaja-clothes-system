@@ -7,7 +7,9 @@ package aswajaclothes.pdf;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Barang;
+import aswajaclothes.entity.InvoicePesanan;
 import aswajaclothes.entity.Kustomer;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianBarangModel;
@@ -152,7 +154,7 @@ public class PdfGenerator {
         setupAddres(addressData, document);
         
         insertSpacing(24, document);
-        setupDaftarItemPesanan(items, document);
+//        setupDaftarItemPesanan(items, document);
         
         ArrayList<HashMap<String, String>> details = new ArrayList<>();
         HashMap<String, String> item1 = new HashMap<>();
@@ -259,9 +261,9 @@ public class PdfGenerator {
         Desktop.getDesktop().open(file);
     }
     
-    public static void cetakInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) throws FileNotFoundException, DocumentException, IOException {
+    public static void cetakInvoicePesanan(InvoicePesanan invoicePesanan) throws FileNotFoundException, DocumentException, IOException {
         Document document = createDocument();
-        File file = createFile(RESULT_PATH + "/invoice-penjualan-"  + kodeInvoice + ".pdf");
+        File file = createFile(RESULT_PATH + "/invoice-penjualan-"  + invoicePesanan.getKodeInvoice() + ".pdf");
         PdfWriter.getInstance(document, new FileOutputStream(file));
 
         document.open();
@@ -269,16 +271,14 @@ public class PdfGenerator {
         insertKopSurat(document);
         
         HashMap<String, String> headerData = new HashMap<>();
-        headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(tanggalInvoice));
-        headerData.put("Invoice No.", kodeInvoice);
-        headerData.put("No. Pesanan", kodePesanan);
+        headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(invoicePesanan.getTanggal()));
+        headerData.put("Invoice No.", invoicePesanan.getKodeInvoice());
+        headerData.put("No. Pesanan", invoicePesanan.getPesanan().getKodePesanan());
         setupHeader("Invoice", headerData, document);
         
         insertSpacing(24, document);
-        
-        InvoiceModel invoice = new ConnectionManager().getInvoice(kodeInvoice);
-        
-        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", invoice.getKodeKustomer()).getSingleResult();
+               
+        Kustomer customer = invoicePesanan.getPesanan().getKustomer();
         ArrayList<String> addressData = new ArrayList<>();
         addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
@@ -287,21 +287,21 @@ public class PdfGenerator {
         
         insertSpacing(24, document);
         
-        List<ItemPesananModel> items = new ConnectionManager().getDaftarPesananItem(kodePesanan);
+        List<PesananDetail> items = invoicePesanan.getPesanan().getPesananDetailList();
         setupDaftarItemPesanan(items, document);
         
         ArrayList<HashMap<String, String>> details = new ArrayList<>();
         HashMap<String, String> item1 = new HashMap<>();
-        item1.put("Subtotal", CurrencyUtil.getInstance().formatCurrency(invoice.getTotal()));
+        item1.put("Subtotal", CurrencyUtil.getInstance().formatCurrency(invoicePesanan.getPesanan().getTotal()));
         details.add(item1);
         HashMap<String, String> item2 = new HashMap<>();
-        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(invoice.getOngkir()));
+        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(invoicePesanan.getPesanan().getOngkir()));
         details.add(item2);
         HashMap<String, String> item3 = new HashMap<>();
-        item3.put("PPN", CurrencyUtil.getInstance().formatCurrency(invoice.getPpn()));
+        item3.put("PPN", CurrencyUtil.getInstance().formatCurrency(invoicePesanan.getPpn()));
         details.add(item3);
         HashMap<String, String> item4 = new HashMap<>();
-        item4.put("Total Bayar", CurrencyUtil.getInstance().formatCurrency(invoice.getTotal() + invoice.getOngkir() + invoice.getPpn()));
+        item4.put("Total Bayar", CurrencyUtil.getInstance().formatCurrency(invoicePesanan.getPesanan().getTotal() + invoicePesanan.getPesanan().getOngkir() + invoicePesanan.getPpn()));
         details.add(item4);
         setupInvoiceTableFooter(details, document);
         
@@ -373,7 +373,7 @@ public class PdfGenerator {
         document.add(paragraph);
     }
     
-    private static void setupDaftarItemPesanan(List<ItemPesananModel> daftarPesanan, Document document) throws DocumentException {
+    private static void setupDaftarItemPesanan(List<PesananDetail> daftarPesanan, Document document) throws DocumentException {
         PdfPTable table = new PdfPTable(6);
         table.setTotalWidth(new float[]{ 24, 100, 100, 48, 96, 96 });
         table.setWidthPercentage(100);
@@ -414,20 +414,20 @@ public class PdfGenerator {
         table.addCell(cell);
         
         int i = 1;
-        for (ItemPesananModel item : daftarPesanan) {
+        for (PesananDetail item : daftarPesanan) {
             cell = new PdfPCell(new Phrase("" + i, SMALL_FONT));
             cell.setBorder(Rectangle.BOX);
             cell.setBackgroundColor(BaseColor.WHITE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase(item.getBarang().getKode(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(item.getBarang().getKodeBarang(), SMALL_FONT));
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase(item.getBarang().getName(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(item.getBarang().getNamaBarang(), SMALL_FONT));
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase("" + item.getQuantity(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase("" + item.getQty(), SMALL_FONT));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
@@ -435,7 +435,7 @@ public class PdfGenerator {
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(item.getQuantity() * item.getBarang().getHargaJualSatuan()), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(item.getQty()* item.getBarang().getHargaJualSatuan()), SMALL_FONT));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             

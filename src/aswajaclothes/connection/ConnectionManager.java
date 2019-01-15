@@ -15,16 +15,12 @@ import aswajaclothes.model.master.PembelianBarangModel;
 import aswajaclothes.model.master.PembelianModel;
 import aswajaclothes.model.master.PesananModel;
 import aswajaclothes.model.master.SupplierModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanModel;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -260,38 +256,23 @@ public class ConnectionManager {
     
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
-    public String getKodeInvoicePenjualan() {
-        return getKode("PJ", "cetak_invoice_penjualan");
+    public static String getKodeInvoicePesanan() {
+        String kode = "PJ";
+        int total = ConnectionManager.getDefaultEntityManager().createNamedQuery("InvoicePesanan.findAll").getResultList().size();
+        int newId = total + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
-    public boolean insertInvoicePenjualan(String kodeInvoice, String kodePesanan, int ppn, Date tanggalInvoice) {
-        try {
-            if (invoicePenjualanBelumAda(kodeInvoice)) {
-                String dateString = new SimpleDateFormat("ddMMyyyy").format(tanggalInvoice);
-                String query = String.format("INSERT INTO cetak_invoice_penjualan VALUES('%s', '%s', '%d', '%s', '%d')", kodeInvoice, kodePesanan, ppn, dateString, 0);
-                return statement.executeUpdate(query) > 0;
-            }
-            // success, but not inserted to table because invoice has been already exists..
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
     
-    private boolean invoicePenjualanBelumAda(String kodeInvoice) {
-        try {
-            String query = String.format("SELECT COUNT(*) 'total' FROM cetak_invoice_penjualan WHERE kode_invoice = '%s'", kodeInvoice);
-            ResultSet resultSet = statement.executeQuery(query);
-            if (resultSet.next()) {
-                int itemsCount = resultSet.getInt("total");
-                return itemsCount == 0;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
     
     public List<InvoiceModel> getInvoices() {
         ArrayList<InvoiceModel> invoices = new ArrayList<>();
@@ -335,51 +316,6 @@ public class ConnectionManager {
         return invoices;
     }
     
-    public InvoiceModel getInvoice(String kodeInvoice) {
-        ArrayList<InvoiceModel> invoices = new ArrayList<>();
-        String query = String.format("SELECT kode_invoice as 'KodeInvoice', "
-                + "iop.kode_pesanan as 'KodePesanan', "
-                + "customer.kode_kustomer as 'KodeKustomer', "
-                + "customer.nama_kustomer as 'NamaKustomer', "
-                + "ekspedisi.kode_ekspedisi as 'KodeEkspedisi', "
-                + "ekspedisi.nama_ekspedisi as 'NamaEkspedisi', "
-                + "ekspedisi.jenis_layanan as 'JenisLayanan', "
-                + "ongkir as 'Ongkir', total as 'Total', "
-                + "ppn as 'Ppn', iop.tanggal as 'TanggalPemesanan', "
-                + "inv.tanggal as 'TanggalInvoice', "
-                + "inv.is_lunas as 'IsLunas' "
-                + "from cetak_invoice_penjualan inv "
-                + "INNER JOIN input_order_penjualan iop ON iop.kode_pesanan = inv.kode_pesanan "
-                + "INNER JOIN customer ON customer.kode_kustomer = iop.kode_kustomer "
-                + "INNER JOIN ekspedisi ON ekspedisi.kode_ekspedisi = iop.kode_ekspedisi "
-                + "WHERE kode_invoice = '%s';", kodeInvoice);
-        try {
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                InvoiceModel invoice = new InvoiceModel();
-                invoice.setKodeInvoice(result.getString("KodeInvoice"));
-                invoice.setKodePesanan(result.getString("KodePesanan"));
-                invoice.setKodeKustomer(result.getString("KodeKustomer"));
-                invoice.setNamaKustomer(result.getString("NamaKustomer"));
-                invoice.setKodeEkspedisi(result.getString("KodeEkspedisi"));
-                invoice.setNamaEkspedisi(result.getString("NamaEkspedisi"));
-                invoice.setJenisLayanan(result.getString("JenisLayanan"));
-                invoice.setOngkir(result.getInt("Ongkir"));
-                invoice.setTotal(result.getInt("Total"));
-                invoice.setPpn(result.getInt("Ppn"));
-                invoice.setTanggalInvoice(result.getString("TanggalInvoice"));
-                invoice.setTanggalPemesanan(result.getString("TanggalPemesanan"));
-                invoice.setLunas(result.getBoolean("IsLunas"));
-                invoices.add(invoice);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        if (invoices.size() > 0) {
-            return invoices.get(0);
-        }
-        return null;
-    }
     
     public int setStatusBayarInvoice(InvoiceModel invoice, boolean statusBayar) {
         try {

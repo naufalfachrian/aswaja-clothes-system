@@ -7,8 +7,6 @@ package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.model.master.PembelianModel;
-import aswajaclothes.model.master.PesananModel;
-import aswajaclothes.util.CurrencyUtil;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
