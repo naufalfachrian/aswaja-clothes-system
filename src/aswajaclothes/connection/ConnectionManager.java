@@ -194,7 +194,7 @@ public class ConnectionManager {
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Penjualan">
     
     public static String getKodeInvoicePesanan() {
-        String kode = "PJ";
+        String kode = "INV-";
         int total = ConnectionManager.getDefaultEntityManager().createNamedQuery("InvoicePesanan.findAll").getResultList().size();
         int newId = total + 1;
         if (newId < 10) {
@@ -509,6 +509,22 @@ public class ConnectionManager {
             System.out.println(ex.getMessage());
         }
         return cities;
+    }
+    
+    public static String getKodeBuktiPembayaran() {
+        String kode = "PS";
+        int total = ConnectionManager.getDefaultEntityManager().createNamedQuery("BuktiPembayaran.findAll").getResultList().size();
+        int newId = total + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
 }

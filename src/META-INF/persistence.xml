@@ -13,6 +13,7 @@
     <class>aswajaclothes.entity.Pesanan</class>
     <class>aswajaclothes.entity.PesananDetail</class>
     <class>aswajaclothes.entity.InvoicePesanan</class>
+    <class>aswajaclothes.entity.BuktiPembayaran</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/aswaja_clothes?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="bungamungil"/>

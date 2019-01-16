@@ -7,6 +7,7 @@ package aswajaclothes.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,6 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "InvoicePesanan.findByTanggal", query = "SELECT i FROM InvoicePesanan i WHERE i.tanggal = :tanggal"),
     @NamedQuery(name = "InvoicePesanan.findByLunas", query = "SELECT i FROM InvoicePesanan i WHERE i.lunas = :lunas")})
 public class InvoicePesanan implements Serializable {
+
+    @OneToMany(mappedBy = "invoicePesanan")
+    private List<BuktiPembayaran> buktiPembayaranList;
 
     private static final long serialVersionUID = 1L;
     
@@ -127,6 +133,15 @@ public class InvoicePesanan implements Serializable {
     @Override
     public String toString() {
         return "aswajaclothes.entity.InvoicePesanan[ kodeInvoice=" + kodeInvoice + " ]";
+    }
+
+    @XmlTransient
+    public List<BuktiPembayaran> getBuktiPembayaranList() {
+        return buktiPembayaranList;
+    }
+
+    public void setBuktiPembayaranList(List<BuktiPembayaran> buktiPembayaranList) {
+        this.buktiPembayaranList = buktiPembayaranList;
     }
     
 }

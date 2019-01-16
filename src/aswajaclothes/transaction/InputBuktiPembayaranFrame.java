@@ -6,91 +6,29 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.BuktiPembayaran;
+import aswajaclothes.entity.InvoicePesanan;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.model.master.InvoiceModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.grid.InvoicePesananGridFrame;
 import aswajaclothes.util.CurrencyUtil;
-import aswajaclothes.widget.ButtonCell;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.HeadlessException;
+import java.util.Date;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
  * @author Satrio
  */
-public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements GridListener, MouseListener {
+public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements GridListener {
 
     /**
-     * Creates new form InputOrderPenjualanFrame
+     * InputBuktiPembayaranForm constructor.
+     * @throws HeadlessException 
      */
-    public InputBuktiPembayaranFrame() {
+    public InputBuktiPembayaranFrame() throws HeadlessException {
         initComponents();
-        initDateFormat();
-        initKodePesanan();
-        initFormatFieldNumber();
-        initTable();
-        initListOrderPenjualan();
-    }
-    
-    private void initDateFormat(){
-        // Todo
-    }
-    
-    private void initKodePesanan(){
-        // Todo
-    }
-    
-    private void initFormatFieldNumber(){
-        // Todo
-    }
-    
-    private void initTable(){
-        tblModel = (DefaultTableModel)tblPesananDetail.getModel();
-        tblPesananDetail.addMouseListener(this);
-        initCellRenderAction();
-        populateTable();
-    }
-    
-    private void initCellRenderAction(){
-        // Todo
-    }
-    
-    private void initListOrderPenjualan(){
-        // Todo
-    }
-    
-    private void clearBarang(){
-        // Todo
-    }
-    
-    private void clearPesanan(){
-        // Todo
-    }
-    
-    private void clearEkspedisi(){
-        // Todo
-    }
-    
-    private void clearAll(){
-        // Todo
-    }
-    
-    private void tambah() throws ParseException, Exception{
-        // Todo
-    }
-
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
-        return false;
-    }
-     
-    private void calculateTotal() throws ParseException{
-        // Todo
+        clear();
     }
     
     /**
@@ -102,56 +40,102 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblPesananDetail = new javax.swing.JTable();
-        jLabel10 = new javax.swing.JLabel();
-        tfNoPesanan = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        tfNoBuktiPembayaran = new javax.swing.JTextField();
+        btnCariBuktiPembayaran = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        tfNoInvoice = new javax.swing.JTextField();
+        btnCariInvoice = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        tfKodeKustomer = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        tfNamaKustomer = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btnSimpan = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
+        tfTanggal = new com.toedter.calendar.JDateChooser();
+        jLabel7 = new javax.swing.JLabel();
+        tfKuantias = new javax.swing.JFormattedTextField();
+        tfJumlahBayar = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tblPesananDetail.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        jLabel1.setText("No. Bukti Pembayaran");
 
-            },
-            new String [] {
-                "No", "Nomor Invoice", "Qty", "Total Harga", "Action"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
+        tfNoBuktiPembayaran.setEnabled(false);
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblPesananDetail.setRowHeight(20);
-        jScrollPane1.setViewportView(tblPesananDetail);
-
-        jLabel10.setText("No. Invoice");
-
-        btnCari.setText("Cari");
-        btnCari.addActionListener(new java.awt.event.ActionListener() {
+        btnCariBuktiPembayaran.setText("Cari");
+        btnCariBuktiPembayaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariActionPerformed(evt);
+                btnCariBuktiPembayaranActionPerformed(evt);
             }
         });
 
+        jLabel2.setText("No. Invoice");
+
+        tfNoInvoice.setEnabled(false);
+
+        btnCariInvoice.setText("Cari");
+        btnCariInvoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariInvoiceActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Kode Kustomer");
+
+        tfKodeKustomer.setEnabled(false);
+
+        jLabel4.setText("Nama Kustomer");
+
+        tfNamaKustomer.setEnabled(false);
+
+        jLabel5.setText("Kuantitas");
+
+        jLabel6.setText("Jumlah Bayar");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        btnSimpan.setForeground(new java.awt.Color(0, 102, 0));
+        btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
+
+        btnKeluar.setForeground(new java.awt.Color(153, 0, 0));
         btnKeluar.setText("Keluar");
         btnKeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnKeluarActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSimpan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnKeluar))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnSimpan)
+                .addComponent(btnKeluar))
+        );
+
+        jLabel7.setText("Tanggal Bayar");
+
+        tfKuantias.setEnabled(false);
+
+        tfJumlahBayar.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,144 +144,175 @@ public class InputBuktiPembayaranFrame extends javax.swing.JFrame implements Gri
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tfNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCari)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnKeluar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE))
-                        .addGap(20, 20, 20))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(tfNoBuktiPembayaran, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                                        .addComponent(tfNoInvoice)
+                                        .addComponent(tfKodeKustomer))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnCariBuktiPembayaran)
+                                        .addComponent(btnCariInvoice)))
+                                .addComponent(tfNamaKustomer)
+                                .addComponent(tfTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
+                            .addComponent(tfKuantias, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfJumlahBayar, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(btnCari))
+                    .addComponent(jLabel1)
+                    .addComponent(tfNoBuktiPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCariBuktiPembayaran))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnKeluar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tfNoInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCariInvoice))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tfKodeKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(tfNamaKustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(tfKuantias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tfJumlahBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tfTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCariActionPerformed
-
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
         dispose();
     }//GEN-LAST:event_btnKeluarActionPerformed
 
-    // Variable declarations - able to modify
-    DefaultTableModel tblModel;
-    List<InvoiceModel> invoices;
+    private void btnCariBuktiPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariBuktiPembayaranActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCariBuktiPembayaranActionPerformed
+
+    private void btnCariInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariInvoiceActionPerformed
+        // TODO add your handling code here:
+        InvoicePesananGridFrame gridFrame = new InvoicePesananGridFrame("");
+        gridFrame.setGridListener(this);
+        gridFrame.setVisible(true);
+    }//GEN-LAST:event_btnCariInvoiceActionPerformed
+
+    private BuktiPembayaran buktiPembayaran = null;
     
-    private static final String VerificationText = "Verifikasi";
-    
-    private static final String SudahLunasText = "Sudah Lunas";
-    
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        try {
+            if (selectedInvoice == null) {
+                throw new RuntimeException("Invoice belum dipilih.");
+            }
+            if (buktiPembayaran == null) {
+                buktiPembayaran = new BuktiPembayaran();                
+            }
+            buktiPembayaran.setInvoicePesanan(selectedInvoice);
+            buktiPembayaran.setKodeBukti(tfNoBuktiPembayaran.getText());
+            buktiPembayaran.setTanggal(tfTanggal.getDate());
+
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(buktiPembayaran);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            
+            JOptionPane.showMessageDialog(null, "Bukti pembayaran berhasil disimpan.", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+            clear();
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Kesalahan", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnCariBuktiPembayaran;
+    private javax.swing.JButton btnCariInvoice;
     private javax.swing.JButton btnKeluar;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblPesananDetail;
-    private javax.swing.JTextField tfNoPesanan;
+    private javax.swing.JButton btnSimpan;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JFormattedTextField tfJumlahBayar;
+    private javax.swing.JTextField tfKodeKustomer;
+    private javax.swing.JFormattedTextField tfKuantias;
+    private javax.swing.JTextField tfNamaKustomer;
+    private javax.swing.JTextField tfNoBuktiPembayaran;
+    private javax.swing.JTextField tfNoInvoice;
+    private com.toedter.calendar.JDateChooser tfTanggal;
     // End of variables declaration//GEN-END:variables
 
+    private InvoicePesanan selectedInvoice = null;
+    
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        // Todo
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int rowSelected = tblPesananDetail.getSelectedRow();
-        int columnSelected = tblPesananDetail.getSelectedColumn();
-        String columnText = tblPesananDetail.getModel().getValueAt(rowSelected, columnSelected).toString();
-        if (columnSelected == 5 && columnText.equals(VerificationText)) {
-            askToConfirmBuktiPembayaran(rowSelected);
-        }
-        if (columnSelected == 5 & columnText.equals(SudahLunasText)) {
-            pesananSudahLunas(rowSelected);
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // Todo
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // Todo
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // Todo
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // Todo
-    }
-
-    private void askToConfirmBuktiPembayaran(int rowSelected) {
-        InvoiceModel invoice = invoices.get(rowSelected);
-        int dialogResult = JOptionPane.showConfirmDialog (null, String.format("Konfirmasi pembayaran pesanan %s atas nama %s?", invoice.getKodePesanan(), invoice.getNamaKustomer()), "Warning", JOptionPane.YES_OPTION);
-        if (dialogResult == JOptionPane.YES_OPTION){
-            confirmBuktiPembayaran(invoice);
-        }
-    }
-
-    private void confirmBuktiPembayaran(InvoiceModel invoice) {
-        new ConnectionManager().setStatusBayarInvoice(invoice, true);
-        populateTable();
-    }
-
-    private void populateTable() {
-        invoices = new ConnectionManager().getInvoices();
-        ArrayList<String[]> rows = new ArrayList<>();
-        int count = 1;
-        for (InvoiceModel item : invoices) {
-            String[] rowData = new String[]{
-                String.format("%d", count),
-                item.getKodePesanan(),
-                item.getNamaKustomer(),
-                "0",
-                new CurrencyUtil().formatCurrency(item.getTotal()),
-                item.isLunas()? SudahLunasText : VerificationText
-            };
-            rows.add(rowData);
-            count++;
-        }
-        TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), new String[]{ "No.", "Kode Pesanan", "Nama Kustomer", "Qty", "Total Harga", "Aksi" }){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
+        if (fromGrid.equals(InvoicePesananGridFrame.class.getSimpleName())) {
+            selectedInvoice = (InvoicePesanan) model;
+            tfNoInvoice.setText(selectedInvoice.getKodeInvoice());
+            tfNamaKustomer.setText(selectedInvoice.getPesanan().getKustomer().getNamaKustomer());
+            int totalQty = 0;
+            int totalBayar = 0;
+            for (PesananDetail pesananDetail : selectedInvoice.getPesanan().getPesananDetailList()) {
+                totalQty += pesananDetail.getQty();
+                totalBayar += (pesananDetail.getQty() * pesananDetail.getBarang().getHargaJualSatuan());
             }
-        };
-        tblPesananDetail.setModel(tblModel);
-        tblPesananDetail.getColumnModel().getColumn(5).setCellRenderer(new ButtonCell());
+            tfKuantias.setText(String.valueOf(totalQty));
+            tfKodeKustomer.setText(selectedInvoice.getPesanan().getKustomer().getKodeKustomer());
+            tfJumlahBayar.setText(CurrencyUtil.getInstance().formatCurrency(totalBayar));
+        }
     }
 
-    private void pesananSudahLunas(int rowSelected) {
-        InvoiceModel invoice = invoices.get(rowSelected);
-        JOptionPane.showMessageDialog(null, String.format("Pembayaran pesanan %s atas nama %s sudah lunas.", invoice.getKodePesanan(), invoice.getNamaKustomer()), "Warning", JOptionPane.INFORMATION_MESSAGE);
+    private void setDate(Date date) {
+        tfTanggal.setDate(date);
+    }
+
+    private void setKodeBuktiPembayaran() {
+        tfNoBuktiPembayaran.setText(ConnectionManager.getKodeBuktiPembayaran());
+    }
+
+    private void clear() {
+        setDate(new Date());
+        setKodeBuktiPembayaran();
+        selectedInvoice = null;
+        tfNoInvoice.setText("");
+        tfNamaKustomer.setText("");
+        tfKuantias.setText("");
+        tfKodeKustomer.setText("");
+        tfJumlahBayar.setText("");
     }
     
 }
