@@ -91,15 +91,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
                           <Component id="tfKodePembelian" min="-2" pref="160" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Component id="btnCariPesanan" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="chooserTanggal" min="-2" pref="171" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
@@ -107,6 +103,9 @@
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chooserTanggal" min="-2" pref="171" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -321,8 +320,8 @@
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="0">
                 <Column editable="false" title="No" type="java.lang.String"/>
-                <Column editable="false" title="No. Pesanan" type="java.lang.String"/>
-                <Column editable="false" title="Kode Customer" type="java.lang.String"/>
+                <Column editable="false" title="No. Invoice" type="java.lang.String"/>
+                <Column editable="false" title="Kustomer" type="java.lang.String"/>
                 <Column editable="false" title="Qty" type="java.lang.String"/>
                 <Column editable="false" title="Total Harga" type="java.lang.String"/>
                 <Column editable="false" title="Action" type="java.lang.Object"/>
@@ -494,7 +493,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="No. Pesanan"/>
+            <Property name="text" type="java.lang.String" value="No. Invoice"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">

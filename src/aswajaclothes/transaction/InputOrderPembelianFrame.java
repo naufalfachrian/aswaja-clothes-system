@@ -6,14 +6,16 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.BuktiPembayaran;
 import aswajaclothes.entity.Ekspedisi;
+import aswajaclothes.entity.InvoicePesanan;
 import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.entity.Supplier;
+import aswajaclothes.grid.BuktiPembayaranGridFrame;
 import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.grid.SupplierGridFrame;
 import aswajaclothes.model.common.KabupatenModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
@@ -97,7 +99,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void clearPesanan(){
-        selectedPesanan = null;
+        selectedInvoicePesanan = null;
         clear(new JTextField[] {
             tfPesananKodeKustomer,
             tfPesananKodePesanan,
@@ -241,15 +243,14 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                         .addGap(116, 116, 116)
                         .addComponent(tfKodePembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(7, 7, 7)
-                        .addComponent(btnCariPesanan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCariPesanan))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,7 +361,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
             },
             new String [] {
-                "No", "No. Pesanan", "Kode Customer", "Qty", "Total Harga", "Action"
+                "No", "No. Invoice", "Kustomer", "Qty", "Total Harga", "Action"
             }
         ) {
             Class[] types = new Class [] {
@@ -410,7 +411,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Pemesanan"));
 
-        jLabel9.setText("No. Pesanan");
+        jLabel9.setText("No. Invoice");
 
         jLabel10.setText("Kode Customer");
 
@@ -699,28 +700,33 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_chooserTanggalPropertyChange
 
     private void btnCariPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPemesananActionPerformed
-        PesananGridFrame frame = new PesananGridFrame("");
+        BuktiPembayaranGridFrame frame = new BuktiPembayaranGridFrame("");
         frame.setGridListener(this);
         frame.setVisible(true);
     }//GEN-LAST:event_btnCariPemesananActionPerformed
 
     private void btnTambahPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPemesananActionPerformed
-        if (selectedPesanan == null) {
+        if (selectedInvoicePesanan == null) {
             return;
         }
         if (!kodePesananHasBeenSelected()) {
-            List<PesananDetail> items = selectedPesanan.getPesananDetailList();
+            int quantity = 0;
+            for (PesananDetail pesananDetail : selectedInvoicePesanan.getPesanan().getPesananDetailList()) {
+                quantity += pesananDetail.getQty();
+            }
             tblModel.addRow(new String[] {
                 String.valueOf((tblModel.getRowCount() + 1)),
-                selectedPesanan.getKodePesanan(),
-                selectedPesanan.getKustomer().getNamaKustomer(),
-                String.valueOf(items.size()),
-                new CurrencyUtil().formatCurrency(selectedPesanan.getTotal()),
+                selectedInvoicePesanan.getKodeInvoice(),
+                selectedInvoicePesanan.getPesanan().getKustomer().getNamaKustomer(),
+                String.valueOf(quantity),
+                new CurrencyUtil().formatCurrency(selectedInvoicePesanan.getPesanan().getTotal()),
                 "Hapus"
             });
-            selectedDaftarPesanan.add(selectedPesanan);
+            selectedDaftarInvoicePesanan.add(selectedInvoicePesanan);
+            clearPesanan();
         } else {
-            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", selectedPesanan.getKodePesanan(), selectedPesanan.getKustomer().getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            Pesanan selectedPesanan = selectedInvoicePesanan.getPesanan();
+            JOptionPane.showMessageDialog(this, String.format("Invoice %s atas nama %s telah ditambahkan.", selectedInvoicePesanan.getKodeInvoice(), selectedPesanan.getKustomer().getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnTambahPemesananActionPerformed
 
@@ -756,9 +762,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     
     private Ekspedisi selectedEkspedisi = null;
     
-    private Pesanan selectedPesanan = null;
+    private InvoicePesanan selectedInvoicePesanan = null;
     
-    private ArrayList<Pesanan> selectedDaftarPesanan = new ArrayList<>();
+    private ArrayList<InvoicePesanan> selectedDaftarInvoicePesanan = new ArrayList<>();
     
     private boolean isUpdate = false;
     
@@ -825,8 +831,9 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())) {
             setEkspedisi((Ekspedisi) model);
         }
-        if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            setPesanan((Pesanan) model);
+        if (fromGrid.equals(BuktiPembayaranGridFrame.class.getSimpleName())) {
+            BuktiPembayaran item = (BuktiPembayaran) model;
+            setPesanan(item.getInvoicePesanan());
         }
         if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
             setCity((KabupatenModel) model);
@@ -883,18 +890,18 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         tfJenisLayanan.setText(ekspedisi.getJenisLayanan());
     }
 
-    private void setPesanan(Pesanan pesanan) {
-        selectedPesanan = pesanan;
+    private void setPesanan(InvoicePesanan invoicePesanan) {
+        selectedInvoicePesanan = invoicePesanan;
         
-        tfPesananKodePesanan.setText(pesanan.getKodePesanan());
-        tfPesananNamaKustomer.setText(pesanan.getKustomer().getNamaKustomer());
-        tfPesananKodeKustomer.setText(pesanan.getKustomer().getKodeKustomer());
-        tfPesananTanggalPesanan.setText(new SimpleDateFormat("dd-MM-yyyy").format(pesanan.getTanggal()));
+        tfPesananKodePesanan.setText(invoicePesanan.getKodeInvoice());
+        tfPesananNamaKustomer.setText(invoicePesanan.getPesanan().getKustomer().getNamaKustomer());
+        tfPesananKodeKustomer.setText(invoicePesanan.getPesanan().getKustomer().getKodeKustomer());
+        tfPesananTanggalPesanan.setText(new SimpleDateFormat("dd-MM-yyyy").format(invoicePesanan.getTanggal()));
     }
 
     private boolean kodePesananHasBeenSelected() {
-        for (Pesanan pesanan : selectedDaftarPesanan) {
-            if (pesanan.getKodePesanan().equals(selectedPesanan)) {
+        for (InvoicePesanan invoicePesanan : selectedDaftarInvoicePesanan) {
+            if (invoicePesanan.getKodeInvoice().equals(selectedInvoicePesanan.getKodeInvoice())) {
                 return true;
             }
         }
@@ -902,7 +909,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void hapusPesananDariPembelian(int position) {
-        selectedDaftarPesanan.remove(position);
+        selectedDaftarInvoicePesanan.remove(position);
         tblModel.removeRow(position);
     }
 
@@ -913,7 +920,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void bersihPemesananTable() {
-        selectedDaftarPesanan.clear();
+        selectedDaftarInvoicePesanan.clear();
         clearTable();
     }
 
