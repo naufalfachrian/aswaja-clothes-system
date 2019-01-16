@@ -9,7 +9,9 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.Barang;
 import aswajaclothes.entity.InvoicePesanan;
 import aswajaclothes.entity.Kustomer;
+import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
+import aswajaclothes.entity.SuratJalan;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
 import aswajaclothes.model.master.PembelianBarangModel;
@@ -178,9 +180,9 @@ public class PdfGenerator {
         Desktop.getDesktop().open(file);
     }
     
-    public static void cetakSuratJalan(String kodeSuratJalan, PesananModel pesanan, List<ItemPesananModel> items) throws DocumentException, FileNotFoundException, BadElementException, IOException {
+    public static void cetakSuratJalan(SuratJalan suratJalan) throws DocumentException, FileNotFoundException, BadElementException, IOException {
         Document document = createDocument();
-        File file = createFile(RESULT_PATH + "/surat-jalan-"  + kodeSuratJalan + ".pdf");
+        File file = createFile(RESULT_PATH + "/surat-jalan-"  + suratJalan.getKodeSuratJalan() + ".pdf");
         PdfWriter.getInstance(document, new FileOutputStream(file));
 
         document.open();
@@ -189,11 +191,13 @@ public class PdfGenerator {
         
         HashMap<String, String> headerData = new HashMap<>();
         headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(new Date()));
-        headerData.put("No. Surat Jalan", kodeSuratJalan);
-        headerData.put("No. Pesanan", pesanan.getKodePesanan());
+        headerData.put("No. Surat Jalan", suratJalan.getKodeSuratJalan());
+        headerData.put("No. Pesanan", suratJalan.getInvoicePesanan().getPesanan().getKodePesanan());
         setupHeader("Surat Jalan", headerData, document);
         
-        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", pesanan.getKodeKustomer()).getSingleResult();
+        Pesanan pesanan = suratJalan.getInvoicePesanan().getPesanan();
+        
+        Kustomer customer = pesanan.getKustomer();
         ArrayList<String> addressData = new ArrayList<>();
         addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
@@ -201,7 +205,7 @@ public class PdfGenerator {
         setupAddres(addressData, document);
         
         insertSpacing(24, document);
-        setupDaftarItemPesananSuratJalan(items, document);
+        setupDaftarItemPesananSuratJalan(pesanan.getPesananDetailList(), document);
         
         insertSpacing(48, document);
         insertFooterText("Thank you for shopping with us!", document);
@@ -445,7 +449,7 @@ public class PdfGenerator {
         document.add(table);
     }
     
-    private static void setupDaftarItemPesananSuratJalan(List<ItemPesananModel> daftarPesanan, Document document) throws DocumentException {
+    private static void setupDaftarItemPesananSuratJalan(List<PesananDetail> daftarPesanan, Document document) throws DocumentException {
         PdfPTable table = new PdfPTable(4);
         table.setTotalWidth(new float[]{ 24, 100, 100, 48 });
         table.setWidthPercentage(100);
@@ -476,20 +480,20 @@ public class PdfGenerator {
         table.addCell(cell);
         
         int i = 1;
-        for (ItemPesananModel item : daftarPesanan) {
+        for (PesananDetail item : daftarPesanan) {
             cell = new PdfPCell(new Phrase("" + i, SMALL_FONT));
             cell.setBorder(Rectangle.BOX);
             cell.setBackgroundColor(BaseColor.WHITE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase(item.getBarang().getKode(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(item.getBarang().getKodeBarang(), SMALL_FONT));
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase(item.getBarang().getName(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase(item.getBarang().getNamaBarang(), SMALL_FONT));
             table.addCell(cell);
             
-            cell = new PdfPCell(new Phrase("" + item.getQuantity(), SMALL_FONT));
+            cell = new PdfPCell(new Phrase("" + item.getQty(), SMALL_FONT));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             table.addCell(cell);
             

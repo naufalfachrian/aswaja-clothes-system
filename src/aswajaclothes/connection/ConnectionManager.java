@@ -446,8 +446,20 @@ public class ConnectionManager {
 
     //<editor-fold defaultstate="collapsed" desc="Surat Jalan">
     
-    public String getKodeSuratJalan() {
-        return getKode("SJ", "cetak_surat_jalan");
+    public static String getKodeSuratJalan() {
+        String kode = "PO";
+        int total = ConnectionManager.getDefaultEntityManager().createNamedQuery("SuratJalan.findAll").getResultList().size();
+        int newId = total + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
     //</editor-fold>

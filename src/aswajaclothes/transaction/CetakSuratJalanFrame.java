@@ -6,18 +6,24 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.InvoicePesanan;
 import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
+import aswajaclothes.entity.SuratJalan;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.grid.PesananGridFrame;
+import aswajaclothes.grid.InvoicePesananGridFrame;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
+import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
+import com.itextpdf.text.DocumentException;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -46,7 +52,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     }
     
     private void initKodeSuratJalan(){
-        String kode = new ConnectionManager().getKodeSuratJalan();
+        String kode = ConnectionManager.getKodeSuratJalan();
         tfKodeSuratJalan.setText(kode);
     }
     
@@ -92,6 +98,9 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
         jLabel15 = new javax.swing.JLabel();
         tfNamaCustomer = new javax.swing.JTextField();
         tfNamaEkspedisi = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tfAlamat = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesananDetail = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -120,7 +129,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
 
         jLabel2.setText("Tanggal");
 
-        jLabel3.setText("No. Pesanan");
+        jLabel3.setText("No. Invoice");
 
         tfKodePesanan.setEnabled(false);
         tfKodePesanan.addActionListener(new java.awt.event.ActionListener() {
@@ -160,6 +169,13 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
 
         tfNamaEkspedisi.setEnabled(false);
 
+        jLabel5.setText("Alamat");
+
+        tfAlamat.setColumns(20);
+        tfAlamat.setRows(5);
+        tfAlamat.setEnabled(false);
+        jScrollPane2.setViewportView(tfAlamat);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -194,10 +210,16 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
                             .addComponent(btnCariPesanan)
                             .addComponent(btnCariInvoice))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5))
                         .addGap(18, 18, 18)
-                        .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,23 +233,28 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
                         .addComponent(btnCariInvoice)
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCariPesanan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNamaCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCariPesanan)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfNamaCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfNamaEkspedisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
 
         tblPesananDetail.setModel(new javax.swing.table.DefaultTableModel(
@@ -319,9 +346,9 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     }//GEN-LAST:event_tfKodePesananActionPerformed
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
-        PesananGridFrame pesananGridFrame = new PesananGridFrame("");
-        pesananGridFrame.setGridListener(this);
-        pesananGridFrame.setVisible(true);
+        InvoicePesananGridFrame gridFrame = new InvoicePesananGridFrame("");
+        gridFrame.setGridListener(this);
+        gridFrame.setVisible(true);
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
     private void tfKodeCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeCustomerActionPerformed
@@ -329,14 +356,22 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     }//GEN-LAST:event_tfKodeCustomerActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // Todo : insert surat jalan ke database
-        // Todo : cetak Invoice
-        if (selectedPesanan != null && items != null) {
-//            try {
-//                PdfGenerator.cetakSuratJalan(tfKodeSuratJalan.getText(), selectedPesanan, items);
-//            } catch (DocumentException | IOException ex) {
-//                Logger.getLogger(CetakSuratJalanFrame.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+        if (selectedInvoicePesanan != null && items != null) {
+            if (selectedSuratJalan == null) {
+                selectedSuratJalan = new SuratJalan();
+            }
+            selectedSuratJalan.setInvoicePesanan(selectedInvoicePesanan);
+            selectedSuratJalan.setKodeSuratJalan(tfKodeSuratJalan.getText());
+            selectedSuratJalan.setTanggal(chooserTanggal.getDate());
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedSuratJalan);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            try {
+                PdfGenerator.cetakSuratJalan(selectedSuratJalan);
+            } catch (DocumentException | IOException ex) {
+                JOptionPane.showMessageDialog(null, "Gagal mencetak dokumen. Alasan : " + ex.getLocalizedMessage(), "Kesalahan", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnCetakActionPerformed
 
@@ -352,7 +387,9 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     
-    private Pesanan selectedPesanan = null;
+    private SuratJalan selectedSuratJalan = null;
+    
+    private InvoicePesanan selectedInvoicePesanan = null;
     private List<PesananDetail> items = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -366,11 +403,14 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblPesananDetail;
+    private javax.swing.JTextArea tfAlamat;
     private javax.swing.JTextField tfKodeCustomer;
     private javax.swing.JTextField tfKodePesanan;
     private javax.swing.JTextField tfKodeSuratJalan;
@@ -380,12 +420,14 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            selectedPesanan = (Pesanan) model;
+        if (fromGrid.equals(InvoicePesananGridFrame.class.getSimpleName())) {
+            selectedInvoicePesanan = (InvoicePesanan) model;
+            Pesanan selectedPesanan = selectedInvoicePesanan.getPesanan();
             tfKodePesanan.setText(selectedPesanan.getKodePesanan());
             tfKodeCustomer.setText(selectedPesanan.getKustomer().getKodeKustomer());
             tfNamaCustomer.setText(selectedPesanan.getKustomer().getNamaKustomer());
             tfNamaEkspedisi.setText(selectedPesanan.getEkspedisi().getNamaEkspedisi());
+            tfAlamat.setText(selectedPesanan.getKustomer().getAlamat());
             applyPesananDetail(selectedPesanan);
         }
     }
