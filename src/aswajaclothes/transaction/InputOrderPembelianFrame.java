@@ -9,27 +9,26 @@ import aswajaclothes.connection.ConnectionManager;
 import aswajaclothes.entity.BuktiPembayaran;
 import aswajaclothes.entity.Ekspedisi;
 import aswajaclothes.entity.InvoicePesanan;
+import aswajaclothes.entity.Pembelian;
+import aswajaclothes.entity.PembelianDetail;
 import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.entity.Supplier;
 import aswajaclothes.grid.BuktiPembayaranGridFrame;
-import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.SupplierGridFrame;
-import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
 import aswajaclothes.widget.ButtonCell;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -81,7 +80,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void initListOrderPenjualan(){
-        listOrderPenjualanDetail = new ArrayList<>();
+        selectedDaftarInvoicePesanan = new ArrayList<>();
     }
     
     private void clearSupplier(){
@@ -109,37 +108,12 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void clearAll(){
+        selectedPembelian = null;
         clearPesanan();
         clearSupplier();
         clearDetailPengiriman();
         initKodePembelian();
         bersihPemesananTable();
-    }
-    
-    private void tambah() throws ParseException, Exception{
-        // Todo
-    }
-
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
-        boolean isDuplikasi = false;
-        for(InputOrderPenjualanDetailModel obj : listOrderPenjualanDetail) {
-            if (obj.getKodeBarang().equals(model.getKodeBarang())){
-                if (isUpdate == false){
-                   int currQty = obj.getQty();
-                   int accumulateQty = currQty + model.getQty();
-                   obj.setQty(accumulateQty);
-                } else {
-                    obj.setQty(model.getQty());
-                }
-                isDuplikasi = true;
-                break;
-            }
-        }
-        return isDuplikasi;
-    }
-     
-    private void calculateTotal() throws ParseException{
-        // Todo
     }
     
     /**
@@ -202,7 +176,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        tfOngkosKirim = new javax.swing.JFormattedTextField();
+        tfOngkosKirim = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -547,7 +521,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel8)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -604,11 +578,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                 .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 267, Short.MAX_VALUE)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,7 +619,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1))
-                        .addGap(20, 20, 20))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -756,7 +729,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
-    List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     
     private Supplier selectedSupplier = null;
     
@@ -810,7 +782,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JTextField tfBerat;
     private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodePembelian;
-    private javax.swing.JFormattedTextField tfOngkosKirim;
+    private javax.swing.JTextField tfOngkosKirim;
     private javax.swing.JTextField tfPesananKodeKustomer;
     private javax.swing.JTextField tfPesananKodePesanan;
     private javax.swing.JTextField tfPesananNamaKustomer;
@@ -834,9 +806,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         if (fromGrid.equals(BuktiPembayaranGridFrame.class.getSimpleName())) {
             BuktiPembayaran item = (BuktiPembayaran) model;
             setPesanan(item.getInvoicePesanan());
-        }
-        if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
-            setCity((KabupatenModel) model);
         }
     }
 
@@ -932,53 +901,62 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         }
     }
 
+    private Pembelian selectedPembelian = null;
+    
     private boolean simpanInputOrderPembelian() {
-        return false;
-//        try {
-//            if (kodePembelian == null) {
-//                throw new UnsupportedOperationException("kodePembelian should not be null");
-//            }
-//            if (kodeSupplier == null) {
-//                peringatanHarusDiisi("Supplier");
-//                return false;
-//            }
-//            if (kodeEkspedisi == null) {
-//                peringatanHarusDiisi("Ekspedisi");
-//                return false;
-//            }
-//            if (selectedKodePesanan.isEmpty()) {
-//                peringatanHarusDiisi("Pesanann");
-//                return false;
-//            }
-//            Date tanggal = chooserTanggal.getDate();
-//            
-//            SupplierModel supplier = new SupplierModel();
-//            supplier.setKode(kodeSupplier);
-//            
-//            EkspedisiModel ekspedisi = new EkspedisiModel();
-//            ekspedisi.setKode(kodeEkspedisi);
-//            
-//            KabupatenModel kabupaten = new KabupatenModel();
-//            kabupaten.setId(kotaTujuanId);
-//            kabupaten.setName(tfKotaTujuan.getText());
-//            
-//            PembelianModel pembelian = new PembelianModel();
-//            pembelian.setKode(kodePembelian);
-//            pembelian.setSupplier(supplier);
-//            pembelian.setEkspedisi(ekspedisi);
-//            pembelian.setDateString(new SimpleDateFormat("ddMMyyyy").format(tanggal));
-//            pembelian.setSelectedKodePesanan(selectedKodePesanan);
-//            pembelian.setAlamatPengiriman(taAlamatPengiriman.getText());
-//            pembelian.setKotaTujuan(kabupaten);
-//            pembelian.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
-//            pembelian.setOngkir(Integer.valueOf(new ValidatorUtil().isNumber(tfOngkosKirim.getText(), "Ongkos Kirim")));
-//            
-//            return new ConnectionManager().simpanInputOrderPembelian(pembelian, isUpdate);
-//        } catch (Exception ex) {
-//            Logger.getLogger(InputOrderPembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
-//            inputOrderPembelianGagalTersimpan();
-//            return false;
-//        }
+        try {
+            if (tfKodePembelian.getText().isEmpty()) {
+                throw new UnsupportedOperationException("kodePembelian should not be null");
+            }
+            if (selectedSupplier == null) {
+                peringatanHarusDiisi("Supplier");
+                return false;
+            }
+            if (selectedEkspedisi == null) {
+                peringatanHarusDiisi("Ekspedisi");
+                return false;
+            }
+            if (selectedDaftarInvoicePesanan.isEmpty()) {
+                peringatanHarusDiisi("Pesanann");
+                return false;
+            }
+            Date tanggal = chooserTanggal.getDate();
+            
+            if (selectedPembelian == null) {
+                selectedPembelian = new Pembelian();
+            }
+            selectedPembelian.setAlamatPengiriman(taAlamatPengiriman.getText());
+            selectedPembelian.setBerat(Integer.valueOf(tfBerat.getText()));
+            selectedPembelian.setEkspedisi(selectedEkspedisi);
+            selectedPembelian.setKodePembelian(tfKodePembelian.getText());
+            selectedPembelian.setOngkir(Integer.valueOf(tfOngkosKirim.getText()));
+            selectedPembelian.setSupplier(selectedSupplier);
+            selectedPembelian.setTanggal(tanggal);
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(selectedPembelian);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            
+            ArrayList<PembelianDetail> daftarPembelianDetail = new ArrayList<>();
+            for (InvoicePesanan invoicePesanan : selectedDaftarInvoicePesanan) {
+                PembelianDetail pembelianDetail = new PembelianDetail();
+                pembelianDetail.setPembelian(selectedPembelian);
+                pembelianDetail.setPesanan(invoicePesanan.getPesanan());
+                daftarPembelianDetail.add(pembelianDetail);
+                
+                ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+                ConnectionManager.getDefaultEntityManager().persist(invoicePesanan);
+                ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            }
+            
+            selectedPembelian.setPembelianDetailList(daftarPembelianDetail);
+            
+            return true;
+        } catch (NumberFormatException | UnsupportedOperationException ex) {
+            Logger.getLogger(InputOrderPembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
+            inputOrderPembelianGagalTersimpan();
+            return false;
+        }
     }
 
     private void peringatanHarusDiisi(String fieldName) {
@@ -993,10 +971,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private void inputOrderPembelianGagalTersimpan() {
         JOptionPane.showMessageDialog(this, "Input Order Pemeblan Gagal Tersimpan", "Gagal Tersimpan", JOptionPane.ERROR_MESSAGE);
         clearAll();
-    }
-
-    private void setCity(KabupatenModel city) {
-        kotaTujuanId = city.getId();
     }
 
     private void clearDetailPengiriman() {
