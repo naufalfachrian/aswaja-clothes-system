@@ -705,12 +705,12 @@ public class PdfGenerator {
     }
     
     private static void setupDaftarItemPembelianLaporan(List<PembelianDetail> daftarPembelian, Document document) throws DocumentException {
-        PdfPTable table = new PdfPTable(9);
+        PdfPTable table = new PdfPTable(7);
         table.setTotalWidth(new float[]{ 24, 96, 48, 48, 48, 36, 48 });
         table.setWidthPercentage(100);
         
         PdfPCell blankCell = new PdfPCell();
-        blankCell.setColspan(3);
+        blankCell.setColspan(0);
         blankCell.setBorder(Rectangle.NO_BORDER);
         
         PdfPCell cell = new PdfPCell(new Phrase("No", SMALL_FONT));

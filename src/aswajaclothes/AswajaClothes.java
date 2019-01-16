@@ -65,12 +65,9 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         mnInputOrderPembelian = new javax.swing.JMenuItem();
         mnCetakOrderPembelian = new javax.swing.JMenuItem();
-        mnReturPembelian = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem14 = new javax.swing.JMenuItem();
-        jMenuItem15 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Utama");
@@ -191,14 +188,6 @@ public class AswajaClothes extends javax.swing.JFrame {
         });
         jMenu4.add(mnCetakOrderPembelian);
 
-        mnReturPembelian.setText("Retur Pembelian");
-        mnReturPembelian.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnReturPembelianActionPerformed(evt);
-            }
-        });
-        jMenu4.add(mnReturPembelian);
-
         jMenuBar1.add(jMenu4);
 
         jMenu3.setText("Report");
@@ -218,22 +207,6 @@ public class AswajaClothes extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem13);
-
-        jMenuItem14.setText("Cetak Laporan Cost Revenue");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem14);
-
-        jMenuItem15.setText("Cetak Laporan Barang Terlaris");
-        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem15ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem15);
 
         jMenuBar1.add(jMenu3);
 
@@ -287,10 +260,6 @@ public class AswajaClothes extends javax.swing.JFrame {
         new ReturPenjualanFrame().setVisible(true);
     }//GEN-LAST:event_mnReturPenjualanActionPerformed
 
-    private void mnReturPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnReturPembelianActionPerformed
-        new ReturPembelianFrame().setVisible(true);
-    }//GEN-LAST:event_mnReturPembelianActionPerformed
-
     private void mnCetakSuratJalanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnCetakSuratJalanActionPerformed
         new CetakSuratJalanFrame().setVisible(true);
     }//GEN-LAST:event_mnCetakSuratJalanActionPerformed
@@ -302,14 +271,6 @@ public class AswajaClothes extends javax.swing.JFrame {
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         new CetakLaporanPembelian().setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
-
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        new CetakLaporanCostRevenue().setVisible(true);
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
-
-    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
-        new CetakLaporanBarangTerlaris().setVisible(true);
-    }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -356,8 +317,6 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
-    private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel logo;
     private javax.swing.JMenuItem mnCetakInvoicePenjualan;
@@ -371,7 +330,6 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnMasterEkspedisi;
     private javax.swing.JMenuItem mnMasterKonsumen;
     private javax.swing.JMenuItem mnMasterSupplier;
-    private javax.swing.JMenuItem mnReturPembelian;
     private javax.swing.JMenuItem mnReturPenjualan;
     // End of variables declaration//GEN-END:variables
 
