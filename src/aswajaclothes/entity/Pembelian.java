@@ -38,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pembelian.findByOngkir", query = "SELECT p FROM Pembelian p WHERE p.ongkir = :ongkir")})
 public class Pembelian implements Serializable {
 
+    @OneToMany(mappedBy = "pembelian")
+    private List<InvoicePembelian> invoicePembelianList;
+
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -164,6 +167,15 @@ public class Pembelian implements Serializable {
 
     public void setAlamatPengiriman(String alamatPengiriman) {
         this.alamatPengiriman = alamatPengiriman;
+    }
+
+    @XmlTransient
+    public List<InvoicePembelian> getInvoicePembelianList() {
+        return invoicePembelianList;
+    }
+
+    public void setInvoicePembelianList(List<InvoicePembelian> invoicePembelianList) {
+        this.invoicePembelianList = invoicePembelianList;
     }
     
 }

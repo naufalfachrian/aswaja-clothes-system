@@ -6,6 +6,10 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.InvoicePembelian;
+import aswajaclothes.entity.Pembelian;
+import aswajaclothes.entity.PembelianDetail;
+import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PembelianGridFrame;
 import aswajaclothes.model.master.PembelianBarangModel;
@@ -52,7 +56,7 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     }
     
     private void initKodePesanan(){
-        String kode = new ConnectionManager().getKodeInvoicePembelian();
+        String kode = ConnectionManager.getKodeInvoicePembelian();
         tfNoPurchase.setText(kode);
     }
     
@@ -425,15 +429,28 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
         // TODO add your handling code here:
     }//GEN-LAST:event_tfKodeSupplierActionPerformed
 
+    private InvoicePembelian invoicePembelian = null;
+    
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        if (pembelian == null || goods == null) {
+        if (selectedPembelian == null || goods == null) {
             JOptionPane optionPane = new JOptionPane("ErrorMsg", JOptionPane.ERROR_MESSAGE);    
             JDialog dialog = optionPane.createDialog("Failure");
             dialog.setAlwaysOnTop(true);
             dialog.setVisible(true);
         } else {
+            if (invoicePembelian == null) {
+                invoicePembelian = new InvoicePembelian();
+            }
+            invoicePembelian.setKodeInvoice(tfNoPurchase.getText());
+            invoicePembelian.setPembelian(selectedPembelian);
+            invoicePembelian.setTanggal(chooserTanggal.getDate());
+            
+            ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+            ConnectionManager.getDefaultEntityManager().persist(invoicePembelian);
+            ConnectionManager.getDefaultEntityManager().getTransaction().commit();
+            
             try {
-                PdfGenerator.cetakInvoicePembelian(tfNoPurchase.getText(), pembelian, goods);
+                PdfGenerator.cetakInvoicePembelian(invoicePembelian);
             } catch (IOException | DocumentException ex) {
                 Logger.getLogger(CetakInvoicePembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -452,8 +469,8 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
     
-    PembelianModel pembelian = null;
-    List<PembelianBarangModel> goods = null;
+    Pembelian selectedPembelian = null;
+    List<PembelianDetail> goods = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariInvoice;
@@ -496,7 +513,7 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(PembelianGridFrame.class.getSimpleName())) {
-            setPembelian((PembelianModel) model);
+            setPembelian((Pembelian) model);
         }
     }
 
@@ -525,39 +542,41 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
 
     }
 
-    private void setPembelian(PembelianModel pembelian) {
-        this.pembelian = pembelian;
+    private void setPembelian(Pembelian pembelian) {
+        selectedPembelian = pembelian;
         
-        tfNoPembelian.setText(pembelian.getKode());
-        tfKodeSupplier.setText(pembelian.getSupplier().getKode());
-        tfNamaSupplier.setText(pembelian.getSupplier().getName());
+        tfNoPembelian.setText(pembelian.getKodePembelian());
+        tfKodeSupplier.setText(pembelian.getSupplier().getKodeSupplier());
+        tfNamaSupplier.setText(pembelian.getSupplier().getNamaSupplier());
         tfNoTelepon.setText(pembelian.getSupplier().getNoTelepon());
         tfAlamat.setText(pembelian.getSupplier().getAlamat());
-        tfKodeEkspedisi.setText(pembelian.getEkspedisi().getKode());
-        tfNamaEkspedisi.setText(pembelian.getEkspedisi().getName());
+        tfKodeEkspedisi.setText(pembelian.getEkspedisi().getKodeEkspedisi());
+        tfNamaEkspedisi.setText(pembelian.getEkspedisi().getNamaEkspedisi());
         tfJenisEkspedisi.setText(pembelian.getEkspedisi().getJenisLayanan());
         tfOngkir.setText(String.valueOf(pembelian.getOngkir()));
         
-        this.goods = new ConnectionManager().getDaftarPembelianBarang(pembelian.getKode());
-        setPembelianBarang(pembelian, goods);
+        this.goods = selectedPembelian.getPembelianDetailList();
+        setPembelianBarang(selectedPembelian, goods);
     }
 
-    private void setPembelianBarang(PembelianModel pembelian, List<PembelianBarangModel> goods) {
+    private void setPembelianBarang(Pembelian pembelian, List<PembelianDetail> goods) {
         String[] customerColumn = new String [] { "Kode Barang", "Nama Barang", "Warna", "Area", "Ukuran", "Jumlah", "Harga Satuan"};
         ArrayList<String[]> rows = new ArrayList<>();     
         int totalBayar = 0;
-        for (PembelianBarangModel item : goods) {
-            totalBayar += item.getQuantity() * item.getHargaHpp();
-            String[] rowData = new String[]{
-                item.getKodeBarang(),
-                item.getNamaBarang(),
-                item.getWarna(),
-                item.getArea(),
-                item.getUkuran(),
-                String.valueOf(item.getQuantity()),
-                new CurrencyUtil().formatCurrency(item.getHargaHpp())
-            };
-            rows.add(rowData);
+        for (PembelianDetail item : goods) {
+            for (PesananDetail pesananDetail : item.getPesanan().getPesananDetailList()) {
+                totalBayar += pesananDetail.getQty() * pesananDetail.getBarang().getHargaHpp();
+                String[] rowData = new String[]{
+                    pesananDetail.getBarang().getKodeBarang(),
+                    pesananDetail.getBarang().getNamaBarang(),
+                    pesananDetail.getBarang().getWarna(),
+                    pesananDetail.getBarang().getArea(),
+                    pesananDetail.getBarang().getUkuran(),
+                    String.valueOf(pesananDetail.getQty()),
+                    new CurrencyUtil().formatCurrency(pesananDetail.getBarang().getHargaHpp())
+                };
+                rows.add(rowData);
+            }
         }
         TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), customerColumn){
             @Override

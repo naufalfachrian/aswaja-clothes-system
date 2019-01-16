@@ -6,7 +6,7 @@
 package aswajaclothes.grid;
 
 import aswajaclothes.connection.ConnectionManager;
-import aswajaclothes.model.master.PembelianModel;
+import aswajaclothes.entity.Pembelian;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ public class PembelianGridFrame extends javax.swing.JFrame implements MouseListe
 
     /**
      * Creates new form CustomerGridFrame
+     * @param valueFilter
      */
     public PembelianGridFrame(String valueFilter) {
         initComponents();
@@ -119,13 +120,13 @@ public class PembelianGridFrame extends javax.swing.JFrame implements MouseListe
     private void initDaftarPenjualan(String valueFilter) {
         String[] customerColumn = new String [] { "No. Pembelian", "Supplier", "Ekspedisi", "Ongkos Kirim", "Berat"};
         ArrayList<String[]> rows = new ArrayList<>();
-        items = new ConnectionManager().getDaftarPembelian();
+        items = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pembelian.findAll", Pembelian.class).getResultList();
         
-        for (PembelianModel item : items) {
+        for (Pembelian item : items) {
             String[] rowData = new String[]{
-                item.getKode(),
-                item.getSupplier().getName(),
-                item.getEkspedisi().getName(),
+                item.getKodePembelian(),
+                item.getSupplier().getNamaSupplier(),
+                item.getEkspedisi().getNamaEkspedisi(),
                 String.valueOf(item.getOngkir()),
                 String.valueOf(item.getBerat())
             };
@@ -145,7 +146,7 @@ public class PembelianGridFrame extends javax.swing.JFrame implements MouseListe
     }
     
     // Variables declaration - able to modify
-    private List<PembelianModel> items;
+    private List<Pembelian> items;
     private GridListener listener;
     private String noTelepon;
     
@@ -160,7 +161,7 @@ public class PembelianGridFrame extends javax.swing.JFrame implements MouseListe
     @Override
     public void mouseClicked(MouseEvent e) {
         int rowSelected = tblPesanan.getSelectedRow();
-        PembelianModel pembelian  = items.get(rowSelected);
+        Pembelian pembelian  = items.get(rowSelected);
         listener.onSelectedRow(pembelian, PembelianGridFrame.class.getSimpleName());
         dispose();
     }

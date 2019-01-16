@@ -146,8 +146,20 @@ public class ConnectionManager {
     
     //<editor-fold defaultstate="collapsed" desc="Cetak Invoice Pembelian">
     
-    public String getKodeInvoicePembelian() {
-        return getKode("PO", "cetak_invoice_pembelian");
+    public static String getKodeInvoicePembelian() {
+        String kode = "PO";
+        int totalPesanan = ConnectionManager.getDefaultEntityManager().createNamedQuery("InvoicePembelian.findAll").getResultList().size();
+        int newId = totalPesanan + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
     public List<PembelianBarangModel> getDaftarPembelianBarang(String kodePembelian) {

@@ -945,7 +945,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
                 daftarPembelianDetail.add(pembelianDetail);
                 
                 ConnectionManager.getDefaultEntityManager().getTransaction().begin();
-                ConnectionManager.getDefaultEntityManager().persist(invoicePesanan);
+                ConnectionManager.getDefaultEntityManager().persist(pembelianDetail);
                 ConnectionManager.getDefaultEntityManager().getTransaction().commit();
             }
             
