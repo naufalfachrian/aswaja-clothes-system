@@ -466,8 +466,20 @@ public class ConnectionManager {
 
     //<editor-fold defaultstate="collapsed" desc="Retur Penjualan">
     
-    public String getKodeReturPenjualan() {
-        return getKode("RJ", "retur_penjualan");
+    public static String getKodeReturPenjualan() {
+        String kode = "RJ";
+        int total = ConnectionManager.getDefaultEntityManager().createNamedQuery("ReturPesanan.findAll").getResultList().size();
+        int newId = total + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
     //</editor-fold>

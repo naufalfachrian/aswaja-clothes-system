@@ -11,6 +11,7 @@ import aswajaclothes.entity.InvoicePesanan;
 import aswajaclothes.entity.Kustomer;
 import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
+import aswajaclothes.entity.ReturPesanan;
 import aswajaclothes.entity.SuratJalan;
 import aswajaclothes.model.master.InvoiceModel;
 import aswajaclothes.model.master.ItemPesananModel;
@@ -133,9 +134,9 @@ public class PdfGenerator {
     }
 
     
-    public static void cetakReturPenjualan(String kodeRetur, PesananModel pesanan, List<ItemPesananModel> items) throws IOException, DocumentException, BadElementException, FileNotFoundException {
+    public static void cetakReturPenjualan(ReturPesanan returPesanan) throws IOException, DocumentException, BadElementException, FileNotFoundException {
         Document document = createDocument();
-        File file = createFile(RESULT_PATH + "/retur-penjualan-"  + kodeRetur + ".pdf");
+        File file = createFile(RESULT_PATH + "/retur-penjualan-"  + returPesanan.getKodeReturPesanan() + ".pdf");
         PdfWriter.getInstance(document, new FileOutputStream(file));
 
         document.open();
@@ -144,11 +145,11 @@ public class PdfGenerator {
         
         HashMap<String, String> headerData = new HashMap<>();
         headerData.put("Date", new SimpleDateFormat("dd MMMM yyyy").format(new Date()));
-        headerData.put("No. Retur", kodeRetur);
-        headerData.put("No. Pesanan", pesanan.getKodePesanan());
+        headerData.put("No. Retur", returPesanan.getKodeReturPesanan());
+        headerData.put("No. Invoice", returPesanan.getInvoicePesanan().getKodeInvoice());
         setupHeader("Retur Penjualan", headerData, document);
         
-        Kustomer customer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findByKodeKustomer", Kustomer.class).setParameter("kodeKustomer", pesanan.getKodeKustomer()).getSingleResult();
+        Kustomer customer = returPesanan.getInvoicePesanan().getPesanan().getKustomer();
         ArrayList<String> addressData = new ArrayList<>();
         addressData.add(customer.getNamaKustomer());
         addressData.add(customer.getAlamat());
@@ -156,14 +157,16 @@ public class PdfGenerator {
         setupAddres(addressData, document);
         
         insertSpacing(24, document);
-//        setupDaftarItemPesanan(items, document);
+        setupDaftarItemPesanan(returPesanan.getInvoicePesanan().getPesanan().getPesananDetailList(), document);
+        
+        Pesanan pesanan = returPesanan.getInvoicePesanan().getPesanan();
         
         ArrayList<HashMap<String, String>> details = new ArrayList<>();
         HashMap<String, String> item1 = new HashMap<>();
         item1.put("Subtotal", CurrencyUtil.getInstance().formatCurrency(pesanan.getTotal() - pesanan.getOngkir()));
         details.add(item1);
         HashMap<String, String> item2 = new HashMap<>();
-        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(pesanan.getOngkir()));
+        item2.put("Ongkir", CurrencyUtil.getInstance().formatCurrency(returPesanan.getOngkir()));
         details.add(item2);
         HashMap<String, String> item3 = new HashMap<>();
         item3.put("PPN", CurrencyUtil.getInstance().formatCurrency(0));

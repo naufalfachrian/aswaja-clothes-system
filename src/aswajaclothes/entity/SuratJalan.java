@@ -34,13 +34,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SuratJalan implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @Column(name = "kode_surat_jalan")
     private String kodeSuratJalan;
+    
     @Column(name = "tanggal")
     @Temporal(TemporalType.DATE)
     private Date tanggal;
+    
     @JoinColumn(name = "invoice_pesanan", referencedColumnName = "kode_invoice")
     @ManyToOne
     private InvoicePesanan invoicePesanan;
