@@ -40,9 +40,7 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         initComponents();
         initDateFormat();
         initKodeInvoice();
-        initFormatFieldNumber();
         initTable();
-        initListOrderPenjualan();
     }
     
     private void initDateFormat(){
@@ -56,25 +54,12 @@ public class CetakInvoicePenjualanFrame extends javax.swing.JFrame implements Gr
         String kode = ConnectionManager.getKodeInvoicePesanan();
         tfNoInvoice.setText(kode);
     }
-    
-    private void initFormatFieldNumber(){
-        // Todo
-    }
-    
+        
     private void initTable(){
         tblModel = (DefaultTableModel)tblPesananDetail.getModel();
         tblPesananDetail.addMouseListener(this);
-        initCellRenderAction();
     }
     
-    private void initCellRenderAction(){
-        // Todo
-    }
-    
-    private void initListOrderPenjualan(){
-        // Todo
-    }
-     
     private void calculateTotal() throws ParseException{
         // Todo
     }

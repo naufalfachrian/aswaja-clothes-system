@@ -18,7 +18,6 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,9 +41,7 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
         initComponents();
         initDateFormat();
         initKodePesanan();
-        initFormatFieldNumber();
         initTable();
-        initListOrderPenjualan();
     }
     
     private void initDateFormat(){
@@ -59,50 +56,9 @@ public class CetakInvoicePembelianFrame extends javax.swing.JFrame implements Gr
         tfNoPurchase.setText(kode);
     }
     
-    private void initFormatFieldNumber(){
-        // Todo
-    }
-    
     private void initTable(){
         tblModel = (DefaultTableModel)tblPesananDetail.getModel();
         tblPesananDetail.addMouseListener(this);
-        initCellRenderAction();
-    }
-    
-    private void initCellRenderAction(){
-        // Todo
-    }
-    
-    private void initListOrderPenjualan(){
-        // Todo
-    }
-    
-    private void clearBarang(){
-        // Todo
-    }
-    
-    private void clearPesanan(){
-        // Todo
-    }
-    
-    private void clearEkspedisi(){
-        // Todo
-    }
-    
-    private void clearAll(){
-        // Todo
-    }
-    
-    private void tambah() throws ParseException, Exception{
-        // Todo
-    }
-
-    private boolean isDuplikasiBarang(InputOrderPenjualanDetailModel model, boolean isUpdate){
-        return false;
-    }
-     
-    private void calculateTotal() throws ParseException{
-        // Todo
     }
     
     /**
