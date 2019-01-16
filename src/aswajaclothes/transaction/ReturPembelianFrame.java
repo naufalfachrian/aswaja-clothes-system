@@ -45,8 +45,8 @@ public class ReturPembelianFrame extends javax.swing.JFrame implements GridListe
     }
     
     private void initKodePesanan(){
-        String kode = new ConnectionManager().getKodePesanan();
-        tfNoInvoice.setText(kode);
+//        String kode = new ConnectionManager().getKodePesanan();
+        tfNoInvoice.setText("");
     }
     
     private void initFormatFieldNumber(){

@@ -67,6 +67,7 @@ public class AswajaClothes extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         mnInputOrderPembelian = new javax.swing.JMenuItem();
         mnCetakOrderPembelian = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
@@ -196,6 +197,14 @@ public class AswajaClothes extends javax.swing.JFrame {
         });
         jMenu4.add(mnCetakOrderPembelian);
 
+        jMenuItem5.setText("Retur Pembelian");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem5);
+
         jMenuBar1.add(jMenu4);
 
         jMenu3.setText("Report");
@@ -304,6 +313,10 @@ public class AswajaClothes extends javax.swing.JFrame {
         new CetakLaporanBarangTerlaris().setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        new ReturPembelianFrame().setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -353,6 +366,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel logo;
     private javax.swing.JMenuItem mnCetakInvoicePenjualan;

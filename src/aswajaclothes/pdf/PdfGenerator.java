@@ -165,6 +165,22 @@ public class PdfGenerator {
         HashMap<String, String> headerData = new HashMap<>();
         setupHeader("Laporan Cost Revenue", headerData, document);
                 
+        ArrayList<PesananDetail> daftarPesanan = new ArrayList<>();
+        List<Barang> daftarBarang = ConnectionManager.getDefaultEntityManager().createNamedQuery("Barang.findAll", Barang.class).getResultList();
+        for (Barang barang : daftarBarang) {
+            int jumlahPesanan = 0;
+            List<PesananDetail> pesananBarang = barang.getPesananDetailList();
+            for (PesananDetail pesananDetail : pesananBarang) {
+                jumlahPesanan += pesananDetail.getQty();
+            }
+            PesananDetail item = new PesananDetail();
+            item.setBarang(barang);
+            item.setQty(jumlahPesanan);
+            daftarPesanan.add(item);
+        }
+        
+        setupCostRevenueLaporan(daftarPesanan, document);
+        
         document.close();
         Desktop.getDesktop().open(file);
     }
@@ -859,6 +875,106 @@ public class PdfGenerator {
 
             i++;
         }
+        
+        document.add(table);
+    }
+    
+    private static void setupCostRevenueLaporan(List<PesananDetail> daftarPembelian, Document document) throws DocumentException {
+        PdfPTable table = new PdfPTable(7);
+        table.setTotalWidth(new float[]{ 24, 96, 96, 48, 96, 96, 96 });
+        table.setWidthPercentage(100);
+        
+        PdfPCell blankCell = new PdfPCell();
+        blankCell.setColspan(5);
+        blankCell.setBorder(Rectangle.NO_BORDER);
+        
+        PdfPCell cell = new PdfPCell(new Phrase("No", SMALL_FONT));
+        cell.setBorder(Rectangle.BOX);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+
+        cell = new PdfPCell(new Phrase("Kode Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase("Nama Barang", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase("Jumlah Pembelian", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase("Harga HPP", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase("Harga Penjualan", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase("Margin", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        int i = 1;
+        int totalMargin = 0;
+        for (PesananDetail item : daftarPembelian) {
+            cell = new PdfPCell(new Phrase("" + i, SMALL_FONT));
+            cell.setBorder(Rectangle.BOX);
+            cell.setBackgroundColor(BaseColor.WHITE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            Barang barang = item.getBarang();
+
+            cell = new PdfPCell(new Phrase(barang.getKodeBarang(), SMALL_FONT));
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(barang.getNamaBarang(), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("" + item.getQty(), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            int hargaHpp = barang.getHargaHpp() * item.getQty();
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(hargaHpp), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            int hargaJual = barang.getHargaJualSatuan() * item.getQty();
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(hargaJual), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            totalMargin += hargaJual - hargaHpp;
+            cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(hargaJual - hargaHpp), SMALL_FONT));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            i++;
+        }
+        
+        table.addCell(blankCell);
+        
+        cell = new PdfPCell(new Phrase("Total Margin", SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase(CurrencyUtil.getInstance().formatCurrency(totalMargin), SMALL_FONT));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        table.addCell(cell);
         
         document.add(table);
     }
