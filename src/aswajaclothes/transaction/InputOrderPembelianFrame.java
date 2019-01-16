@@ -6,22 +6,19 @@
 package aswajaclothes.transaction;
 
 import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.Ekspedisi;
 import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
+import aswajaclothes.entity.Supplier;
 import aswajaclothes.grid.CityGridFrame;
 import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
 import aswajaclothes.grid.PesananGridFrame;
 import aswajaclothes.grid.SupplierGridFrame;
 import aswajaclothes.model.common.KabupatenModel;
-import aswajaclothes.model.master.EkspedisiModel;
-import aswajaclothes.model.master.PembelianModel;
-import aswajaclothes.model.master.PesananModel;
-import aswajaclothes.model.master.SupplierModel;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.util.CurrencyUtil;
 import aswajaclothes.util.FilterUtil;
-import aswajaclothes.util.ValidatorUtil;
 import aswajaclothes.widget.ButtonCell;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.MouseEvent;
@@ -31,8 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -65,8 +60,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void initKodePembelian(){
-        kodePembelian = new ConnectionManager().getKodePembelian();
-        tfKodePembelian.setText(kodePembelian);
+        tfKodePembelian.setText(ConnectionManager.getKodePembelian());
     }
     
     private void initFormatFieldNumber(){
@@ -89,8 +83,8 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void clearSupplier(){
-        kodeSupplier = null;
-        kodeEkspedisi = null;
+        selectedSupplier = null;
+        selectedEkspedisi = null;
         clear(new JTextField[] {
             tfSupplierKodeEkspedisi,
             tfSupplierKodeSupplier,
@@ -103,7 +97,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
     
     private void clearPesanan(){
-        kodePesanan = null;
+        selectedPesanan = null;
         clear(new JTextField[] {
             tfPesananKodeKustomer,
             tfPesananKodePesanan,
@@ -202,10 +196,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jScrollPane3 = new javax.swing.JScrollPane();
         taAlamatPengiriman = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
-        jLabel15 = new javax.swing.JLabel();
-        tfKotaTujuan = new javax.swing.JTextField();
-        btnCariKotaTujuan = new javax.swing.JButton();
-        btnHitung = new javax.swing.JButton();
         tfBerat = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -597,20 +587,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Ongkos Kirim"));
 
-        jLabel15.setText("Kota Tujuan");
-
-        tfKotaTujuan.setEditable(false);
-        tfKotaTujuan.setEnabled(false);
-
-        btnCariKotaTujuan.setText("Cari");
-        btnCariKotaTujuan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCariKotaTujuanActionPerformed(evt);
-            }
-        });
-
-        btnHitung.setText("Hitung");
-
         jLabel16.setText("Berat");
 
         jLabel17.setText("Kg");
@@ -622,39 +598,24 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addGap(53, 53, 53)
-                        .addComponent(tfKotaTujuan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCariKotaTujuan))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(88, 88, 88)
-                        .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnHitung)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel16)
+                .addGap(88, 88, 88)
+                .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfKotaTujuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15)
-                    .addComponent(btnCariKotaTujuan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfBerat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17)
-                    .addComponent(btnHitung)
                     .addComponent(jLabel16)
                     .addComponent(jLabel18)
                     .addComponent(tfOngkosKirim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -744,23 +705,22 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }//GEN-LAST:event_btnCariPemesananActionPerformed
 
     private void btnTambahPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPemesananActionPerformed
-        if (kodePesanan == null) {
+        if (selectedPesanan == null) {
             return;
         }
-        Pesanan pesanan = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pesanan.findByKodePesanan", Pesanan.class).setParameter("kodePesanan", kodePesanan).getSingleResult();
         if (!kodePesananHasBeenSelected()) {
-            List<PesananDetail> items = pesanan.getPesananDetailList();
+            List<PesananDetail> items = selectedPesanan.getPesananDetailList();
             tblModel.addRow(new String[] {
                 String.valueOf((tblModel.getRowCount() + 1)),
-                pesanan.getKodePesanan(),
-                pesanan.getKustomer().getNamaKustomer(),
+                selectedPesanan.getKodePesanan(),
+                selectedPesanan.getKustomer().getNamaKustomer(),
                 String.valueOf(items.size()),
-                new CurrencyUtil().formatCurrency(pesanan.getTotal()),
+                new CurrencyUtil().formatCurrency(selectedPesanan.getTotal()),
                 "Hapus"
             });
-            selectedKodePesanan.add(kodePesanan);
+            selectedDaftarPesanan.add(selectedPesanan);
         } else {
-            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", pesanan.getKodePesanan(), pesanan.getKustomer().getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, String.format("Pesanan telah %s atas nama %s ditambahkan.", selectedPesanan.getKodePesanan(), selectedPesanan.getKustomer().getNamaKustomer()), "Informasi", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnTambahPemesananActionPerformed
 
@@ -788,31 +748,27 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
         // TODO add your handling code here:
     }//GEN-LAST:event_tfSupplierKodeSupplierActionPerformed
 
-    private void btnCariKotaTujuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariKotaTujuanActionPerformed
-        CityGridFrame frame = new CityGridFrame(FilterUtil.FilterType.NONE, "");
-        frame.setGridListener(this);
-        frame.setVisible(true);
-    }//GEN-LAST:event_btnCariKotaTujuanActionPerformed
-
     // Variable declarations - able to modify
     DefaultTableModel tblModel;
     List<InputOrderPenjualanDetailModel> listOrderPenjualanDetail;
-    private String kodePembelian = null;
-    private String kodeSupplier = null;
-    private String kodeEkspedisi = null;
-    private String kodePesanan = null;
-    private ArrayList<String> selectedKodePesanan = new ArrayList<>();
+    
+    private Supplier selectedSupplier = null;
+    
+    private Ekspedisi selectedEkspedisi = null;
+    
+    private Pesanan selectedPesanan = null;
+    
+    private ArrayList<Pesanan> selectedDaftarPesanan = new ArrayList<>();
+    
     private boolean isUpdate = false;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnBersihPemesanan;
     private javax.swing.JButton btnCariEkspedisi;
-    private javax.swing.JButton btnCariKotaTujuan;
     private javax.swing.JButton btnCariPemesanan;
     private javax.swing.JButton btnCariPesanan;
     private javax.swing.JButton btnCariSupplier;
-    private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambahPemesanan;
@@ -823,7 +779,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -849,7 +804,6 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     private javax.swing.JTextField tfBerat;
     private javax.swing.JTextField tfJenisLayanan;
     private javax.swing.JTextField tfKodePembelian;
-    private javax.swing.JTextField tfKotaTujuan;
     private javax.swing.JFormattedTextField tfOngkosKirim;
     private javax.swing.JTextField tfPesananKodeKustomer;
     private javax.swing.JTextField tfPesananKodePesanan;
@@ -866,13 +820,13 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
         if (fromGrid.equals(SupplierGridFrame.class.getSimpleName())) {
-            setSupplier((SupplierModel) model);
+            setSupplier((Supplier) model);
         }
         if (fromGrid.equals(EkspedisiGridFrame.class.getSimpleName())) {
-            setEkspedisi((EkspedisiModel) model);
+            setEkspedisi((Ekspedisi) model);
         }
         if (fromGrid.equals(PesananGridFrame.class.getSimpleName())) {
-            setPesanan((PesananModel) model);
+            setPesanan((Pesanan) model);
         }
         if (fromGrid.equals(CityGridFrame.class.getSimpleName())) {
             setCity((KabupatenModel) model);
@@ -912,32 +866,35 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
     }
 
-    private void setSupplier(SupplierModel supplier) {
-        tfSupplierKodeSupplier.setText(supplier.getKode());
-        tfSupplierNamaSupplier.setText(supplier.getName());
+    private void setSupplier(Supplier supplier) {
+        selectedSupplier = supplier;
+        
+        tfSupplierKodeSupplier.setText(supplier.getKodeSupplier());
+        tfSupplierNamaSupplier.setText(supplier.getNamaSupplier());
         tfSupplierAlamat.setText(supplier.getAlamat());
         tfSupplierNomorTelepon.setText(supplier.getNoTelepon());
-        kodeSupplier = supplier.getKode();
     }
 
-    private void setEkspedisi(EkspedisiModel ekspedisi) {
-        tfSupplierKodeEkspedisi.setText(ekspedisi.getKode());
-        tfSupplierNamaEkspedisi.setText(ekspedisi.getName());
+    private void setEkspedisi(Ekspedisi ekspedisi) {
+        selectedEkspedisi = ekspedisi;
+        
+        tfSupplierKodeEkspedisi.setText(ekspedisi.getKodeEkspedisi());
+        tfSupplierNamaEkspedisi.setText(ekspedisi.getNamaEkspedisi());
         tfJenisLayanan.setText(ekspedisi.getJenisLayanan());
-        kodeEkspedisi = ekspedisi.getKode();
     }
 
-    private void setPesanan(PesananModel pesanan) {
+    private void setPesanan(Pesanan pesanan) {
+        selectedPesanan = pesanan;
+        
         tfPesananKodePesanan.setText(pesanan.getKodePesanan());
-        tfPesananNamaKustomer.setText(pesanan.getNamaKustomer());
-        tfPesananKodeKustomer.setText(pesanan.getKodeKustomer());
-        tfPesananTanggalPesanan.setText(pesanan.getTanggalPemesanan());
-        kodePesanan = pesanan.getKodePesanan();
+        tfPesananNamaKustomer.setText(pesanan.getKustomer().getNamaKustomer());
+        tfPesananKodeKustomer.setText(pesanan.getKustomer().getKodeKustomer());
+        tfPesananTanggalPesanan.setText(new SimpleDateFormat("dd-MM-yyyy").format(pesanan.getTanggal()));
     }
 
     private boolean kodePesananHasBeenSelected() {
-        for (String check: selectedKodePesanan) {
-            if (check.equals(kodePesanan)) {
+        for (Pesanan pesanan : selectedDaftarPesanan) {
+            if (pesanan.getKodePesanan().equals(selectedPesanan)) {
                 return true;
             }
         }
@@ -945,7 +902,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void hapusPesananDariPembelian(int position) {
-        selectedKodePesanan.remove(position);
+        selectedDaftarPesanan.remove(position);
         tblModel.removeRow(position);
     }
 
@@ -956,7 +913,7 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private void bersihPemesananTable() {
-        selectedKodePesanan.clear();
+        selectedDaftarPesanan.clear();
         clearTable();
     }
 
@@ -969,51 +926,52 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
     }
 
     private boolean simpanInputOrderPembelian() {
-        try {
-            if (kodePembelian == null) {
-                throw new UnsupportedOperationException("kodePembelian should not be null");
-            }
-            if (kodeSupplier == null) {
-                peringatanHarusDiisi("Supplier");
-                return false;
-            }
-            if (kodeEkspedisi == null) {
-                peringatanHarusDiisi("Ekspedisi");
-                return false;
-            }
-            if (selectedKodePesanan.isEmpty()) {
-                peringatanHarusDiisi("Pesanann");
-                return false;
-            }
-            Date tanggal = chooserTanggal.getDate();
-            
-            SupplierModel supplier = new SupplierModel();
-            supplier.setKode(kodeSupplier);
-            
-            EkspedisiModel ekspedisi = new EkspedisiModel();
-            ekspedisi.setKode(kodeEkspedisi);
-            
-            KabupatenModel kabupaten = new KabupatenModel();
-            kabupaten.setId(kotaTujuanId);
-            kabupaten.setName(tfKotaTujuan.getText());
-            
-            PembelianModel pembelian = new PembelianModel();
-            pembelian.setKode(kodePembelian);
-            pembelian.setSupplier(supplier);
-            pembelian.setEkspedisi(ekspedisi);
-            pembelian.setDateString(new SimpleDateFormat("ddMMyyyy").format(tanggal));
-            pembelian.setSelectedKodePesanan(selectedKodePesanan);
-            pembelian.setAlamatPengiriman(taAlamatPengiriman.getText());
-            pembelian.setKotaTujuan(kabupaten);
-            pembelian.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
-            pembelian.setOngkir(Integer.valueOf(new ValidatorUtil().isNumber(tfOngkosKirim.getText(), "Ongkos Kirim")));
-            
-            return new ConnectionManager().simpanInputOrderPembelian(pembelian, isUpdate);
-        } catch (Exception ex) {
-            Logger.getLogger(InputOrderPembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
-            inputOrderPembelianGagalTersimpan();
-            return false;
-        }
+        return false;
+//        try {
+//            if (kodePembelian == null) {
+//                throw new UnsupportedOperationException("kodePembelian should not be null");
+//            }
+//            if (kodeSupplier == null) {
+//                peringatanHarusDiisi("Supplier");
+//                return false;
+//            }
+//            if (kodeEkspedisi == null) {
+//                peringatanHarusDiisi("Ekspedisi");
+//                return false;
+//            }
+//            if (selectedKodePesanan.isEmpty()) {
+//                peringatanHarusDiisi("Pesanann");
+//                return false;
+//            }
+//            Date tanggal = chooserTanggal.getDate();
+//            
+//            SupplierModel supplier = new SupplierModel();
+//            supplier.setKode(kodeSupplier);
+//            
+//            EkspedisiModel ekspedisi = new EkspedisiModel();
+//            ekspedisi.setKode(kodeEkspedisi);
+//            
+//            KabupatenModel kabupaten = new KabupatenModel();
+//            kabupaten.setId(kotaTujuanId);
+//            kabupaten.setName(tfKotaTujuan.getText());
+//            
+//            PembelianModel pembelian = new PembelianModel();
+//            pembelian.setKode(kodePembelian);
+//            pembelian.setSupplier(supplier);
+//            pembelian.setEkspedisi(ekspedisi);
+//            pembelian.setDateString(new SimpleDateFormat("ddMMyyyy").format(tanggal));
+//            pembelian.setSelectedKodePesanan(selectedKodePesanan);
+//            pembelian.setAlamatPengiriman(taAlamatPengiriman.getText());
+//            pembelian.setKotaTujuan(kabupaten);
+//            pembelian.setBerat(Integer.valueOf(new ValidatorUtil().isNumber(tfBerat.getText(), "Berat")));
+//            pembelian.setOngkir(Integer.valueOf(new ValidatorUtil().isNumber(tfOngkosKirim.getText(), "Ongkos Kirim")));
+//            
+//            return new ConnectionManager().simpanInputOrderPembelian(pembelian, isUpdate);
+//        } catch (Exception ex) {
+//            Logger.getLogger(InputOrderPembelianFrame.class.getName()).log(Level.SEVERE, null, ex);
+//            inputOrderPembelianGagalTersimpan();
+//            return false;
+//        }
     }
 
     private void peringatanHarusDiisi(String fieldName) {
@@ -1032,12 +990,10 @@ public class InputOrderPembelianFrame extends javax.swing.JFrame implements Grid
 
     private void setCity(KabupatenModel city) {
         kotaTujuanId = city.getId();
-        tfKotaTujuan.setText(city.getName() + ", " + city.getProvince().getName());
     }
 
     private void clearDetailPengiriman() {
         kotaTujuanId = "";
-        tfKotaTujuan.setText("");
         taAlamatPengiriman.setText("");
         tfBerat.setText("");
         tfOngkosKirim.setText("");

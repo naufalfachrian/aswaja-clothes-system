@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Ekspedisi implements Serializable {
 
     @OneToMany(mappedBy = "ekspedisi")
+    private List<Pembelian> pembelianList;
+
+    @OneToMany(mappedBy = "ekspedisi")
     private List<ReturPesanan> returPesananList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ekspedisi")
@@ -130,6 +133,15 @@ public class Ekspedisi implements Serializable {
 
     public void setReturPesananList(List<ReturPesanan> returPesananList) {
         this.returPesananList = returPesananList;
+    }
+
+    @XmlTransient
+    public List<Pembelian> getPembelianList() {
+        return pembelianList;
+    }
+
+    public void setPembelianList(List<Pembelian> pembelianList) {
+        this.pembelianList = pembelianList;
     }
     
 }

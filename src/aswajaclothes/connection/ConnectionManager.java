@@ -269,8 +269,20 @@ public class ConnectionManager {
     //<editor-fold defaultstate="collapsed" desc="get kode">
     
     
-    public String getKodePembelian() {
-        return getKode("PM", "input_order_pembelian");
+    public static String getKodePembelian() {
+        String kode = "PM";
+        int totalPesanan = ConnectionManager.getDefaultEntityManager().createNamedQuery("Pembelian.findAll").getResultList().size();
+        int newId = totalPesanan + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
     }
     
     

@@ -6,6 +6,7 @@
 package aswajaclothes.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Supplier.findByNoFax", query = "SELECT s FROM Supplier s WHERE s.noFax = :noFax"),
     @NamedQuery(name = "Supplier.findByEmail", query = "SELECT s FROM Supplier s WHERE s.email = :email")})
 public class Supplier implements Serializable {
+
+    @OneToMany(mappedBy = "supplier")
+    private List<Pembelian> pembelianList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -159,6 +165,15 @@ public class Supplier implements Serializable {
     @Override
     public String toString() {
         return "aswajaclothes.entity.Supplier[ kodeSupplier=" + kodeSupplier + " ]";
+    }
+
+    @XmlTransient
+    public List<Pembelian> getPembelianList() {
+        return pembelianList;
+    }
+
+    public void setPembelianList(List<Pembelian> pembelianList) {
+        this.pembelianList = pembelianList;
     }
     
 }
