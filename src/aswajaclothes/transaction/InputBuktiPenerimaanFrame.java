@@ -5,6 +5,8 @@
  */
 package aswajaclothes.transaction;
 
+import aswajaclothes.connection.ConnectionManager;
+import aswajaclothes.entity.BuktiPenerimaan;
 import aswajaclothes.entity.Pembelian;
 import aswajaclothes.entity.PembelianDetail;
 import aswajaclothes.entity.PesananDetail;
@@ -26,6 +28,7 @@ public class InputBuktiPenerimaanFrame extends javax.swing.JFrame implements Gri
     
     public InputBuktiPenerimaanFrame() {
         initComponents();
+        initBuktiPenerimaanCounter();
         setDate(new Date());
     }
     
@@ -298,14 +301,16 @@ public class InputBuktiPenerimaanFrame extends javax.swing.JFrame implements Gri
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
-        // Todo
+        clear();
     }//GEN-LAST:event_btnBatalActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-       // Todo
+        save();
     }//GEN-LAST:event_btnSimpanActionPerformed
     
     private Pembelian pembelian = null;
+    
+    private BuktiPenerimaan buktiPenerimaan = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -395,12 +400,31 @@ public class InputBuktiPenerimaanFrame extends javax.swing.JFrame implements Gri
         // Todo
     }
 
-    private void clearTujuan() {
-        // Todo
-    }
-
     private void setDate(Date date) {
         chooserTanggal.setDate(date);
+    }
+
+    private void initBuktiPenerimaanCounter() {
+        tfBuktiPenerimaan.setText(ConnectionManager.getKodeBuktiPenerimaan());
+    }
+
+    private void clear() {
+        this.pembelian = null;
+        tfNomorPurchase.setText("");
+        tfNamaSupplier.setText("");
+        tblDaftarBarang.setModel(new DefaultTableModel());
+    }
+
+    private void save() {
+        if (buktiPenerimaan == null) {
+            buktiPenerimaan = new BuktiPenerimaan();
+        }
+        buktiPenerimaan.setKodeBuktiPenerimaan(tfBuktiPenerimaan.getText());
+        buktiPenerimaan.setPembelian(pembelian);
+        buktiPenerimaan.setTanggal(chooserTanggal.getDate());
+        ConnectionManager.getDefaultEntityManager().getTransaction().begin();
+        ConnectionManager.getDefaultEntityManager().persist(buktiPenerimaan);
+        ConnectionManager.getDefaultEntityManager().getTransaction().commit();
     }
     
 }

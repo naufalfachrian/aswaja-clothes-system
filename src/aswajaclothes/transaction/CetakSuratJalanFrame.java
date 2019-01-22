@@ -11,7 +11,7 @@ import aswajaclothes.entity.Pesanan;
 import aswajaclothes.entity.PesananDetail;
 import aswajaclothes.entity.SuratJalan;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.grid.InvoicePesananGridFrame;
+import aswajaclothes.grid.InvoicePesananGridFrame1;
 import aswajaclothes.model.transaction.InputOrderPenjualanDetailModel;
 import aswajaclothes.pdf.PdfGenerator;
 import aswajaclothes.util.CurrencyUtil;
@@ -346,7 +346,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
     }//GEN-LAST:event_tfKodePesananActionPerformed
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
-        InvoicePesananGridFrame gridFrame = new InvoicePesananGridFrame("");
+        InvoicePesananGridFrame1 gridFrame = new InvoicePesananGridFrame1("");
         gridFrame.setGridListener(this);
         gridFrame.setVisible(true);
     }//GEN-LAST:event_btnCariPesananActionPerformed
@@ -420,7 +420,7 @@ public class CetakSuratJalanFrame extends javax.swing.JFrame implements GridList
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        if (fromGrid.equals(InvoicePesananGridFrame.class.getSimpleName())) {
+        if (fromGrid.equals(InvoicePesananGridFrame1.class.getSimpleName())) {
             selectedInvoicePesanan = (InvoicePesanan) model;
             Pesanan selectedPesanan = selectedInvoicePesanan.getPesanan();
             tfKodePesanan.setText(selectedPesanan.getKodePesanan());

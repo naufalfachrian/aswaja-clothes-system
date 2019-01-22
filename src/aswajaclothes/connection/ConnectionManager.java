@@ -61,6 +61,22 @@ public class ConnectionManager {
     
     // <editor-fold defaultstate="collapsed" desc="Master Customer">
     
+    public static String getKodeBuktiPenerimaan() {
+        String kode = "BP";
+        int totalCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("BuktiPembayaran.findAll").getResultList().size();
+        int newId = totalCustomer + 1;
+        if (newId < 10) {
+            kode += "000" + newId;
+        } else if (newId < 100) {
+            kode += "00" + newId;
+        } else if (newId < 1000) {
+            kode += "0" + newId;
+        } else {
+            kode += "" + newId;
+        }
+        return kode;
+    }
+    
     public static String getKodeCustomer() {
         String kode = "CS";
         int totalCustomer = ConnectionManager.getDefaultEntityManager().createNamedQuery("Kustomer.findAll").getResultList().size();
