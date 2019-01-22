@@ -128,7 +128,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblPesananDetail">
+                <Component class="javax.swing.JTable" name="tblDaftarBarang">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="6" rowCount="0">
@@ -168,13 +168,13 @@
                                   <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="tfNamaCustomer" max="32767" attributes="0"/>
+                                          <Component id="tfNamaSupplier" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="tfKodePesanan" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
-                                              <Component id="tfKodeCustomer" min="-2" pref="131" max="-2" attributes="0"/>
+                                              <Component id="tfBuktiPenerimaan" alignment="1" min="-2" pref="131" max="-2" attributes="0"/>
+                                              <Component id="tfNomorPurchase" min="-2" pref="131" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                                       </Group>
@@ -205,7 +205,7 @@
                               <Component id="chooserTanggal" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="tfKodePesanan" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tfBuktiPenerimaan" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnCariPesanan" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -213,13 +213,13 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="tfKodeCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfNomorPurchase" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnCariCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="tfNamaCustomer" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfNamaSupplier" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -229,15 +229,15 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="No. Bukti Pembayaran"/>
+                    <Property name="text" type="java.lang.String" value="No. Bukti Penerimaan"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="tfKodePesanan">
+                <Component class="javax.swing.JTextField" name="tfBuktiPenerimaan">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodePesananActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfBuktiPenerimaanActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnCariPesanan">
@@ -258,12 +258,12 @@
                     <Property name="text" type="java.lang.String" value="No. Purchase"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="tfKodeCustomer">
+                <Component class="javax.swing.JTextField" name="tfNomorPurchase">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeCustomerActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNomorPurchaseActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnCariCustomer">
@@ -279,12 +279,12 @@
                     <Property name="text" type="java.lang.String" value="Nama Supplier"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="tfNamaCustomer">
+                <Component class="javax.swing.JTextField" name="tfNamaSupplier">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNamaCustomerActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNamaSupplierActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="com.toedter.calendar.JDateChooser" name="chooserTanggal">

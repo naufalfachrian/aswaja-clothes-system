@@ -18,7 +18,7 @@ import aswajaclothes.transaction.CetakInvoicePenjualanFrame;
 import aswajaclothes.transaction.CetakInvoicePembelianFrame;
 import aswajaclothes.transaction.CetakSuratJalanFrame;
 import aswajaclothes.transaction.InputBuktiPembayaranFrame;
-import aswajaclothes.transaction.InputBuktiPenerimaan;
+import aswajaclothes.transaction.InputBuktiPenerimaanFrame;
 import aswajaclothes.transaction.InputOrderPembelianFrame;
 import aswajaclothes.transaction.InputOrderPenjualanFrame;
 import aswajaclothes.transaction.ReturPembelianFrame;
@@ -328,7 +328,7 @@ public class AswajaClothes extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void menuInputBuktiPenerimaanBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuInputBuktiPenerimaanBarangActionPerformed
-        new InputBuktiPenerimaan().setVisible(true);
+        new InputBuktiPenerimaanFrame().setVisible(true);
     }//GEN-LAST:event_menuInputBuktiPenerimaanBarangActionPerformed
 
     /**

@@ -5,30 +5,29 @@
  */
 package aswajaclothes.transaction;
 
-import aswajaclothes.entity.Barang;
-import aswajaclothes.entity.Ekspedisi;
-import aswajaclothes.entity.Kustomer;
-import aswajaclothes.entity.Pesanan;
+import aswajaclothes.entity.Pembelian;
+import aswajaclothes.entity.PembelianDetail;
 import aswajaclothes.entity.PesananDetail;
-import aswajaclothes.grid.BarangGridFrame;
-import aswajaclothes.grid.CustomerGridFrame;
-import aswajaclothes.grid.EkspedisiGridFrame;
 import aswajaclothes.grid.GridListener;
-import aswajaclothes.util.FilterUtil;
+import aswajaclothes.grid.PembelianGridFrame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Satrio
  */
-public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridListener, MouseListener {
+public class InputBuktiPenerimaanFrame extends javax.swing.JFrame implements GridListener, MouseListener {
+    
+    public InputBuktiPenerimaanFrame() {
+        initComponents();
+        setDate(new Date());
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,17 +45,17 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
         btnBatal = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPesananDetail = new javax.swing.JTable();
+        tblDaftarBarang = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        tfKodePesanan = new javax.swing.JTextField();
+        tfBuktiPenerimaan = new javax.swing.JTextField();
         btnCariPesanan = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tfKodeCustomer = new javax.swing.JTextField();
+        tfNomorPurchase = new javax.swing.JTextField();
         btnCariCustomer = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        tfNamaCustomer = new javax.swing.JTextField();
+        tfNamaSupplier = new javax.swing.JTextField();
         chooserTanggal = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,7 +89,7 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
         });
         jPanel3.add(btnKeluar);
 
-        tblPesananDetail.setModel(new javax.swing.table.DefaultTableModel(
+        tblDaftarBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -113,17 +112,17 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
                 return canEdit [columnIndex];
             }
         });
-        tblPesananDetail.setRowHeight(20);
-        jScrollPane1.setViewportView(tblPesananDetail);
+        tblDaftarBarang.setRowHeight(20);
+        jScrollPane1.setViewportView(tblDaftarBarang);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel1.setText("No. Bukti Pembayaran");
+        jLabel1.setText("No. Bukti Penerimaan");
 
-        tfKodePesanan.setEnabled(false);
-        tfKodePesanan.addActionListener(new java.awt.event.ActionListener() {
+        tfBuktiPenerimaan.setEnabled(false);
+        tfBuktiPenerimaan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfKodePesananActionPerformed(evt);
+                tfBuktiPenerimaanActionPerformed(evt);
             }
         });
 
@@ -138,10 +137,10 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
 
         jLabel3.setText("No. Purchase");
 
-        tfKodeCustomer.setEnabled(false);
-        tfKodeCustomer.addActionListener(new java.awt.event.ActionListener() {
+        tfNomorPurchase.setEnabled(false);
+        tfNomorPurchase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfKodeCustomerActionPerformed(evt);
+                tfNomorPurchaseActionPerformed(evt);
             }
         });
 
@@ -154,10 +153,10 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
 
         jLabel4.setText("Nama Supplier");
 
-        tfNamaCustomer.setEnabled(false);
-        tfNamaCustomer.addActionListener(new java.awt.event.ActionListener() {
+        tfNamaSupplier.setEnabled(false);
+        tfNamaSupplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNamaCustomerActionPerformed(evt);
+                tfNamaSupplierActionPerformed(evt);
             }
         });
 
@@ -182,12 +181,12 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
                         .addGap(47, 47, 47)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tfNamaCustomer)
+                                .addComponent(tfNamaSupplier)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfBuktiPenerimaan, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfNomorPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(7, 7, 7)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnCariCustomer)
@@ -209,18 +208,18 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
                     .addComponent(chooserTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(tfKodePesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfBuktiPenerimaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCariPesanan)
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tfKodeCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNomorPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCariCustomer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(tfNamaCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfNamaSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -272,27 +271,27 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
 
     }//GEN-LAST:event_chooserTanggalPropertyChange
 
-    private void tfNamaCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaCustomerActionPerformed
+    private void tfNamaSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNamaSupplierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfNamaCustomerActionPerformed
+    }//GEN-LAST:event_tfNamaSupplierActionPerformed
 
     private void btnCariCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariCustomerActionPerformed
-        CustomerGridFrame customerGrid = new CustomerGridFrame(FilterUtil.FilterType.NONE, "");
-        customerGrid.setGridListener(this);
-        customerGrid.setVisible(true);
+        PembelianGridFrame gridFrame = new PembelianGridFrame("");
+        gridFrame.setGridListener(this);
+        gridFrame.setVisible(true);
     }//GEN-LAST:event_btnCariCustomerActionPerformed
 
-    private void tfKodeCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodeCustomerActionPerformed
+    private void tfNomorPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNomorPurchaseActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfKodeCustomerActionPerformed
+    }//GEN-LAST:event_tfNomorPurchaseActionPerformed
 
     private void btnCariPesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariPesananActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCariPesananActionPerformed
 
-    private void tfKodePesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfKodePesananActionPerformed
+    private void tfBuktiPenerimaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfBuktiPenerimaanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfKodePesananActionPerformed
+    }//GEN-LAST:event_tfBuktiPenerimaanActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
         dispose();
@@ -306,9 +305,7 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
        // Todo
     }//GEN-LAST:event_btnSimpanActionPerformed
     
-    // Variable declarations - able to modify
-    DefaultTableModel tblModel;
-    List<PesananDetail> listPesananDetail;
+    private Pembelian pembelian = null;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
@@ -326,15 +323,51 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable tblPesananDetail;
-    private javax.swing.JTextField tfKodeCustomer;
-    private javax.swing.JTextField tfKodePesanan;
-    private javax.swing.JTextField tfNamaCustomer;
+    private javax.swing.JTable tblDaftarBarang;
+    private javax.swing.JTextField tfBuktiPenerimaan;
+    private javax.swing.JTextField tfNamaSupplier;
+    private javax.swing.JTextField tfNomorPurchase;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void onSelectedRow(Object model, String fromGrid) {
-        // Todo
+        if (fromGrid.equals(PembelianGridFrame.class.getSimpleName())) {
+            this.pembelian = (Pembelian) model;
+            setPembelian(pembelian);
+        }
+    }
+    
+    public void setPembelian(Pembelian pembelian) {
+        tfNomorPurchase.setText(pembelian.getKodePembelian());
+        tfNamaSupplier.setText(pembelian.getSupplier().getNamaSupplier());
+        setPembelianDetail(pembelian.getPembelianDetailList());
+    }
+    
+    public void setPembelianDetail(List<PembelianDetail> details) {
+        String[] customerColumn = new String [] { "No.", "No. Invoice", "Nama Barang", "Nama Barang", "Qty", "Tipe Lengan"};
+        ArrayList<String[]> rows = new ArrayList<>();
+        int index = 1;
+        for (PembelianDetail item : details) {
+            for (PesananDetail pesananDetail : item.getPesanan().getPesananDetailList()) {
+                String[] rowData = new String[]{
+                    String.valueOf(index),
+                    item.getPembelian().getKodePembelian(),
+                    pesananDetail.getBarang().getKodeBarang(),
+                    pesananDetail.getBarang().getNamaBarang(),
+                    String.valueOf(pesananDetail.getQty()),
+                    pesananDetail.getTipeLengan()
+                };
+                rows.add(rowData);
+                index++;
+            }
+        }
+        TableModel tblModel = new DefaultTableModel(rows.toArray(new String[][]{}), customerColumn){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblDaftarBarang.setModel(tblModel);
     }
 
     @Override
@@ -364,6 +397,10 @@ public class InputBuktiPenerimaan extends javax.swing.JFrame implements GridList
 
     private void clearTujuan() {
         // Todo
+    }
+
+    private void setDate(Date date) {
+        chooserTanggal.setDate(date);
     }
     
 }
